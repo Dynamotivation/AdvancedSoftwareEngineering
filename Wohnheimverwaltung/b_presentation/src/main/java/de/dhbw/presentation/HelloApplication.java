@@ -1,4 +1,4 @@
-package de.dhbw.b_presentation;
+package de.dhbw.presentation;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
