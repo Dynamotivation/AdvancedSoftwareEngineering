@@ -1,4 +1,5 @@
 module de.dhbw.presentation {
+    requires de.dhbw.domain;
     requires javafx.controls;
     requires javafx.fxml;
 

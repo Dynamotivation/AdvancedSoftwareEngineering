@@ -10,6 +10,11 @@
     <name>wohnheimverwaltung</name>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>b_presentation</module>
+        <module>a_domain</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
