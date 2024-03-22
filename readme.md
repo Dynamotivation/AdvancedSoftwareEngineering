@@ -9,7 +9,26 @@
 # 1. Domain Driven Design
 
 ## Ubiquitous Language
-(Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe und deren fachliche Bedeutung, Aufgaben und Regeln dokumentieren)
+
+[//]: # (Sadly GitHub doesn't support Markdown includes, so I'm just gonna dump these tables here...)
+
+| Begrifflichkeiten       |                                                                                                                                                                                                                                                 |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Gebäude/Wohnheim/Objekt | Ein Gebäude, dass eine oder mehrere Mietswohnungen enthält über die ein Vermieter verfügt.                                                                                                                                                      |
+| Miete                   | Ein pro Mietswohnung festgelegter Betrag, welcher von allen Mietern anteilig bezahlt wird.                                                                                                                                                      |
+| Mieter                  | Mietet einer Mietswohnung von einem Vermieter in einem Gebäude.                                                                                                                                                                                 |
+| Mietswohnung            | Ein an eine oder mehrere Mieter vermietbarer Bestandteil eines Gebäudes.                                                                                                                                                                        |
+| Mietvertrag             | Ein Vertrag zwischen einem Vermieter und allen Mietern in einer Wohnung, welcher durch seine Eckdaten (Miete, Vertragsbeginn, Befristung, Vertragsende im Falle von Befristung, Kündigungsfristen falls keine Befristung) charakterisiert wird. |
+| Vermieter               | Eine zur Verwaltung von Mietswohnungen in einem Gebäude berechtigte Person. Oftmals der Anwender der Software oder dessen Arbeitgeber.                                                                                                          |
+
+| Prozesse  |                                                                                                                          |
+|-----------|--------------------------------------------------------------------------------------------------------------------------|
+| Ausziehen | Der Prozess des Verlassens eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen. |
+| Einziehen | Der Prozess des beziehen eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen.   |
+| Mieten    | Der Prozess des Bewohnen einer Mietswohnung durch einen Mieter unter Einhaltung der Bedingungen des Mietsvertrags.       |
+| Vermieten | Der Prozess in dem ein Vermieter und ein oder mehrere Mieter sich auf einen Mietvertrag einigen und diesen Abschließen.  |
+
+(Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe ✅ und deren fachliche Bedeutung ❔, Aufgaben ✅ und Regeln ❌ dokumentieren)
 
 
 ## Verwendete taktischer Muster des DDD
