@@ -39,7 +39,7 @@ public class Main {
 
         // Test removing the last remaining contact avenue
         try {
-            renter.getContactInformation().removeContactAvenue(renter.getContactInformation().getPreferedContactAvenue());
+            renter.getContactInformation().removeContactAvenue(renter.getContactInformation().getPreferredContactAvenue());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

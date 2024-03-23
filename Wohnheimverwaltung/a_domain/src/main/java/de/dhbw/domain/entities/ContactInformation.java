@@ -7,18 +7,18 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ContactInformation implements Iterable<ContactAvenue> {
-    private ContactAvenue preferedContactAvenue;
+    private ContactAvenue preferredContactAvenue;
     private final List<ContactAvenue> contactAvenues = new ArrayList<>();
 
     public ContactInformation(ContactAvenue preferedContactAvenue, ContactAvenue... contactAvenues) {
-        this.preferedContactAvenue = preferedContactAvenue;
+        this.preferredContactAvenue = preferedContactAvenue;
         this.contactAvenues.add(preferedContactAvenue);
 
         this.contactAvenues.addAll(List.of(contactAvenues));
     }
 
-    public ContactAvenue getPreferedContactAvenue() {
-        return preferedContactAvenue;
+    public ContactAvenue getPreferredContactAvenue() {
+        return preferredContactAvenue;
     }
 
     public List<ContactAvenue> getContactAvenues() {
@@ -33,7 +33,7 @@ public class ContactInformation implements Iterable<ContactAvenue> {
     }
 
     public void removeContactAvenue(ContactAvenue contactAvenue) {
-        if (preferedContactAvenue.equals(contactAvenue))
+        if (preferredContactAvenue.equals(contactAvenue))
             throw new IllegalArgumentException("Cannot remove preferred contact avenue");
         if (!contactAvenues.contains(contactAvenue))
             throw new IllegalArgumentException("Contact avenue does not exist");
@@ -43,13 +43,13 @@ public class ContactInformation implements Iterable<ContactAvenue> {
         contactAvenues.remove(contactAvenue);
     }
 
-    public void setPreferedContactAvenue(ContactAvenue contactAvenue) {
+    public void setPreferredContactAvenue(ContactAvenue contactAvenue) {
         if (!contactAvenues.contains(contactAvenue))
             throw new IllegalArgumentException("Contact avenue not found in this contact information. If this is deliberate, add it first.");
-        if (preferedContactAvenue.equals(contactAvenue))
+        if (preferredContactAvenue.equals(contactAvenue))
             throw new IllegalArgumentException("Contact avenue is already the preferred one");
 
-        preferedContactAvenue = contactAvenue;
+        preferredContactAvenue = contactAvenue;
     }
 
     @Override
