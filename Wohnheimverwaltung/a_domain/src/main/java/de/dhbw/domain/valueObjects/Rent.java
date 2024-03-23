@@ -4,6 +4,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public final class Rent {
+    // Rent should be a value object because it is a specialised form currency amounts.
     private final int amount;
     private static final char cachedCommaSeparator;
 

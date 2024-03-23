@@ -1,6 +1,8 @@
 package de.dhbw.domain.valueObjects;
 
 public class Address {
+    // An Address should be a value object since it cannot change. If anything changes it's a different address.
+    // Likewise, multiple people can live at the same address. At most the combination of their name + address is unique, never the address itself.
     private final String streetName;
     private final String houseNumber;
     private final String postalCode;

@@ -4,6 +4,8 @@ import de.dhbw.domain.utilities.ContactAvenue;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class ContactAvenueEmail implements ContactAvenue {
+    // An email address as a contact avenue should be a value object.
+    // Tenants are free to register a shared inbox for their living space.
     private final String email;
 
     public ContactAvenueEmail(String email) {
