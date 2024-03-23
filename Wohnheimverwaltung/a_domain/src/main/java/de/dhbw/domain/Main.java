@@ -1,6 +1,6 @@
 package de.dhbw.domain;
 
-import de.dhbw.domain.entities.Renter;
+import de.dhbw.domain.entities.Tenant;
 import de.dhbw.domain.valueObjects.ContactAvenueEmail;
 import de.dhbw.domain.valueObjects.Rent;
 
@@ -19,27 +19,27 @@ public class Main {
         System.out.println(rent1.equals(rent2));
         System.out.println(rent1.equals(rent3));
 
-        Renter renter = new Renter("John", "Doe", new ContactAvenueEmail("test@me.lol"));
-        Renter renter2 = new Renter("John", "Doe", new ContactAvenueEmail("test@me"));
+        Tenant tenant = new Tenant("John", "Doe", new ContactAvenueEmail("test@me.lol"));
+        Tenant tenant2 = new Tenant("John", "Doe", new ContactAvenueEmail("test@me"));
         //Renter renter3 = new Renter("John", "Doe", new ContactAvenueEmail("test@.me"));
 
         // Test duplicate
         try {
-            renter.getContactInformation().addContactAvenue(new ContactAvenueEmail("test@me.lol"));
+            tenant.getContactInformation().addContactAvenue(new ContactAvenueEmail("test@me.lol"));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
         // Test removing a non-existing contact avenue
         try {
-            renter.getContactInformation().removeContactAvenue(new ContactAvenueEmail("test@me.lol"));
+            tenant.getContactInformation().removeContactAvenue(new ContactAvenueEmail("test@me.lol"));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
         // Test removing the last remaining contact avenue
         try {
-            renter.getContactInformation().removeContactAvenue(renter.getContactInformation().getPreferredContactAvenue());
+            tenant.getContactInformation().removeContactAvenue(tenant.getContactInformation().getPreferredContactAvenue());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

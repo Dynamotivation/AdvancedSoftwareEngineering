@@ -2,12 +2,12 @@ package de.dhbw.domain.entities;
 
 import de.dhbw.domain.utilities.ContactAvenue;
 
-public class Renter {
+public class Tenant {
     private final String name;
     private final String surname;
     private final ContactInformation contactInformation;
 
-    public Renter(String name, String surname, ContactAvenue contactAvenue) {
+    public Tenant(String name, String surname, ContactAvenue contactAvenue) {
         this.name = name;
         this.surname = surname;
         this.contactInformation = new ContactInformation(contactAvenue);
