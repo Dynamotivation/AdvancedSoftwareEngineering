@@ -11,6 +11,8 @@ public class Renter {
         this.name = name;
         this.surname = surname;
         this.contactInformation = new ContactInformation(contactAvenue);
+
+        // TODO Validate name and surname and check if contactAvenue is not MAIL TO HIS RENTED ADDRESS
     }
 
     public String getName() {
