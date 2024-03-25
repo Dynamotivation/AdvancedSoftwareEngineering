@@ -28,15 +28,6 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
-    public void rentTo(Tenant tenant) {
-        // TODO start work on the renters agreement
-        if (tenants.contains(tenant))
-            throw new IllegalArgumentException("Renter already rents this apartment");
-
-        tenants.add(tenant);
-    }
-
-    @Override
     public void remodel(double size, int maxTenants) {
         setSize(size);
         setMaxTenants(maxTenants);
