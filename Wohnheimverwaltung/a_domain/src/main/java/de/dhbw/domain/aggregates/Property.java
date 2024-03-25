@@ -1,11 +1,14 @@
-package de.dhbw.domain.entities;
+package de.dhbw.domain.aggregates;
 
+import de.dhbw.domain.entities.RentalAgreement;
+import de.dhbw.domain.entities.Tenant;
 import de.dhbw.domain.utilities.Rentable;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public class Property implements Rentable {
     private final Address address;
@@ -13,8 +16,8 @@ public class Property implements Rentable {
     private List<Tenant> tenants;
     private double size;
     private int maxTenants;
-    private Rent rent;
-
+    private RentalAgreement rentalAgreement;
+    private final UUID id = UUID.randomUUID();
 
     public Property(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, double size, int maxTenants, Rent rent) {
         // Validate date of construction (implicitly checked for null)
@@ -25,7 +28,6 @@ public class Property implements Rentable {
         this.dateOfConstruction = dateOfConstruction;
         setSize(size);
         setMaxTenants(maxTenants);
-        setRent(rent);
     }
 
     public Address getAddress() {
@@ -34,6 +36,13 @@ public class Property implements Rentable {
 
     public LocalDate getDateOfConstruction() {
         return dateOfConstruction;
+    }
+
+    public void setSize(double size) {
+        if (size <= 0)
+            throw new IllegalArgumentException("Invalid size");
+
+        this.size = size;
     }
 
     @Override
@@ -51,21 +60,17 @@ public class Property implements Rentable {
     }
 
     @Override
-    public void setSize(double size) {
-        if (size <= 0)
-            throw new IllegalArgumentException("Invalid size");
-
-        this.size = size;
+    public RentalAgreement getRentalAgreement() {
+        return rentalAgreement;
     }
 
     @Override
-    public Rent getRent() {
-        return rent;
-    }
+    public void rentToTenant(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+        // Validate that the number of tenants does not exceed the maximum number of tenants
+        if (tenants.size() > maxTenants)
+            throw new IllegalArgumentException("Too many tenants");
 
-    @Override
-    public void setRent(Rent rent) {
-        this.rent = rent;
+        rentalAgreement = new RentalAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
     }
 
     @Override
@@ -74,7 +79,17 @@ public class Property implements Rentable {
     }
 
     @Override
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
     public List<Tenant> getTenants() {
         return null;
+    }
+
+    @Override
+    public RentalAgreement GetRentalAgreement() {
+        return rentalAgreement;
     }
 }

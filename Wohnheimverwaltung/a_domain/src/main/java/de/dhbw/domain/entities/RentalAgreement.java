@@ -1,30 +1,24 @@
-package de.dhbw.domain.aggregates;
+package de.dhbw.domain.entities;
 
-import de.dhbw.domain.entities.Tenant;
-import de.dhbw.domain.utilities.Rentable;
+import de.dhbw.domain.valueObjects.Rent;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 public class RentalAgreement {
     private final LocalDate inclusiveStartDate;
     private final int monthlyDayOfPayment;
     private LocalDate inclusiveEndDate;
-    private final Rentable rentable;
     private final List<Tenant> tenants;
-    private final UUID id = UUID.randomUUID();
 
-    public RentalAgreement(Rentable rentable, List<Tenant> tenants, LocalDate inclusiveStartDate, int monthlyDayOfPayment) {
+    public RentalAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
         // Validate monthly day of payment
         if (monthlyDayOfPayment < 1 || monthlyDayOfPayment > 31)
             throw new IllegalArgumentException("Monthly day of payment must be between 1 and 31. Shorter months are accounted for automatically.");
 
 
-
         this.inclusiveStartDate = inclusiveStartDate;
         this.monthlyDayOfPayment = monthlyDayOfPayment;
-        this.rentable = rentable;
         this.tenants = tenants;
     }
 
@@ -33,7 +27,7 @@ public class RentalAgreement {
     }
 
     public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
-        // TODO
+        // TODO Minimum rental period
 
         // Validate that the end date is after the start date
         if (inclusiveEndDate.isBefore(inclusiveStartDate))
@@ -43,22 +37,14 @@ public class RentalAgreement {
     }
 
     public LocalDate getInclusiveEndDate() {
-        return inclusiveEndDate;
-    }
-
-    public Rentable getRentable() {
-        return rentable;
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public List<Tenant> getTenants() {
         return tenants;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void rentRentableToTenant(Rentable rentable, Tenant tenant) {
-        // TODO implement
+    public int getMonthlyDayOfPayment() {
+        return monthlyDayOfPayment;
     }
 }

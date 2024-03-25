@@ -1,5 +1,6 @@
 package de.dhbw.domain.entities;
 
+import de.dhbw.domain.aggregates.ApartmentUnit;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
 
@@ -21,8 +22,8 @@ public class ApartmentComplex {
         this.dateOfConstruction = dateOfConstruction;
     }
 
-    public void addApartment(int apartmentNumber, int floor, double size, Rent rent) {
-        apartmentUnits.add(new ApartmentUnit(this, apartmentNumber, floor, size, 3, rent));
+    public void addApartment(ApartmentUnit apartmentUnit) {
+        apartmentUnits.add(apartmentUnit);
     }
 
     public List<ApartmentUnit> getApartments() {

@@ -1,48 +1,36 @@
-package de.dhbw.domain.entities;
+package de.dhbw.domain.aggregates;
 
+import de.dhbw.domain.entities.ApartmentComplex;
+import de.dhbw.domain.entities.RentalAgreement;
+import de.dhbw.domain.entities.Tenant;
 import de.dhbw.domain.utilities.Rentable;
 import de.dhbw.domain.valueObjects.Rent;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ApartmentUnit implements Rentable {
     // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
     private int apartmentNumber;
     private double size;
-    private Rent rent;
     private final int floor;
     private final List<Tenant> tenants = new ArrayList<>();
     private final ApartmentComplex parentApartmentComplex;
     private int maxTenants;
+    private RentalAgreement rentalAgreement;
+    private final UUID id = UUID.randomUUID();
 
-    // An Apartment should always be part of a property, thus external classes may not create them uncontrollably.
-    // Creation will be possible through the Property class.
-    protected ApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
+    public ApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
         setApartmentNumber(apartmentNumber);
         this.floor = floor;
         setSize(size);
         setMaxTenants(maxTenants);
-        setRent(rent);
         this.parentApartmentComplex = parentApartmentComplex;
     }
 
-    @Override
-    public void remodel(double size, int maxTenants) {
-        setSize(size);
-        setMaxTenants(maxTenants);
-    }
-
-    @Override
-    public void setMaxTenants(int maxTenants) {
-        if (maxTenants <= 0)
-            throw new IllegalArgumentException("Invalid max tenants");
-
-        this.maxTenants = maxTenants;
-    }
-
-    @Override
-    public void setSize(double size) {
+    private void setSize(double size) {
         if (size <= 0)
             throw new IllegalArgumentException("Invalid size");
 
@@ -71,23 +59,55 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
+    public void remodel(double size, int maxTenants) {
+        // Validate the apartment is not rented
+        if (rentalAgreement != null)
+            throw new IllegalStateException("Cannot remodel while apartment is rented");
+
+        setSize(size);
+        setMaxTenants(maxTenants);
+    }
+
+    @Override
+    public void setMaxTenants(int maxTenants) {
+        if (maxTenants <= 0)
+            throw new IllegalArgumentException("Invalid max tenants");
+
+        this.maxTenants = maxTenants;
+    }
+
+    @Override
     public double getSize() {
         return size;
     }
 
     @Override
-    public Rent getRent() {
-        return rent;
+    public UUID getId() {
+        return id;
     }
 
     @Override
-    public void setRent(Rent rent) {
-        this.rent = rent;
+    public RentalAgreement getRentalAgreement() {
+        return rentalAgreement;
+    }
+
+    @Override
+    public void rentToTenant(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+        // Validate that the number of tenants does not exceed the maximum number of tenants
+        if (tenants.size() > maxTenants)
+            throw new IllegalArgumentException("Too many tenants");
+
+        rentalAgreement = new RentalAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
     }
 
     @Override
     public List<Tenant> getTenants() {
         return tenants;
+    }
+
+    @Override
+    public RentalAgreement GetRentalAgreement() {
+        return rentalAgreement;
     }
 
     public ApartmentComplex getParentComplex() {
