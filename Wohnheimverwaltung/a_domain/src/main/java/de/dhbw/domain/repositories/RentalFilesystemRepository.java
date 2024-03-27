@@ -5,6 +5,10 @@ import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.miscellaneous.Rental;
+import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
+import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
+import de.dhbw.domain.valueObjects.ids.RentalId;
+import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,33 +24,26 @@ public class RentalFilesystemRepository implements RentalRepository {
     }
 
     @Override
-    public Rental findById(UUID id) {
+    public Rental findById(RentalId rentalId) {
         return rentals.stream()
-                .filter(rental -> rental.getId().equals(id))
+                .filter(rental -> rental.getId().equals(rentalId))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public List<Rental> findByTenant(Tenant tenant) {
-        return rentals.stream()
-                .filter(rental -> rental.GetRentalAgreement().getTenants().contains(tenant))
-                .toList();
+    public List<Rental> findByTenantId(TenantId tenantId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Rental> findByRentalAgreement(LeaseAgreement leaseAgreement) {
-        return rentals.stream()
-                .filter(rental -> rental.GetRentalAgreement().equals(leaseAgreement))
-                .toList();
+    public List<Rental> findByRentalAgreementId(LeaseAgreementId leaseAgreementId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Rental> findByApartmentComplex(ApartmentComplex apartmentComplex) {
-        return rentals.stream()
-                .filter(rental -> rental.getClass().equals(RentalApartmentUnit.class))
-                .filter(rental -> ((RentalApartmentUnit) rental).getParentComplex().equals(apartmentComplex))
-                .toList();
+    public List<Rental> findByApartmentComplexId(ApartmentComplexId apartmentComplexId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

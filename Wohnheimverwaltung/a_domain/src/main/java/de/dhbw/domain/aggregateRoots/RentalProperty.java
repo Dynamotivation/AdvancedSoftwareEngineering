@@ -56,8 +56,7 @@ public class RentalProperty implements Rental {
         return maxTenants;
     }
 
-    @Override
-    public void setMaxTenants(int maxTenants) {
+    private void setMaxTenants(int maxTenants) {
         if (maxTenants <= 0)
             throw new IllegalArgumentException("Invalid max tenants");
 

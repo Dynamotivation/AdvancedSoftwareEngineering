@@ -3,10 +3,10 @@ package de.dhbw.domain.valueObjects.ids;
 import java.util.Objects;
 import java.util.UUID;
 
-public class RentalId {
+public class LeaseAgreementId {
     private final UUID id;
 
-    public RentalId() {
+    public LeaseAgreementId() {
         this.id = UUID.randomUUID();
     }
 
@@ -18,7 +18,7 @@ public class RentalId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RentalId tenantId = (RentalId) o;
+        LeaseAgreementId tenantId = (LeaseAgreementId) o;
         return Objects.equals(id, tenantId.id);
     }
 }

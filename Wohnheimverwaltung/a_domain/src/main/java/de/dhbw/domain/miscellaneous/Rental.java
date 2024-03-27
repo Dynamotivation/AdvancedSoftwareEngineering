@@ -13,7 +13,6 @@ public interface Rental {
     RentalId getId();
     LeaseAgreement GetLeaseAgreement();
     int getMaxTenants();
-    void setMaxTenants(int maxTenants);
     double getSize();
     List<TenantId> getTenantIds();
     void remodel(double size, int maxTenants);

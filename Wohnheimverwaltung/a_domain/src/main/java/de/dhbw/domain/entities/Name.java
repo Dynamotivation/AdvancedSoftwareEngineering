@@ -29,7 +29,7 @@ public class Name {
 
         return name;
     }
-
+//TODO Add something like changing to make it into an entity for sure
     @Override
     public String toString() {
         return getFullName();

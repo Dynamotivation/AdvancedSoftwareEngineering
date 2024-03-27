@@ -1,5 +1,10 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
 public class Address {
     // An Address should be a value object since it cannot change. If anything changes it's a different address.
     // Likewise, multiple people can live at the same address. At most the combination of their name + address is unique, never the address itself.
@@ -45,6 +50,16 @@ public class Address {
         this.city = city;
     }
 
+    // Factory for deserialization
+    @JsonCreator
+    static Address createAddress(
+            @JsonProperty("streetName") String streetName,
+            @JsonProperty("houseNumber") String houseNumber,
+            @JsonProperty("postalCode") String postalCode,
+            @JsonProperty("city") String city) {
+        return new Address(streetName, houseNumber, postalCode, city);
+    }
+
     public String getStreetName() {
         return streetName;
     }
@@ -62,15 +77,20 @@ public class Address {
     }
 
     @Override
+    public String toString() {
+        return String.format("%s %s, %s %s", streetName, houseNumber, postalCode, city);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Address address = (Address) o;
+        return Objects.equals(streetName, address.streetName) && Objects.equals(houseNumber, address.houseNumber) && Objects.equals(postalCode, address.postalCode) && Objects.equals(city, address.city);
+    }
 
-        if (!streetName.equals(address.streetName)) return false;
-        if (!houseNumber.equals(address.houseNumber)) return false;
-        if (!postalCode.equals(address.postalCode)) return false;
-        return city.equals(address.city);
+    @Override
+    public int hashCode() {
+        return Objects.hash(streetName, houseNumber, postalCode, city);
     }
 }

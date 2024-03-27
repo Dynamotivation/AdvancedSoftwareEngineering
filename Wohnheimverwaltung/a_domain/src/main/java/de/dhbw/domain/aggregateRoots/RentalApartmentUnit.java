@@ -1,5 +1,7 @@
 package de.dhbw.domain.aggregateRoots;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
@@ -8,7 +10,9 @@ import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RentalApartmentUnit implements Rental {
     // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
@@ -22,25 +26,31 @@ public class RentalApartmentUnit implements Rental {
     private LeaseAgreement leaseAgreement;
     private int maxTenants; // TODO move into RentalInformation
     private double size; // TODO move into RentalInformation
+    private final List<TenantId> tenantIds;
 
     public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, double size, int maxTenants) {
         this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
     }
 
     public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants) {
+        this.parentApartmentComplex = parentApartmentComplex;
         setApartmentNumber(apartmentNumber);
         this.floor = floor;
         setSize(size);
         setMaxTenants(maxTenants);
-        this.parentApartmentComplex = parentApartmentComplex;
         this.id = new RentalId();
+        this.tenantIds = new ArrayList<>();
     }
 
-    private void setSize(double size) {
-        if (size <= 0)
-            throw new IllegalArgumentException("Invalid size");
-
-        this.size = size;
+    // Factory for deserialization
+    @JsonCreator
+    static RentalApartmentUnit createRentalApartmentUnit(
+            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
+            @JsonProperty("apartmentNumber") int apartmentNumber,
+            @JsonProperty("floor") int floor,
+            @JsonProperty("size") double size,
+            @JsonProperty("maxTenants") int maxTenants) {
+        return new RentalApartmentUnit(parentApartmentComplex, apartmentNumber, floor, size, maxTenants);
     }
 
     public int getApartmentNumber() {
@@ -52,7 +62,7 @@ public class RentalApartmentUnit implements Rental {
             throw new IllegalArgumentException("Invalid apartment number");
 
         // Check if an apartment with the same number already exists
-        for (RentalApartmentUnit rentalApartmentUnit : this.parentApartmentComplex.getApartments()) {
+        for (RentalApartmentUnit rentalApartmentUnit : this.parentApartmentComplex.getRentalApartmentUnits()) {
             if (rentalApartmentUnit.getApartmentNumber() == apartmentNumber)
                 throw new IllegalArgumentException("Apartment with this number already exists");
         }
@@ -64,7 +74,7 @@ public class RentalApartmentUnit implements Rental {
         return floor;
     }
 
-    public ApartmentComplex getParentComplex() {
+    public ApartmentComplex getParentApartmentComplex() {
         return parentApartmentComplex;
     }
 
@@ -80,12 +90,10 @@ public class RentalApartmentUnit implements Rental {
 
     @Override
     public int getMaxTenants() {
-        return 0;
+        return maxTenants;
     }
 
-    @Override
-    //TODO Should this really be public?
-    public void setMaxTenants(int maxTenants) {
+    private void setMaxTenants(int maxTenants) {
         if (maxTenants <= 0)
             throw new IllegalArgumentException("Invalid max tenants");
 
@@ -97,10 +105,16 @@ public class RentalApartmentUnit implements Rental {
         return size;
     }
 
+    private void setSize(double size) {
+        if (size <= 0)
+            throw new IllegalArgumentException("Invalid size");
+
+        this.size = size;
+    }
+
     @Override
     public List<TenantId> getTenantIds() {
-        //TODO
-        throw new UnsupportedOperationException("Not implemented yet");
+        return new ArrayList<>(tenantIds);
     }
 
     @Override
@@ -120,5 +134,18 @@ public class RentalApartmentUnit implements Rental {
             throw new IllegalArgumentException("Too many tenants");
 
         leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RentalApartmentUnit that = (RentalApartmentUnit) o;
+        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Double.compare(size, that.size) == 0 && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && Objects.equals(tenantIds, that.tenantIds);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(apartmentNumber, floor, parentApartmentComplex, id, leaseAgreement, maxTenants, size, tenantIds);
     }
 }
