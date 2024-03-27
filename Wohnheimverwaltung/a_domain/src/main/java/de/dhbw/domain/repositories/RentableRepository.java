@@ -2,7 +2,7 @@ package de.dhbw.domain.repositories;
 
 import de.dhbw.domain.entities.RentalAgreement;
 import de.dhbw.domain.entities.ApartmentComplex;
-import de.dhbw.domain.entities.Tenant;
+import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.utilities.Rentable;
 
 import java.util.List;

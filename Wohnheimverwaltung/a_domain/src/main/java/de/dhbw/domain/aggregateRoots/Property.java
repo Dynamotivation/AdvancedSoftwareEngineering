@@ -1,31 +1,35 @@
-package de.dhbw.domain.aggregates;
+package de.dhbw.domain.aggregateRoots;
 
 import de.dhbw.domain.entities.RentalAgreement;
-import de.dhbw.domain.entities.Tenant;
 import de.dhbw.domain.utilities.Rentable;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.RentableId;
+import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 public class Property implements Rentable {
+    // Implementation specific variables
     private final Address address;
     private final LocalDate dateOfConstruction;
-    private List<Tenant> tenants;
-    private double size;
-    private int maxTenants;
-    private RentalAgreement rentalAgreement;
-    private final UUID id = UUID.randomUUID();
 
-    public Property(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, double size, int maxTenants, Rent rent) {
+    // Required variables
+    private final RentableId id;
+    private int maxTenants; // TODO make into a value object or annotate verifications
+    private RentalAgreement rentalAgreement;
+    private double size; // TODO make into a value object or annotate verifications
+
+    public Property(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, double size, int maxTenants) {
         // Validate date of construction (implicitly checked for null)
         if (dateOfConstruction.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Date of construction may not be in the future");
 
         this.address = new Address(streetName, houseNumber, postalCode, city);
         this.dateOfConstruction = dateOfConstruction;
+        this.id = new RentableId();
         setSize(size);
         setMaxTenants(maxTenants);
     }
@@ -79,13 +83,13 @@ public class Property implements Rentable {
     }
 
     @Override
-    public UUID getId() {
+    public RentableId getId() {
         return id;
     }
 
     @Override
-    public List<Tenant> getTenants() {
-        return null;
+    public List<TenantId> getTenantIds() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

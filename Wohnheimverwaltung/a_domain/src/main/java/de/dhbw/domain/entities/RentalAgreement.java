@@ -1,5 +1,6 @@
 package de.dhbw.domain.entities;
 
+import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.valueObjects.Rent;
 
 import java.time.LocalDate;

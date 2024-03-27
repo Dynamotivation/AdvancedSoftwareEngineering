@@ -1,8 +1,10 @@
 package de.dhbw.domain.utilities;
 
 import de.dhbw.domain.entities.RentalAgreement;
-import de.dhbw.domain.entities.Tenant;
+import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.RentableId;
+import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +16,7 @@ public interface Rentable {
     RentalAgreement getRentalAgreement();
     void rentToTenant(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment);
     double getSize();
-    UUID getId();
-    List<Tenant> getTenants();
+    RentableId getId();
+    List<TenantId> getTenantIds();
     RentalAgreement GetRentalAgreement();
 }

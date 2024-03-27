@@ -1,8 +1,7 @@
 package de.dhbw.domain.entities;
 
-import de.dhbw.domain.aggregates.ApartmentUnit;
+import de.dhbw.domain.aggregateRoots.ApartmentUnit;
 import de.dhbw.domain.valueObjects.Address;
-import de.dhbw.domain.valueObjects.Rent;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

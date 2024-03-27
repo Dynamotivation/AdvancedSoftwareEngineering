@@ -1,6 +1,7 @@
 package de.dhbw.domain;
 
-import de.dhbw.domain.entities.Tenant;
+import de.dhbw.domain.aggregateRoots.Tenant;
+import de.dhbw.domain.entities.Name;
 import de.dhbw.domain.valueObjects.ContactAvenueEmail;
 import de.dhbw.domain.valueObjects.Rent;
 
@@ -10,7 +11,7 @@ public class Main {
 
     public static String test = "Hello from Domain";
     public static void main(String[] args) {
-        Rent rent1 = new Rent(1000);
+        /*Rent rent1 = new Rent(1000);
         Rent rent2 = new Rent(2000);
         Rent rent3 = new Rent(1000);
 
@@ -42,6 +43,13 @@ public class Main {
             tenant.getContactInformation().removeContactAvenue(tenant.getContactInformation().getPreferredContactAvenue());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
+
+        Name name = new Name("John", "Doe");
+        System.out.println(name);
+        String test = name.getName();
+        test += "!";
+        System.out.println(name.getName());
+        System.out.println(test);
     }
 }

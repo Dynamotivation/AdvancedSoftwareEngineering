@@ -1,10 +1,11 @@
-package de.dhbw.domain.aggregates;
+package de.dhbw.domain.aggregateRoots;
 
 import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.RentalAgreement;
-import de.dhbw.domain.entities.Tenant;
 import de.dhbw.domain.utilities.Rentable;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.RentableId;
+import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,14 +14,16 @@ import java.util.UUID;
 
 public class ApartmentUnit implements Rentable {
     // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
-    private int apartmentNumber;
-    private double size;
-    private final int floor;
-    private final List<Tenant> tenants = new ArrayList<>();
+    // Implementation specific variables
+    private int apartmentNumber; // TODO make into a value object or annotate verifications
+    private final int floor; // TODO make into a value object or annotate verifications
     private final ApartmentComplex parentApartmentComplex;
-    private int maxTenants;
+
+    // Required variables
+    private final RentableId id;
+    private int maxTenants; // TODO make into a value object or annotate verifications
     private RentalAgreement rentalAgreement;
-    private final UUID id = UUID.randomUUID();
+    private double size; // TODO make into a value object or annotate verifications
 
     public ApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
         setApartmentNumber(apartmentNumber);
@@ -28,6 +31,7 @@ public class ApartmentUnit implements Rentable {
         setSize(size);
         setMaxTenants(maxTenants);
         this.parentApartmentComplex = parentApartmentComplex;
+        this.id = new RentableId();
     }
 
     private void setSize(double size) {
@@ -58,6 +62,10 @@ public class ApartmentUnit implements Rentable {
         return floor;
     }
 
+    public ApartmentComplex getParentComplex() {
+        return parentApartmentComplex;
+    }
+
     @Override
     public void remodel(double size, int maxTenants) {
         // Validate the apartment is not rented
@@ -82,7 +90,7 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
-    public UUID getId() {
+    public RentableId getId() {
         return id;
     }
 
@@ -101,16 +109,12 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
-    public List<Tenant> getTenants() {
-        return tenants;
+    public List<TenantId> getTenantIds() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
     public RentalAgreement GetRentalAgreement() {
         return rentalAgreement;
-    }
-
-    public ApartmentComplex getParentComplex() {
-        return parentApartmentComplex;
     }
 }
