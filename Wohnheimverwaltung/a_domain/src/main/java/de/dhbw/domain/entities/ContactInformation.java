@@ -1,6 +1,6 @@
 package de.dhbw.domain.entities;
 
-import de.dhbw.domain.utilities.ContactAvenue;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
 
 import java.util.ArrayList;
 import java.util.Iterator;

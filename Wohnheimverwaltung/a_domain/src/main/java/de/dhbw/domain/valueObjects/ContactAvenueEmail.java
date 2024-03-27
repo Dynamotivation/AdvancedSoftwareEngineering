@@ -1,6 +1,6 @@
 package de.dhbw.domain.valueObjects;
 
-import de.dhbw.domain.utilities.ContactAvenue;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class ContactAvenueEmail implements ContactAvenue {

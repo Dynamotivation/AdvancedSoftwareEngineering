@@ -2,7 +2,7 @@ package de.dhbw.domain.valueObjects;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
-import de.dhbw.domain.utilities.ContactAvenue;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
 
 public class ContactAvenuePhone implements ContactAvenue {
     // A phone number as a contact avenue should be a value object.

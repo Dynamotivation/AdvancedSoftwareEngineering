@@ -1,18 +1,16 @@
 package de.dhbw.domain.aggregateRoots;
 
 import de.dhbw.domain.entities.ApartmentComplex;
-import de.dhbw.domain.entities.RentalAgreement;
-import de.dhbw.domain.utilities.Rentable;
+import de.dhbw.domain.entities.LeaseAgreement;
+import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.ids.RentableId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class ApartmentUnit implements Rentable {
+public class RentalApartmentUnit implements Rental {
     // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
     // Implementation specific variables
     private int apartmentNumber; // TODO make into a value object or annotate verifications
@@ -22,10 +20,10 @@ public class ApartmentUnit implements Rentable {
     // Required variables
     private final RentableId id;
     private int maxTenants; // TODO make into a value object or annotate verifications
-    private RentalAgreement rentalAgreement;
+    private LeaseAgreement leaseAgreement;
     private double size; // TODO make into a value object or annotate verifications
 
-    public ApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
+    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
         setApartmentNumber(apartmentNumber);
         this.floor = floor;
         setSize(size);
@@ -50,8 +48,8 @@ public class ApartmentUnit implements Rentable {
             throw new IllegalArgumentException("Invalid apartment number");
 
         // Check if an apartment with the same number already exists
-        for (ApartmentUnit apartmentUnit : this.parentApartmentComplex.getApartments()) {
-            if (apartmentUnit.getApartmentNumber() == apartmentNumber)
+        for (RentalApartmentUnit rentalApartmentUnit : this.parentApartmentComplex.getApartments()) {
+            if (rentalApartmentUnit.getApartmentNumber() == apartmentNumber)
                 throw new IllegalArgumentException("Apartment with this number already exists");
         }
 
@@ -69,7 +67,7 @@ public class ApartmentUnit implements Rentable {
     @Override
     public void remodel(double size, int maxTenants) {
         // Validate the apartment is not rented
-        if (rentalAgreement != null)
+        if (leaseAgreement != null)
             throw new IllegalStateException("Cannot remodel while apartment is rented");
 
         setSize(size);
@@ -95,8 +93,8 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
-    public RentalAgreement getRentalAgreement() {
-        return rentalAgreement;
+    public LeaseAgreement getRentalAgreement() {
+        return leaseAgreement;
     }
 
     @Override
@@ -105,7 +103,7 @@ public class ApartmentUnit implements Rentable {
         if (tenants.size() > maxTenants)
             throw new IllegalArgumentException("Too many tenants");
 
-        rentalAgreement = new RentalAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
+        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
     }
 
     @Override
@@ -114,7 +112,7 @@ public class ApartmentUnit implements Rentable {
     }
 
     @Override
-    public RentalAgreement GetRentalAgreement() {
-        return rentalAgreement;
+    public LeaseAgreement GetRentalAgreement() {
+        return leaseAgreement;
     }
 }

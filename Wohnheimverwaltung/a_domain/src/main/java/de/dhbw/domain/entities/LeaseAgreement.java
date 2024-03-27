@@ -6,13 +6,13 @@ import de.dhbw.domain.valueObjects.Rent;
 import java.time.LocalDate;
 import java.util.List;
 
-public class RentalAgreement {
+public class LeaseAgreement {
     private final LocalDate inclusiveStartDate;
     private final int monthlyDayOfPayment;
     private LocalDate inclusiveEndDate;
     private final List<Tenant> tenants;
 
-    public RentalAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+    public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
         // Validate monthly day of payment
         if (monthlyDayOfPayment < 1 || monthlyDayOfPayment > 31)
             throw new IllegalArgumentException("Monthly day of payment must be between 1 and 31. Shorter months are accounted for automatically.");

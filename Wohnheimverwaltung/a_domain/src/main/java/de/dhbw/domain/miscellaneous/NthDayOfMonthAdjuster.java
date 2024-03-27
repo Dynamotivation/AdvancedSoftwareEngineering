@@ -1,4 +1,4 @@
-package de.dhbw.domain.utilities;
+package de.dhbw.domain.miscellaneous;
 
 import java.time.LocalDate;
 import java.time.temporal.*;

@@ -1,4 +1,4 @@
-package de.dhbw.domain.utilities;
+package de.dhbw.domain.miscellaneous;
 
 public interface Transaction {
     int getAmount();

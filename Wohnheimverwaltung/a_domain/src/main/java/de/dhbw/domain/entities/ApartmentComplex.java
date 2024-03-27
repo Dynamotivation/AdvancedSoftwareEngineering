@@ -1,6 +1,6 @@
 package de.dhbw.domain.entities;
 
-import de.dhbw.domain.aggregateRoots.ApartmentUnit;
+import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.valueObjects.Address;
 
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.List;
 public class ApartmentComplex {
     private final Address address;
     private final LocalDate dateOfConstruction;
-    private final List<ApartmentUnit> apartmentUnits = new ArrayList<>();
+    private final List<RentalApartmentUnit> rentalApartmentUnits = new ArrayList<>();
 
     public ApartmentComplex(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction) {
         // Validate date of construction (implicitly checked for null)
@@ -21,12 +21,12 @@ public class ApartmentComplex {
         this.dateOfConstruction = dateOfConstruction;
     }
 
-    public void addApartment(ApartmentUnit apartmentUnit) {
-        apartmentUnits.add(apartmentUnit);
+    public void addApartment(RentalApartmentUnit rentalApartmentUnit) {
+        rentalApartmentUnits.add(rentalApartmentUnit);
     }
 
-    public List<ApartmentUnit> getApartments() {
-        return apartmentUnits;
+    public List<RentalApartmentUnit> getApartments() {
+        return rentalApartmentUnits;
     }
 
     public Address getAddress() {

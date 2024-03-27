@@ -2,8 +2,8 @@ package de.dhbw.domain.aggregateRoots;
 
 import de.dhbw.domain.entities.ContactInformation;
 import de.dhbw.domain.entities.Name;
-import de.dhbw.domain.utilities.ContactAvenue;
-import de.dhbw.domain.utilities.Transaction;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
+import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.util.ArrayList;

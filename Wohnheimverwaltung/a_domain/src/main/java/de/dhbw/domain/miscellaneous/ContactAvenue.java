@@ -1,4 +1,4 @@
-package de.dhbw.domain.utilities;
+package de.dhbw.domain.miscellaneous;
 
 public interface ContactAvenue {
     // Semantically it does not make sense to enforce a method name here.

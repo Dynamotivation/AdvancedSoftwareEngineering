@@ -1,6 +1,6 @@
 package de.dhbw.domain.entities;
 
-import de.dhbw.domain.utilities.Transaction;
+import de.dhbw.domain.miscellaneous.Transaction;
 
 import java.time.LocalDate;
 
