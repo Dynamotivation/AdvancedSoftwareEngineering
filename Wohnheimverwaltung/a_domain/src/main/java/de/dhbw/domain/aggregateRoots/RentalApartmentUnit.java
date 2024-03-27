@@ -4,7 +4,7 @@ import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Rent;
-import de.dhbw.domain.valueObjects.ids.RentableId;
+import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
@@ -18,18 +18,22 @@ public class RentalApartmentUnit implements Rental {
     private final ApartmentComplex parentApartmentComplex;
 
     // Required variables
-    private final RentableId id;
-    private int maxTenants; // TODO make into a value object or annotate verifications
+    private final RentalId id;
     private LeaseAgreement leaseAgreement;
-    private double size; // TODO make into a value object or annotate verifications
+    private int maxTenants; // TODO move into RentalInformation
+    private double size; // TODO move into RentalInformation
 
-    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants, Rent rent) {
+    public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, double size, int maxTenants) {
+        this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
+    }
+
+    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants) {
         setApartmentNumber(apartmentNumber);
         this.floor = floor;
         setSize(size);
         setMaxTenants(maxTenants);
         this.parentApartmentComplex = parentApartmentComplex;
-        this.id = new RentableId();
+        this.id = new RentalId();
     }
 
     private void setSize(double size) {
@@ -65,16 +69,22 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public void remodel(double size, int maxTenants) {
-        // Validate the apartment is not rented
-        if (leaseAgreement != null)
-            throw new IllegalStateException("Cannot remodel while apartment is rented");
-
-        setSize(size);
-        setMaxTenants(maxTenants);
+    public RentalId getId() {
+        return id;
     }
 
     @Override
+    public LeaseAgreement GetLeaseAgreement() {
+        return leaseAgreement;
+    }
+
+    @Override
+    public int getMaxTenants() {
+        return 0;
+    }
+
+    @Override
+    //TODO Should this really be public?
     public void setMaxTenants(int maxTenants) {
         if (maxTenants <= 0)
             throw new IllegalArgumentException("Invalid max tenants");
@@ -88,13 +98,19 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public RentableId getId() {
-        return id;
+    public List<TenantId> getTenantIds() {
+        //TODO
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public LeaseAgreement getRentalAgreement() {
-        return leaseAgreement;
+    public void remodel(double size, int maxTenants) {
+        // Validate the apartment is not rented
+        if (leaseAgreement != null)
+            throw new IllegalStateException("Cannot remodel while apartment is rented");
+
+        setSize(size);
+        setMaxTenants(maxTenants);
     }
 
     @Override
@@ -104,15 +120,5 @@ public class RentalApartmentUnit implements Rental {
             throw new IllegalArgumentException("Too many tenants");
 
         leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
-    }
-
-    @Override
-    public List<TenantId> getTenantIds() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Override
-    public LeaseAgreement GetRentalAgreement() {
-        return leaseAgreement;
     }
 }

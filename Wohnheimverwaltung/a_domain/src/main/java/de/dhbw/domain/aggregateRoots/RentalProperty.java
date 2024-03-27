@@ -4,7 +4,7 @@ import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
-import de.dhbw.domain.valueObjects.ids.RentableId;
+import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
@@ -16,10 +16,10 @@ public class RentalProperty implements Rental {
     private final LocalDate dateOfConstruction;
 
     // Required variables
-    private final RentableId id;
-    private int maxTenants; // TODO make into a value object or annotate verifications
+    private final RentalId id;
     private LeaseAgreement leaseAgreement;
-    private double size; // TODO make into a value object or annotate verifications
+    private int maxTenants; // TODO move into RentalInformation
+    private double size; // TODO move into RentalInformation
 
     public RentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, double size, int maxTenants) {
         // Validate date of construction (implicitly checked for null)
@@ -28,7 +28,7 @@ public class RentalProperty implements Rental {
 
         this.address = new Address(streetName, houseNumber, postalCode, city);
         this.dateOfConstruction = dateOfConstruction;
-        this.id = new RentableId();
+        this.id = new RentalId();
         setSize(size);
         setMaxTenants(maxTenants);
     }
@@ -41,7 +41,41 @@ public class RentalProperty implements Rental {
         return dateOfConstruction;
     }
 
-    public void setSize(double size) {
+    @Override
+    public RentalId getId() {
+        return id;
+    }
+
+    @Override
+    public LeaseAgreement GetLeaseAgreement() {
+        return leaseAgreement;
+    }
+
+    @Override
+    public int getMaxTenants() {
+        return maxTenants;
+    }
+
+    @Override
+    public void setMaxTenants(int maxTenants) {
+        if (maxTenants <= 0)
+            throw new IllegalArgumentException("Invalid max tenants");
+
+        this.maxTenants = maxTenants;
+    }
+
+    @Override
+    public List<TenantId> getTenantIds() {
+        //TODO
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public double getSize() {
+        return size;
+    }
+
+    private void setSize(double size) {
         if (size <= 0)
             throw new IllegalArgumentException("Invalid size");
 
@@ -55,44 +89,11 @@ public class RentalProperty implements Rental {
     }
 
     @Override
-    public void setMaxTenants(int maxTenants) {
-        if (maxTenants <= 0)
-            throw new IllegalArgumentException("Invalid max tenants");
-
-        this.maxTenants = maxTenants;
-    }
-
-    @Override
-    public LeaseAgreement getRentalAgreement() {
-        return leaseAgreement;
-    }
-
-    @Override
     public void rentToTenant(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
         // Validate that the number of tenants does not exceed the maximum number of tenants
         if (tenants.size() > maxTenants)
             throw new IllegalArgumentException("Too many tenants");
 
         leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
-    }
-
-    @Override
-    public double getSize() {
-        return size;
-    }
-
-    @Override
-    public RentableId getId() {
-        return id;
-    }
-
-    @Override
-    public List<TenantId> getTenantIds() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Override
-    public LeaseAgreement GetRentalAgreement() {
-        return leaseAgreement;
     }
 }
