@@ -1,8 +1,6 @@
 module de.dhbw.domain {
     requires org.apache.commons.validator;
     requires libphonenumber;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.annotation;
 
     opens de.dhbw.domain.aggregateRoots to com.fasterxml.jackson.databind;
@@ -10,7 +8,6 @@ module de.dhbw.domain {
     opens de.dhbw.domain.entities to com.fasterxml.jackson.databind;
     opens de.dhbw.domain.valueObjects to com.fasterxml.jackson.databind;
 
-    exports de.dhbw.domain;
     exports de.dhbw.domain.aggregateRoots;
     exports de.dhbw.domain.entities;
     exports de.dhbw.domain.miscellaneous;

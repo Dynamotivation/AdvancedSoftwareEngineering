@@ -1,10 +1,7 @@
-package de.dhbw.domain.repositories;
+package de.dhbw.plugin.persistence;
 
-import de.dhbw.domain.entities.LeaseAgreement;
-import de.dhbw.domain.entities.ApartmentComplex;
-import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
-import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.miscellaneous.Rental;
+import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
@@ -12,14 +9,12 @@ import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class RentalFilesystemRepository implements RentalRepository {
+public class RentalJacksonJsonRepository implements RentalRepository {
     private final List<Rental> rentals = new ArrayList<>();
 
     @Override
     public List<Rental> listAll() {
-        //TODO test if this is enough to obfuscate the pointer
         return new ArrayList<>(rentals);
     }
 
