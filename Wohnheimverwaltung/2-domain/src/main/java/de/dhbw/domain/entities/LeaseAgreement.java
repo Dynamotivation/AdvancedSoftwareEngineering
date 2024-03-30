@@ -1,16 +1,25 @@
 package de.dhbw.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.dhbw.domain.aggregateRoots.Tenant;
+import de.dhbw.domain.miscellaneous.NthDayOfMonthAdjuster;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class LeaseAgreement {
     private final LocalDate inclusiveStartDate;
-    private final int monthlyDayOfPayment;
     private LocalDate inclusiveEndDate;
+    private final int monthlyDayOfPayment;
+    private LocalDate nextPaymentDate;
+    private final Rent rent;
     private final List<Tenant> tenants;
+    private final LeaseAgreementId id;
 
     public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
         // Validate monthly day of payment
@@ -19,12 +28,22 @@ public class LeaseAgreement {
 
 
         this.inclusiveStartDate = inclusiveStartDate;
+        this.nextPaymentDate = inclusiveStartDate;
         this.monthlyDayOfPayment = monthlyDayOfPayment;
         this.tenants = tenants;
+        this.id = new LeaseAgreementId();
+        this.rent = rent;
+
+        // Notifies the tenants of the new lease agreement
+        tenants.forEach(tenant -> tenant.addLeaseAgreement(this));
     }
 
     public LocalDate getInclusiveStartDate() {
         return inclusiveStartDate;
+    }
+
+    public LocalDate getInclusiveEndDate() {
+        return inclusiveEndDate;
     }
 
     public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
@@ -37,15 +56,37 @@ public class LeaseAgreement {
         this.inclusiveEndDate = inclusiveEndDate;
     }
 
-    public LocalDate getInclusiveEndDate() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
     public List<Tenant> getTenants() {
         return tenants;
     }
 
     public int getMonthlyDayOfPayment() {
         return monthlyDayOfPayment;
+    }
+
+    public LeaseAgreementId getId() {
+        return id;
+    }
+
+    public void chargeRent() {
+        NthDayOfMonthAdjuster nthDayOfMonthAdjuster = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
+
+        while (nextPaymentDate.isBefore(LocalDate.now())) {
+            tenants.forEach(tenant -> tenant.addTransaction(new RentCharge(-rent.getAmount(), nextPaymentDate, id)));
+            nextPaymentDate = nextPaymentDate.plusMonths(1).with(nthDayOfMonthAdjuster);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaseAgreement that = (LeaseAgreement) o;
+        return monthlyDayOfPayment == that.monthlyDayOfPayment && Objects.equals(inclusiveStartDate, that.inclusiveStartDate) && Objects.equals(inclusiveEndDate, that.inclusiveEndDate) && Objects.equals(tenants, that.tenants) && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inclusiveStartDate, monthlyDayOfPayment, inclusiveEndDate, tenants, id);
     }
 }

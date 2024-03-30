@@ -8,6 +8,7 @@ public class Deposit implements Transaction {
     private final int amount;
     private final LocalDate dueDate;
 
+
     public Deposit(int amount, LocalDate dueDate) {
         if (amount <= 0)
             throw new IllegalArgumentException("Invalid amount");
@@ -22,7 +23,7 @@ public class Deposit implements Transaction {
     }
 
     @Override
-    public int getDate() {
-        return 0;
+    public LocalDate getDate() {
+        return dueDate;
     }
 }

@@ -7,10 +7,8 @@ import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.ids.RentalId;
-import de.dhbw.domain.valueObjects.ids.TenantId;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +24,6 @@ public class RentalApartmentUnit implements Rental {
     private LeaseAgreement leaseAgreement;
     private int maxTenants; // TODO move into RentalInformation
     private double size; // TODO move into RentalInformation
-    private final List<TenantId> tenantIds;
 
     public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, double size, int maxTenants) {
         this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
@@ -45,7 +42,6 @@ public class RentalApartmentUnit implements Rental {
         setSize(size);
         setMaxTenants(maxTenants);
         this.id = new RentalId();
-        this.tenantIds = new ArrayList<>();
     }
 
     public int getApartmentNumber() {
@@ -79,7 +75,7 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public LeaseAgreement GetLeaseAgreement() {
+    public LeaseAgreement getLeaseAgreement() {
         return leaseAgreement;
     }
 
@@ -108,11 +104,6 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public List<TenantId> getTenantIds() {
-        return new ArrayList<>(tenantIds);
-    }
-
-    @Override
     public void remodel(double size, int maxTenants) {
         // Validate the apartment is not rented
         if (leaseAgreement != null)
@@ -123,7 +114,7 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public void rentToTenant(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+    public void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
         // Validate that the number of tenants does not exceed the maximum number of tenants
         if (tenants.size() > maxTenants)
             throw new IllegalArgumentException("Too many tenants");
@@ -136,11 +127,11 @@ public class RentalApartmentUnit implements Rental {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RentalApartmentUnit that = (RentalApartmentUnit) o;
-        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Double.compare(size, that.size) == 0 && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && Objects.equals(tenantIds, that.tenantIds);
+        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Double.compare(size, that.size) == 0 && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(apartmentNumber, floor, parentApartmentComplex, id, leaseAgreement, maxTenants, size, tenantIds);
+        return Objects.hash(apartmentNumber, floor, parentApartmentComplex, id, leaseAgreement, maxTenants, size);
     }
 }

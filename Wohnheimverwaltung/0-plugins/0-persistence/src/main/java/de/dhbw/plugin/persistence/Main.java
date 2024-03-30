@@ -37,8 +37,6 @@ public class Main {
 
         System.out.println("Comparing Complexes");
         System.out.println(apartmentUnit.getParentApartmentComplex().equals(apartmentUnit2.getParentApartmentComplex()));
-        System.out.println("Comparing Tenants");
-        System.out.println(apartmentUnit.getTenantIds().equals(apartmentUnit2.getTenantIds()));
         System.out.println("Comparing Units");
         System.out.println(apartmentUnit.equals(apartmentUnit2));
     }
