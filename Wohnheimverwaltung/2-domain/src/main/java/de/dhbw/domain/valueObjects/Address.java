@@ -13,7 +13,12 @@ public class Address {
     private final String postalCode;
     private final String city;
 
-    public Address(String streetName, String houseNumber, String postalCode, String city) {
+    @JsonCreator
+    public Address(
+            @JsonProperty("streetName") String streetName,
+            @JsonProperty("houseNumber") String houseNumber,
+            @JsonProperty("postalCode") String postalCode,
+            @JsonProperty("city") String city) {
         // Validate street name
         streetName = streetName.trim();
 
@@ -48,16 +53,6 @@ public class Address {
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.city = city;
-    }
-
-    // Factory for deserialization
-    @JsonCreator
-    static Address createAddress(
-            @JsonProperty("streetName") String streetName,
-            @JsonProperty("houseNumber") String houseNumber,
-            @JsonProperty("postalCode") String postalCode,
-            @JsonProperty("city") String city) {
-        return new Address(streetName, houseNumber, postalCode, city);
     }
 
     public String getStreetName() {

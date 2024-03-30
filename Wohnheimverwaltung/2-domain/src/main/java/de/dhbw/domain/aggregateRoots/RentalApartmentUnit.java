@@ -32,7 +32,13 @@ public class RentalApartmentUnit implements Rental {
         this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
     }
 
-    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, int apartmentNumber, int floor, double size, int maxTenants) {
+    @JsonCreator
+    public RentalApartmentUnit(
+            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
+            @JsonProperty("apartmentNumber") int apartmentNumber,
+            @JsonProperty("floor") int floor,
+            @JsonProperty("size") double size,
+            @JsonProperty("maxTenants") int maxTenants) {
         this.parentApartmentComplex = parentApartmentComplex;
         setApartmentNumber(apartmentNumber);
         this.floor = floor;
@@ -40,17 +46,6 @@ public class RentalApartmentUnit implements Rental {
         setMaxTenants(maxTenants);
         this.id = new RentalId();
         this.tenantIds = new ArrayList<>();
-    }
-
-    // Factory for deserialization
-    @JsonCreator
-    static RentalApartmentUnit createRentalApartmentUnit(
-            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
-            @JsonProperty("apartmentNumber") int apartmentNumber,
-            @JsonProperty("floor") int floor,
-            @JsonProperty("size") double size,
-            @JsonProperty("maxTenants") int maxTenants) {
-        return new RentalApartmentUnit(parentApartmentComplex, apartmentNumber, floor, size, maxTenants);
     }
 
     public int getApartmentNumber() {

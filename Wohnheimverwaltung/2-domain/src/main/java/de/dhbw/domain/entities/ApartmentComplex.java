@@ -24,19 +24,17 @@ public class ApartmentComplex {
         this.dateOfConstruction = dateOfConstruction;
     }
 
-    // Factory for deserialization
+    // Powerful constructor for deserialization
     @JsonCreator
-    private static ApartmentComplex createApartmentComplex(
+    private ApartmentComplex(
             @JsonProperty("address") Address address,
             @JsonProperty("rentalApartmentUnits") List<RentalApartmentUnit> rentalApartmentUnits,
             @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction) {
-        ApartmentComplex apartmentComplex =  new ApartmentComplex(address.getStreetName(), address.getHouseNumber(), address.getPostalCode(), address.getCity(), dateOfConstruction);
+        this(address.getStreetName(), address.getHouseNumber(), address.getPostalCode(), address.getCity(), dateOfConstruction);
 
         for (RentalApartmentUnit rentalApartmentUnit : rentalApartmentUnits) {
-            apartmentComplex.addApartment(rentalApartmentUnit);
+            addApartment(rentalApartmentUnit);
         }
-
-        return apartmentComplex;
     }
 
     public void addApartment(RentalApartmentUnit rentalApartmentUnit) {
