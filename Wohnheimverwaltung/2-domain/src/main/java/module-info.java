@@ -11,10 +11,10 @@ module de.dhbw.domain {
     opens de.dhbw.domain.valueObjects to com.fasterxml.jackson.databind;
 
     // Export packages
-    exports de.dhbw.domain.aggregateRoots;
-    exports de.dhbw.domain.entities;
-    exports de.dhbw.domain.miscellaneous;
-    exports de.dhbw.domain.repositories;
-    exports de.dhbw.domain.valueObjects;
-    exports de.dhbw.domain.valueObjects.ids;
+    exports de.dhbw.domain.aggregateRoots to de.dhbw.application, de.dhbw.plugin.persistence;
+    exports de.dhbw.domain.entities to de.dhbw.application, de.dhbw.plugin.persistence;
+    exports de.dhbw.domain.miscellaneous to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
+    exports de.dhbw.domain.repositories to de.dhbw.application, de.dhbw.plugin.persistence;
+    exports de.dhbw.domain.valueObjects to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
+    exports de.dhbw.domain.valueObjects.ids to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
 }
