@@ -90,7 +90,7 @@ public class RentalProperty implements Rental {
             throw new IllegalArgumentException("Too many tenants");
 
 
-        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
+        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, id);
     }
 
     @Override

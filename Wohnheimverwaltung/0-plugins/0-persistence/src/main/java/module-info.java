@@ -8,5 +8,5 @@ module de.dhbw.plugin.persistence {
     requires com.fasterxml.jackson.annotation;
 
     // Export packages
-    exports de.dhbw.plugin.persistence to de.dhbw.application, de.dhbw.plugins.presentation;
+    exports de.dhbw.plugin.persistence to de.dhbw.application, de.dhbw.plugin.presentation;
 }

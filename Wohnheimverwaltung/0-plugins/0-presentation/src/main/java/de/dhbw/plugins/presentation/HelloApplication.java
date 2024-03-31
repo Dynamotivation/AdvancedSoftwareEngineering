@@ -21,7 +21,7 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         // Inject Repositories into Application Layer
-        RentalManagementService rentalManagementService = new RentalManagementService(new RentalJacksonJsonRepository());
+        //RentalManagementService rentalManagementService = new RentalManagementService(new RentalJacksonJsonRepository());
 
         launch();
     }

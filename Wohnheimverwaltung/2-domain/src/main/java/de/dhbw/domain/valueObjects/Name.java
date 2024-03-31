@@ -1,4 +1,6 @@
-package de.dhbw.domain.entities;
+package de.dhbw.domain.valueObjects;
+
+import java.util.Objects;
 
 public class Name {
     private final String name;
@@ -23,15 +25,28 @@ public class Name {
 
     private String validateName(String name) {
         if (name == null || name.isBlank())
-            throw new IllegalArgumentException("First name must not be null or empty");
+            throw new IllegalArgumentException("Name must not be null or empty");
 
         name = name.trim();
 
         return name;
     }
-//TODO Add something like changing to make it into an entity for sure
+
     @Override
     public String toString() {
         return getFullName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name name1 = (Name) o;
+        return Objects.equals(name, name1.name) && Objects.equals(surname, name1.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname);
     }
 }

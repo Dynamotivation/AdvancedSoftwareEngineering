@@ -2,7 +2,7 @@ package de.dhbw.domain.aggregateRoots;
 
 import de.dhbw.domain.entities.ContactInformation;
 import de.dhbw.domain.entities.LeaseAgreement;
-import de.dhbw.domain.entities.Name;
+import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.entities.RentCharge;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.miscellaneous.Transaction;
@@ -42,7 +42,7 @@ public class Tenant {
     }
 
     public List<LeaseAgreement> getAssociatedLeaseAgreements() {
-        return associatedLeaseAgreements;
+        return new ArrayList<>(associatedLeaseAgreements);
     }
 
     public void addLeaseAgreement(LeaseAgreement leaseAgreement) {
@@ -111,6 +111,6 @@ public class Tenant {
     }
 
     public List<Transaction> getOutstandingBalanceHistory() {
-        return outstandingBalanceHistory;
+        return new ArrayList<>(outstandingBalanceHistory);
     }
 }

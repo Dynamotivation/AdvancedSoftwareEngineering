@@ -1,4 +1,4 @@
-module de.dhbw.plugins.presentation {
+module de.dhbw.plugin.presentation {
     // Import other layers
     requires de.dhbw.plugin.persistence;
     requires de.dhbw.application;

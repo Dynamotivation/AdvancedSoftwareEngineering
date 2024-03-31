@@ -1,16 +1,12 @@
 package de.dhbw.application.transferObjects;
 
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
-import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
-import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Size;
-import de.dhbw.domain.valueObjects.ids.RentalId;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
-public class RentalApartmentUnitDTO {
+public class RentalApartmentUnitSnapshotDTO {
     private int apartmentNumber;
     private final int floor;
     private final UUID parentApartmentComplexId;
@@ -19,7 +15,7 @@ public class RentalApartmentUnitDTO {
     private int maxTenants;
     private Size size;
 
-    public RentalApartmentUnitDTO(RentalApartmentUnit rentalApartmentUnit) {
+    public RentalApartmentUnitSnapshotDTO(RentalApartmentUnit rentalApartmentUnit) {
         this.parentApartmentComplexId = UUID.randomUUID(); // TODO fix
         this.apartmentNumber = rentalApartmentUnit.getApartmentNumber();
         this.floor = rentalApartmentUnit.getFloor();
