@@ -42,7 +42,7 @@ public class ApartmentComplex {
     }
 
     public List<RentalApartmentUnit> getRentalApartmentUnits() {
-        return rentalApartmentUnits;
+        return new ArrayList<>(rentalApartmentUnits);
     }
 
     public Address getAddress() {

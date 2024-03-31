@@ -1,4 +1,4 @@
-package de.dhbw.application.transferObjects;
+package de.dhbw.application.snapshotObjects;
 
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.entities.ContactInformation;
@@ -16,6 +16,7 @@ public class TenantSnapshotDTO {
     private final List<LeaseAgreement> associatedLeaseAgreements;
     private final Name name;
     private final List<Transaction> outstandingBalanceHistory;
+    private final int balance;
 
     public TenantSnapshotDTO(Tenant tenant) {
         this.name = new Name(tenant.getName(), tenant.getSurname());
@@ -23,6 +24,7 @@ public class TenantSnapshotDTO {
         this.id = tenant.getId();
         this.associatedLeaseAgreements = tenant.getAssociatedLeaseAgreements();
         this.outstandingBalanceHistory = tenant.getOutstandingBalanceHistory();
+        this.balance = tenant.getBalance();
     }
 
     public ContactInformation getContactInformation() {
@@ -43,5 +45,9 @@ public class TenantSnapshotDTO {
 
     public List<Transaction> getOutstandingBalanceHistory() {
         return new ArrayList<>(outstandingBalanceHistory);
+    }
+
+    public int getBalance() {
+        return balance;
     }
 }

@@ -1,7 +1,7 @@
 package de.dhbw.application.services;
 
-import de.dhbw.application.transferObjects.RentalApartmentUnitSnapshotDTO;
-import de.dhbw.application.transferObjects.RentalPropertySnapshotDTO;
+import de.dhbw.application.snapshotObjects.RentalApartmentUnitSnapshotDTO;
+import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.aggregateRoots.RentalProperty;
 import de.dhbw.domain.aggregateRoots.Tenant;
@@ -26,11 +26,11 @@ public class RentalManagementService {
         this.tenantRepository = tenantRepository;
     }
 
-    public RentalPropertySnapshotDTO createRentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, BigDecimal size, int maxTenants) {
+    public RentalId createRentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, BigDecimal size, int maxTenants) {
         RentalProperty rentalProperty = new RentalProperty(streetName, houseNumber, postalCode, city, dateOfConstruction, Size.squareMeters(size), maxTenants);
         rentalRepository.add(rentalProperty);
 
-        return new RentalPropertySnapshotDTO(rentalProperty);
+        return rentalProperty.getId();
     }
 
     public RentalId createRentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, BigDecimal size, int maxTenants) {
@@ -50,21 +50,21 @@ public class RentalManagementService {
         rental.rentToTenants(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
     }
 
-    public List<RentalApartmentUnitSnapshotDTO> listAllRentalApartmentUnits() {
+    public List<RentalApartmentUnitSnapshotDTO> listAllRentalApartmentUnitSnapshots() {
         return rentalRepository.listAllRentalApartmentUnits()
                 .stream()
                 .map(RentalApartmentUnitSnapshotDTO::new)
                 .toList();
     }
 
-    public List<RentalPropertySnapshotDTO> listAllRentalProperties() {
+    public List<RentalPropertySnapshotDTO> listAllRentalPropertySnapshots() {
         return rentalRepository.listAllRentalProperties()
                 .stream()
                 .map(RentalPropertySnapshotDTO::new)
                 .toList();
     }
 
-    public RentalPropertySnapshotDTO findRentalPropertyById(RentalId rentalId) {
+    public RentalPropertySnapshotDTO getRentalPropertySnapshotById(RentalId rentalId) {
         Rental rental = rentalRepository.findById(rentalId);
 
         if (rental instanceof RentalProperty rentalProperty)

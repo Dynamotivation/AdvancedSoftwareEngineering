@@ -2,13 +2,14 @@ package de.dhbw.plugins.presentation;
 
 import de.dhbw.application.services.RentalManagementService;
 import de.dhbw.application.services.TenantManagementService;
-import de.dhbw.application.transferObjects.LeaseAgreementSnapshotDTO;
-import de.dhbw.application.transferObjects.RentalPropertySnapshotDTO;
-import de.dhbw.application.transferObjects.TenantSnapshotDTO;
+import de.dhbw.application.snapshotObjects.LeaseAgreementSnapshotDTO;
+import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
+import de.dhbw.application.snapshotObjects.TenantSnapshotDTO;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ContactAvenueEmail;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.SizeUnit;
+import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
 
@@ -32,14 +33,20 @@ public class Testing {
 
 
         System.out.println("Creating 4 tenants...");
-        var tenant1 = tenantManagementService.createTenant("John", "Doe", new ContactAvenueEmail("john@doemail.com"));
-        var tenant2 = tenantManagementService.createTenant("Jane", "Doe", new ContactAvenueEmail("jane@doemail.com"));
-        var tenant3 = tenantManagementService.createTenant("Alice", "Wonderland", new ContactAvenueEmail("alice@wonderland.de"));
-        var tenant4 = tenantManagementService.createTenant("Bob", "Builder", new ContactAvenueEmail("bob@builders.com.uk"));
+        var tenantId1 = tenantManagementService.createTenant("John", "Doe", new ContactAvenueEmail("john@doemail.com"));
+        var tenantId2 = tenantManagementService.createTenant("Jane", "Doe", new ContactAvenueEmail("jane@doemail.com"));
+        var tenantId3 = tenantManagementService.createTenant("Alice", "Wonderland", new ContactAvenueEmail("alice@wonderland.de"));
+        var tenantId4 = tenantManagementService.createTenant("Bob", "Builder", new ContactAvenueEmail("bob@builders.com.uk"));
+        TenantSnapshotDTO tenant1 = tenantManagementService.getTenantSnapshotById(tenantId1);
+        TenantSnapshotDTO tenant2 = tenantManagementService.getTenantSnapshotById(tenantId2);
+        TenantSnapshotDTO tenant3 = tenantManagementService.getTenantSnapshotById(tenantId3);
+        TenantSnapshotDTO tenant4 = tenantManagementService.getTenantSnapshotById(tenantId4);
 
 
         System.out.println("Creating a RentalProperty...");
-        RentalPropertySnapshotDTO rentalProperty = rentalManagementService.createRentalProperty("Main Street", "1", "12345", "Springfield", LocalDate.of(2000, 1, 1), new BigDecimal(200), 2);
+        RentalId rentalId = rentalManagementService.createRentalProperty("Main Street", "1", "12345", "Springfield", LocalDate.of(2000, 1, 1), new BigDecimal(200), 2);
+        RentalPropertySnapshotDTO rentalProperty = rentalManagementService.getRentalPropertySnapshotById(rentalId);
+
 
         System.out.println("Trying to overfill the rental property...");
         try {
@@ -77,7 +84,7 @@ public class Testing {
 
 
         System.out.println("Refreshing rental data...");
-        rentalProperty = rentalManagementService.findRentalPropertyById(rentalProperty.getId());
+        rentalProperty = rentalManagementService.getRentalPropertySnapshotById(rentalProperty.getId());
 
 
         System.out.println("Displaying all information on the rental property and lease...");

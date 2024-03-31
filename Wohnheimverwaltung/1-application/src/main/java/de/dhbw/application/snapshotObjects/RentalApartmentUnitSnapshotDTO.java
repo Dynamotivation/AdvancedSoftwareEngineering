@@ -1,27 +1,29 @@
-package de.dhbw.application.transferObjects;
+package de.dhbw.application.snapshotObjects;
 
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
+import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.valueObjects.Size;
+import de.dhbw.domain.valueObjects.ids.RentalId;
 
 import java.util.UUID;
 
 public class RentalApartmentUnitSnapshotDTO {
-    private int apartmentNumber;
+    private final int apartmentNumber;
     private final int floor;
-    private final UUID parentApartmentComplexId;
-    private final UUID rentalId;
+    private final ApartmentComplexSnapshotDTO parentApartmentComplex;
+    private final RentalId id;
     private LeaseAgreement leaseAgreement;
-    private int maxTenants;
-    private Size size;
+    private final int maxTenants;
+    private final Size size;
 
     public RentalApartmentUnitSnapshotDTO(RentalApartmentUnit rentalApartmentUnit) {
-        this.parentApartmentComplexId = UUID.randomUUID(); // TODO fix
+        this.parentApartmentComplex = new ApartmentComplexSnapshotDTO(rentalApartmentUnit.getParentApartmentComplex());
         this.apartmentNumber = rentalApartmentUnit.getApartmentNumber();
         this.floor = rentalApartmentUnit.getFloor();
         this.size = rentalApartmentUnit.getSize();
         this.maxTenants = rentalApartmentUnit.getMaxTenants();
-        this.rentalId = rentalApartmentUnit.getId().getId();
+        this.id = rentalApartmentUnit.getId();
     }
 
     public int getApartmentNumber() {
@@ -32,12 +34,12 @@ public class RentalApartmentUnitSnapshotDTO {
         return floor;
     }
 
-    public UUID getParentApartmentComplexId() {
-        return parentApartmentComplexId;
+    public ApartmentComplexSnapshotDTO getParentApartmentComplex() {
+        return parentApartmentComplex;
     }
 
-    public UUID getRentalId() {
-        return rentalId;
+    public RentalId getId() {
+        return id;
     }
 
     public LeaseAgreement getLeaseAgreement() {

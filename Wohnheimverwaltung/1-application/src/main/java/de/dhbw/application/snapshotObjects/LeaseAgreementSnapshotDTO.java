@@ -1,6 +1,5 @@
-package de.dhbw.application.transferObjects;
+package de.dhbw.application.snapshotObjects;
 
-import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;

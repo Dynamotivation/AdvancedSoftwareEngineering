@@ -1,6 +1,6 @@
 package de.dhbw.application.services;
 
-import de.dhbw.application.transferObjects.TenantSnapshotDTO;
+import de.dhbw.application.snapshotObjects.TenantSnapshotDTO;
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.repositories.TenantRepository;
@@ -13,11 +13,11 @@ public class TenantManagementService {
         this.tenantRepository = tenantRepository;
     }
 
-    public TenantSnapshotDTO createTenant(String name, String surname, ContactAvenue contactAvenue) {
+    public TenantId createTenant(String name, String surname, ContactAvenue contactAvenue) {
         Tenant tenant = new Tenant(name, surname, contactAvenue);
         tenantRepository.add(tenant);
 
-        return new TenantSnapshotDTO(tenant);
+        return tenant.getId();
     }
 
     public void addContactAvenueToTenant(TenantId tenantId, ContactAvenue contactAvenue) {
@@ -30,7 +30,7 @@ public class TenantManagementService {
         return tenant.getBalance();
     }
 
-    public TenantSnapshotDTO findTenantById(TenantId tenantId) {
+    public TenantSnapshotDTO getTenantSnapshotById(TenantId tenantId) {
         Tenant tenant = tenantRepository.findById(tenantId);
 
         return new TenantSnapshotDTO(tenant);
