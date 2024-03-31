@@ -6,8 +6,11 @@ import de.dhbw.domain.entities.RentCharge;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ContactAvenueEmail;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.Size;
+import de.dhbw.domain.valueObjects.SizeUnit;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -24,7 +27,7 @@ public class ManualTesting {
 
 
         System.out.println("Creating a RentalProperty...");
-        RentalProperty rentalProperty = new RentalProperty("Main Street", "1", "12345", "Springfield", LocalDate.of(2000, 1, 1), 100, 2);
+        RentalProperty rentalProperty = new RentalProperty("Main Street", "1", "12345", "Springfield", LocalDate.of(2000, 1, 1), Size.squareMeters(new BigDecimal(200)), 2);
 
 
         System.out.println("Trying to overfill the rental property...");

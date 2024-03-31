@@ -6,6 +6,7 @@ import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 
 import java.time.LocalDate;
@@ -15,17 +16,17 @@ import java.util.Objects;
 public class RentalApartmentUnit implements Rental {
     // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
     // Implementation specific variables
-    private int apartmentNumber; // TODO make into a value object or annotate verifications
-    private final int floor; // TODO make into a value object or annotate verifications
+    private int apartmentNumber;
+    private final int floor;
     private final ApartmentComplex parentApartmentComplex;
 
     // Required variables
     private final RentalId id;
     private LeaseAgreement leaseAgreement;
-    private int maxTenants; // TODO move into RentalInformation
-    private double size; // TODO move into RentalInformation
+    private int maxTenants;
+    private Size size;
 
-    public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, double size, int maxTenants) {
+    public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, Size size, int maxTenants) {
         this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
     }
 
@@ -34,7 +35,7 @@ public class RentalApartmentUnit implements Rental {
             @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
             @JsonProperty("apartmentNumber") int apartmentNumber,
             @JsonProperty("floor") int floor,
-            @JsonProperty("size") double size,
+            @JsonProperty("size") Size size,
             @JsonProperty("maxTenants") int maxTenants) {
         this.parentApartmentComplex = parentApartmentComplex;
         setApartmentNumber(apartmentNumber);
@@ -92,19 +93,16 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public double getSize() {
+    public Size getSize() {
         return size;
     }
 
-    private void setSize(double size) {
-        if (size <= 0)
-            throw new IllegalArgumentException("Invalid size");
-
+    private void setSize(Size size) {
         this.size = size;
     }
 
     @Override
-    public void remodel(double size, int maxTenants) {
+    public void remodel(Size size, int maxTenants) {
         // Validate the apartment is not rented
         if (leaseAgreement != null)
             throw new IllegalStateException("Cannot remodel while apartment is rented");
@@ -127,7 +125,7 @@ public class RentalApartmentUnit implements Rental {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RentalApartmentUnit that = (RentalApartmentUnit) o;
-        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Double.compare(size, that.size) == 0 && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement);
+        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && Objects.equals(size, that.size);
     }
 
     @Override

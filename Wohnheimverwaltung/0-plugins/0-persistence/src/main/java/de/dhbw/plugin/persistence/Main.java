@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
+import de.dhbw.domain.valueObjects.Size;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Main {
@@ -15,7 +17,7 @@ public class Main {
         mapper.registerModule(new JavaTimeModule());
 
         // Serialize object to JSON
-        RentalApartmentUnit apartmentUnit = new RentalApartmentUnit("Rheinstraße", "1", "68163", "Mannheim", LocalDate.of(2000, 10, 3), 1,1,1,1);
+        RentalApartmentUnit apartmentUnit = new RentalApartmentUnit("Rheinstraße", "1", "68163", "Mannheim", LocalDate.of(2000, 10, 3), 1,1, Size.squareMeters(new BigDecimal(1)),1);
 
         String jsonString = null;
 

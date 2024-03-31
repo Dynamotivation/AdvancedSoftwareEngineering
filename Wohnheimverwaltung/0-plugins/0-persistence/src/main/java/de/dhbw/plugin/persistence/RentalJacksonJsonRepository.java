@@ -1,5 +1,7 @@
 package de.dhbw.plugin.persistence;
 
+import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
+import de.dhbw.domain.aggregateRoots.RentalProperty;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
@@ -32,13 +34,40 @@ public class RentalJacksonJsonRepository implements RentalRepository {
     }
 
     @Override
-    public List<Rental> findByRentalAgreementId(LeaseAgreementId leaseAgreementId) {
+    public List<Rental> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Rental> findByApartmentComplexId(ApartmentComplexId apartmentComplexId) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<RentalApartmentUnit> listAllRentalApartmentUnits() {
+        List<RentalApartmentUnit> rentalApartmentUnits = new ArrayList<>();
+
+        rentals.stream().filter(rental -> rental instanceof RentalApartmentUnit)
+                .map(rental -> (RentalApartmentUnit) rental)
+                .forEach(rentalApartmentUnits::add);
+
+        return rentalApartmentUnits;
+    }
+
+    @Override
+    public List<RentalProperty> listAllRentalProperties() {
+        List<RentalProperty> rentalProperties = new ArrayList<>();
+
+        rentals.stream().filter(rental -> rental instanceof RentalProperty)
+                .map(rental -> (RentalProperty) rental)
+                .forEach(rentalProperties::add);
+
+        return rentalProperties;
+    }
+
+    @Override
+    public void add(Rental rental) {
+        rentals.add(rental);
     }
 
     @Override

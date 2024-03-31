@@ -1,5 +1,7 @@
 package de.dhbw.plugins.presentation;
 
+import de.dhbw.application.services.RentalManagementService;
+import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,12 +14,15 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle(Main.test);
+        stage.setTitle("Hello World!");
         stage.setScene(scene);
         stage.show();
     }
 
     public static void main(String[] args) {
+        // Inject Repositories into Application Layer
+        RentalManagementService rentalManagementService = new RentalManagementService(new RentalJacksonJsonRepository());
+
         launch();
     }
 }
