@@ -7,8 +7,17 @@ module de.dhbw.plugin.presentation {
     // Import JavaFX
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.material;
+    requires jfxflexbox;
+    requires flexbox;
 
     // Export to JavaFX
-    opens de.dhbw.plugins.presentation to javafx.fxml;
     exports de.dhbw.plugins.presentation to javafx.graphics;
+    opens de.dhbw.plugins.presentation to javafx.fxml;
+    exports de.dhbw.plugins.presentation.startView to javafx.graphics;
+    opens de.dhbw.plugins.presentation.startView to javafx.fxml;
+    exports de.dhbw.plugins.presentation.overviewView to javafx.graphics;
+    opens de.dhbw.plugins.presentation.overviewView to javafx.fxml;
 }

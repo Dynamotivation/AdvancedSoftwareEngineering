@@ -14,7 +14,7 @@ module de.dhbw.domain {
     exports de.dhbw.domain.aggregateRoots to de.dhbw.application, de.dhbw.plugin.persistence;
     exports de.dhbw.domain.entities to de.dhbw.application, de.dhbw.plugin.persistence;
     exports de.dhbw.domain.miscellaneous to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
-    exports de.dhbw.domain.repositories to de.dhbw.application, de.dhbw.plugin.persistence;
+    exports de.dhbw.domain.repositories to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
     exports de.dhbw.domain.valueObjects to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
     exports de.dhbw.domain.valueObjects.ids to de.dhbw.application, de.dhbw.plugin.persistence, de.dhbw.plugin.presentation;
 }
