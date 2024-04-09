@@ -10,6 +10,7 @@ import de.dhbw.domain.valueObjects.ContactAvenueEmail;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.SizeUnit;
 import de.dhbw.domain.valueObjects.ids.RentalId;
+import de.dhbw.plugin.persistence.ApartmentComplexJacksonJsonRepository;
 import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
 
@@ -24,9 +25,10 @@ public class Testing {
         // Create repositories
         RentalJacksonJsonRepository rentalJacksonJsonRepository = new RentalJacksonJsonRepository();
         TenantJacksonJsonRepository tenantJacksonJsonRepository = new TenantJacksonJsonRepository();
+        ApartmentComplexJacksonJsonRepository apartmentComplexJacksonJsonRepository = new ApartmentComplexJacksonJsonRepository();
 
         // Inject Repositories into Application Layer
-        RentalManagementService rentalManagementService = new RentalManagementService(rentalJacksonJsonRepository, tenantJacksonJsonRepository);
+        RentalManagementService rentalManagementService = new RentalManagementService(rentalJacksonJsonRepository, tenantJacksonJsonRepository, apartmentComplexJacksonJsonRepository);
         TenantManagementService tenantManagementService = new TenantManagementService(tenantJacksonJsonRepository);
 
         System.out.println("Starting manual testing...");

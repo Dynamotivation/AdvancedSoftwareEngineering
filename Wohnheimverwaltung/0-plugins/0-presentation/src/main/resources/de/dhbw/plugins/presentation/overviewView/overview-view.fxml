@@ -23,27 +23,33 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.ScrollPane?>
 <TabPane xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="de.dhbw.plugins.presentation.overviewView.OverviewController"
          prefWidth="800" prefHeight="600">
 
-    <Tab text="Rentals" closable="false">
+    <Tab text="Unterkünfte" closable="false">
         <BorderPane>
             <top>
                 <TextField fx:id="searchField" promptText="Search..."/>
             </top>
 
             <center>
-                <VBox spacing="5">
-                    <BorderPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </BorderPane.margin>
-
-                    <BorderPane fx:id="complexesBorderPane">
-
-                    </BorderPane>
-                </VBox>
+                <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS">
+                    <VBox spacing="30">
+                        <VBox fx:id="apartmentComplexesPane" spacing="5">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </VBox.margin>
+                        </VBox>
+                        <VBox fx:id="rentalPropertiesPane">
+                            <VBox.margin>
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                            </VBox.margin>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
             </center>
         </BorderPane>
     </Tab>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.valueObjects.Address;
+import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class ApartmentComplex {
     private final Address address;
     private final LocalDate dateOfConstruction;
     private final List<RentalApartmentUnit> rentalApartmentUnits = new ArrayList<>();
+    private final ApartmentComplexId id;
 
     public ApartmentComplex(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction) {
         // Validate date of construction (implicitly checked for null)
@@ -22,6 +24,7 @@ public class ApartmentComplex {
 
         this.address = new Address(streetName, houseNumber, postalCode, city);
         this.dateOfConstruction = dateOfConstruction;
+        this.id = new ApartmentComplexId();
     }
 
     // Powerful constructor for deserialization
@@ -35,6 +38,10 @@ public class ApartmentComplex {
         for (RentalApartmentUnit rentalApartmentUnit : rentalApartmentUnits) {
             addApartment(rentalApartmentUnit);
         }
+    }
+
+    public ApartmentComplexId getId() {
+        return id;
     }
 
     public void addApartment(RentalApartmentUnit rentalApartmentUnit) {

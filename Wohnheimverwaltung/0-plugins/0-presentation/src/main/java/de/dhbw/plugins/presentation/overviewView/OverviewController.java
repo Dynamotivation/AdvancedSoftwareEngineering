@@ -1,11 +1,9 @@
 package de.dhbw.plugins.presentation.overviewView;
 
 import com.dukescript.layouts.flexbox.FlexboxLayout;
-import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
 import de.dhbw.plugins.presentation.MainApp;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -14,59 +12,114 @@ import com.dukescript.layouts.jfxflexbox.FlexBoxPane;
 
 public class OverviewController {
     @FXML
-    private BorderPane complexesBorderPane;
+    private VBox apartmentComplexesPane;
     @FXML
-    private FlexBoxPane test;
+    private VBox rentalPropertiesPane;
 
     @FXML
     public void initialize() {
-        complexesBorderPane.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        // Adding all apartment units
+        var apartmentComplexes = MainApp.getApartmentComplexManagementService().listAllApartmentComplexSnapshots();
 
-        BorderPane borderPane = new BorderPane();
-        borderPane.setMaxHeight(100); // Set max height
-        borderPane.setPrefWidth(100); // Set preferred width
-        BorderPane.setMargin(borderPane, new Insets(5, 15, 0, 5)); // Set margin
-        Label label = new Label("Filter");
-        borderPane.setTop(label); // Set label as the top node
-        FontIcon fontIcon = new FontIcon("gmi-home-work");
-        fontIcon.setIconSize(32); // Set icon size
-        StackPane iconPane = new StackPane(fontIcon); // Place icon in a StackPane for centering
-        borderPane.setCenter(iconPane); // Set iconPane as the center node
-        complexesBorderPane.setLeft(borderPane); // Set borderPane as the left node
+        for (var apartmentComplex : apartmentComplexes) {
+            // Style complex info
+            BorderPane apartmentUnitInfoPane = new BorderPane();
+            apartmentUnitInfoPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(5), Insets.EMPTY)));
+            apartmentUnitInfoPane.setMaxHeight(100);
+            apartmentUnitInfoPane.setPrefWidth(100);
+            BorderPane.setMargin(apartmentUnitInfoPane, new Insets(5, 15, 0, 5));
+
+            // Assemble apartment complex information
+            Label complexAddress = new Label(apartmentComplex.getAddress().toString().replace(", ", "\n"));
+            apartmentUnitInfoPane.setTop(complexAddress);
+            FontIcon complexIcon = new FontIcon("gmi-apartment");
+            complexIcon.setIconSize(32);
+            apartmentUnitInfoPane.setCenter(complexIcon);
+
+            // Create pane for apartment units
+            FlexBoxPane apartmentUnitsPane = new FlexBoxPane();
+            apartmentUnitsPane.setJustifyContent(FlexboxLayout.JustifyContent.FLEX_START);
+            apartmentUnitsPane.setFlexDirection(FlexboxLayout.FlexDirection.ROW);
+            apartmentUnitsPane.setFlexWrap(FlexboxLayout.FlexWrap.WRAP);
+            apartmentUnitsPane.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(10),
+                    new Insets(-5, -5, -10, -5))));
+
+
+
+            // Fetching all current apartment units
+            var apartments = MainApp.getRentalManagementService()
+                    .getRentalApartmentUnitSnapshotsByApartmentComplexId(apartmentComplex.getId());
+
+            // Add rentals to pane
+            for (var apartment : apartments) {
+                // Create rental unit info pane
+                BorderPane rentalInfoPane = new BorderPane();
+                rentalInfoPane.setPrefSize(100, 100);
+                rentalInfoPane.setTop(new Label(apartment.getApartmentNumber() + " - " + apartment.getFloor()));
+                FontIcon rentalIcon = new FontIcon("gmi-home-work");
+                rentalIcon.setIconSize(32);
+                rentalInfoPane.setCenter(rentalIcon);
+                rentalInfoPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(5), Insets.EMPTY)));
+                FlexBoxPane.setMargin(rentalInfoPane, new Insets(5));
+
+                // Add to pane
+                apartmentUnitsPane.getChildren().add(rentalInfoPane);
+            }
+
+
+
+            // Create grouping pane
+            BorderPane apartmentUnitGroupPane = new BorderPane();
+            apartmentUnitGroupPane.setPadding(new Insets(5, 5, 10, 5));
+            apartmentUnitGroupPane.setLeft(apartmentUnitInfoPane);
+            apartmentUnitGroupPane.setCenter(apartmentUnitsPane);
+
+            // Add grouping pane to complexes pane
+            apartmentComplexesPane.getChildren().add(apartmentUnitGroupPane);
+        }
+
+
+
+        // Adding all rental properties
+        var rentalProperties = MainApp.getRentalManagementService().listAllRentalPropertySnapshots();
+
+        FlexBoxPane rentalPropertiesGroupPane = new FlexBoxPane();
+        rentalPropertiesGroupPane.setJustifyContent(FlexboxLayout.JustifyContent.FLEX_START);
+        rentalPropertiesGroupPane.setFlexDirection(FlexboxLayout.FlexDirection.ROW);
+        rentalPropertiesGroupPane.setFlexWrap(FlexboxLayout.FlexWrap.WRAP);
+        rentalPropertiesGroupPane.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(10),
+                new Insets(-5, -5, -10, -5))));
+
+        for (var rentalProperty : rentalProperties) {
+            // Create rental unit info pane
+            BorderPane rentalInfoPane = new BorderPane();
+            rentalInfoPane.setPrefSize(100, 100);
+            rentalInfoPane.setTop(new Label(rentalProperty.getAddress().toString().replace(", ", "\n")));
+            FontIcon rentalIcon = new FontIcon("gmi-home");
+            rentalIcon.setIconSize(32);
+            rentalInfoPane.setCenter(rentalIcon);
+            rentalInfoPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(5), Insets.EMPTY)));
+            FlexBoxPane.setMargin(rentalInfoPane, new Insets(5));
+
+            // Add to pane
+            rentalPropertiesGroupPane.getChildren().add(rentalInfoPane);
+        }
+
+        rentalPropertiesPane.getChildren().add(rentalPropertiesGroupPane);
 
 
 
 
 
-        complexesBorderPane.setPadding(new Insets(5, 5, 10, 5));
 
-        // Fetching all current rentals
-        var Rentals = MainApp.getRentalManagementService().listAllRentalPropertySnapshots();
-        System.out.println(Rentals.size());
+
+
 
 
         // Group by apartment complex
-        FlexBoxPane flexBoxPane = new FlexBoxPane();
-        flexBoxPane.setJustifyContent(FlexboxLayout.JustifyContent.FLEX_START);
-        flexBoxPane.setFlexDirection(FlexboxLayout.FlexDirection.ROW);
-        flexBoxPane.setFlexWrap(FlexboxLayout.FlexWrap.WRAP);
-        flexBoxPane.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(10),
-                new Insets(-5, -5, -10, -5))));
-        complexesBorderPane.setCenter(flexBoxPane);
 
-        // Add rentals
-        for (RentalPropertySnapshotDTO rental : Rentals) {
-            BorderPane rentalBorderPane = new BorderPane();
-            rentalBorderPane.setPrefSize(100, 100);
 
-            rentalBorderPane.setTop(new Label(rental.getAddress().toString().replace(", ", "\n")));
-            rentalBorderPane.setCenter(new FontIcon("gmi-home-work"));
-            rentalBorderPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(5), Insets.EMPTY)));
 
-            flexBoxPane.getChildren().add(rentalBorderPane);
-            FlexBoxPane.setMargin(rentalBorderPane, new Insets(5));
-
-        }
 
 /*
 

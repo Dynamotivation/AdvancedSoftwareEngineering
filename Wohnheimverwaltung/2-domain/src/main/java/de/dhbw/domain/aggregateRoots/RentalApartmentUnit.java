@@ -26,10 +26,6 @@ public class RentalApartmentUnit implements Rental {
     private int maxTenants;
     private Size size;
 
-    public RentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, Size size, int maxTenants) {
-        this(new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction), apartmentNumber, floor, size, maxTenants);
-    }
-
     @JsonCreator
     public RentalApartmentUnit(
             @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,

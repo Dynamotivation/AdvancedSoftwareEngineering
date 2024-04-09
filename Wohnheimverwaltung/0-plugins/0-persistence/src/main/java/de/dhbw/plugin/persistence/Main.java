@@ -13,7 +13,7 @@ public class Main {
 
     public static String test = "Hello from Domain";
     public static void main(String[] args) {
-        ObjectMapper mapper = new ObjectMapper();
+        /*ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
         // Serialize object to JSON
@@ -40,6 +40,6 @@ public class Main {
         System.out.println("Comparing Complexes");
         System.out.println(apartmentUnit.getParentApartmentComplex().equals(apartmentUnit2.getParentApartmentComplex()));
         System.out.println("Comparing Units");
-        System.out.println(apartmentUnit.equals(apartmentUnit2));
+        System.out.println(apartmentUnit.equals(apartmentUnit2));*/
     }
 }

@@ -5,11 +5,14 @@ import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.aggregateRoots.RentalProperty;
 import de.dhbw.domain.aggregateRoots.Tenant;
+import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.miscellaneous.Rental;
+import de.dhbw.domain.repositories.ApartmentComplexRepository;
 import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.repositories.TenantRepository;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
+import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
@@ -20,10 +23,12 @@ import java.util.List;
 public class RentalManagementService {
     private final RentalRepository rentalRepository;
     private final TenantRepository tenantRepository;
+    private final ApartmentComplexRepository apartmentComplexRepository;
 
-    public RentalManagementService(RentalRepository rentalRepository, TenantRepository tenantRepository) {
+    public RentalManagementService(RentalRepository rentalRepository, TenantRepository tenantRepository, ApartmentComplexRepository apartmentComplexRepository) {
         this.rentalRepository = rentalRepository;
         this.tenantRepository = tenantRepository;
+        this.apartmentComplexRepository = apartmentComplexRepository;
     }
 
     public RentalId createRentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, BigDecimal size, int maxTenants) {
@@ -33,8 +38,9 @@ public class RentalManagementService {
         return rentalProperty.getId();
     }
 
-    public RentalId createRentalApartmentUnit(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, int apartmentNumber, int floor, BigDecimal size, int maxTenants) {
-        RentalApartmentUnit rentalApartmentUnit = new RentalApartmentUnit(streetName, houseNumber, postalCode, city, dateOfConstruction, apartmentNumber, floor, Size.squareMeters(size), maxTenants);
+    public RentalId createRentalApartmentUnit(ApartmentComplexId apartmentComplexId, int apartmentNumber, int floor, BigDecimal size, int maxTenants) {
+        ApartmentComplex apartmentComplex = apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId);
+        RentalApartmentUnit rentalApartmentUnit = new RentalApartmentUnit(apartmentComplex, apartmentNumber, floor, Size.squareMeters(size), maxTenants);
         rentalRepository.add(rentalApartmentUnit);
 
         return rentalApartmentUnit.getId();
@@ -71,5 +77,13 @@ public class RentalManagementService {
             return new RentalPropertySnapshotDTO(rentalProperty);
 
         return null;
+    }
+
+    public List<RentalApartmentUnitSnapshotDTO> getRentalApartmentUnitSnapshotsByApartmentComplexId(ApartmentComplexId apartmentComplexId) {
+        return rentalRepository.listAllRentalApartmentUnits()
+                .stream()
+                .filter(rental -> rental.getParentApartmentComplex().getId().equals(apartmentComplexId))
+                .map(RentalApartmentUnitSnapshotDTO::new)
+                .toList();
     }
 }

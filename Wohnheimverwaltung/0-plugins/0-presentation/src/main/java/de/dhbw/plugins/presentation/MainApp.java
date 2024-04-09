@@ -1,9 +1,12 @@
 package de.dhbw.plugins.presentation;
 
+import de.dhbw.application.services.ApartmentComplexManagementService;
 import de.dhbw.application.services.RentalManagementService;
 import de.dhbw.application.services.TenantManagementService;
+import de.dhbw.domain.repositories.ApartmentComplexRepository;
 import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.repositories.TenantRepository;
+import de.dhbw.plugin.persistence.ApartmentComplexJacksonJsonRepository;
 import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
 import de.dhbw.plugins.presentation.overviewView.OverviewController;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 public class MainApp extends Application {
     private static RentalManagementService rentalManagementService;
     private static TenantManagementService tenantManagementService;
+    private static ApartmentComplexManagementService apartmentComplexManagementService;
 
     private Stage primaryStage;
     private Scene homeScene;
@@ -66,12 +70,33 @@ public class MainApp extends Application {
         // Create repositories
         RentalRepository rentalRepository = new RentalJacksonJsonRepository();
         TenantRepository tenantRepository = new TenantJacksonJsonRepository();
+        ApartmentComplexRepository apartmentComplexRepository = new ApartmentComplexJacksonJsonRepository();
 
         // Inject Repositories into Application Layer
-        rentalManagementService = new RentalManagementService(rentalRepository, tenantRepository);
+        rentalManagementService = new RentalManagementService(rentalRepository, tenantRepository, apartmentComplexRepository);
         tenantManagementService = new TenantManagementService(tenantRepository);
+        apartmentComplexManagementService = new ApartmentComplexManagementService(apartmentComplexRepository);
 
-        // Create rentals
+        // Create apartment complexes
+        var apartmentComplexId = apartmentComplexManagementService.createApartmentComplex("Main Street", "1", "12345",
+                "Springfield", LocalDate.of(2000, 1, 1));
+        var apartmentComplexId2 = apartmentComplexManagementService.createApartmentComplex("Second Street", "2", "54321",
+                "Springfield", LocalDate.of(2000, 1, 1));
+
+        // Create rental units
+        rentalManagementService.createRentalApartmentUnit(apartmentComplexId, 1, 1,
+                new BigDecimal(100), 2);
+        rentalManagementService.createRentalApartmentUnit(apartmentComplexId, 2, 1,
+                new BigDecimal(100), 2);
+        rentalManagementService.createRentalApartmentUnit(apartmentComplexId, 3, 2,
+                new BigDecimal(100), 2);
+
+        rentalManagementService.createRentalApartmentUnit(apartmentComplexId2, 1, 1,
+                new BigDecimal(100), 2);
+        rentalManagementService.createRentalApartmentUnit(apartmentComplexId2, 2, 1,
+                new BigDecimal(100), 2);
+
+        // Create rental properties
         rentalManagementService.createRentalProperty("Main Street", "1", "12345",
                 "Springfield", LocalDate.of(2000, 1, 1), new BigDecimal(200),
                 2);
@@ -93,5 +118,9 @@ public class MainApp extends Application {
 
     public static TenantManagementService getTenantManagementService() {
         return tenantManagementService;
+    }
+
+    public static ApartmentComplexManagementService getApartmentComplexManagementService() {
+        return apartmentComplexManagementService;
     }
 }
