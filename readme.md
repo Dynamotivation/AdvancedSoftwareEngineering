@@ -44,17 +44,30 @@
 
 ### Value Objects
 
+#### Size
+Die Größe / Fläche einer Mietunterkunft besteht aus einer Zahl und einer Einheit und ist als Value Object implementiert. Der Wert kann aus einer beliebigen Kombination der akzeptierten Werte erzeugt werden und umgerechnet werden. Ändert sich in einer künftigen Version durch z.B. renovieren eine Größenangabe, so ist das Resultat eine neue Größe.
+
 
 ### Entities
+
+#### Lease Agreement
+Der Mietvertrag ist als Entity implementiert, weil er neben finalen Attributen auch einige veränderbare, wie beispielsweise das End-Datum, beinhaltet. Außerdem besitzt der Vertrag eine Identität, um ihn eindeutig ausmachen zu können.
 
 
 ### Aggregates
 
+#### Tenant Aggregate
+Das Tenant Aggregate wurde so gewählt, dass ein Mieter als Aggregate Root auftritt, denn in ihm werden verschiedene Personalien (Value Objects) und eine Liste der Mietverträge (Entities) zusammengeführt.
+
 
 ### Repositories
 
+#### Tenant Repository
+Das Tenant Repository existiert als zentrale Sammelstelle für alle Mieter. Diese herangehensweise wurde gewählt, damit ein Mieter nicht aufhört zu existieren, sobald sein letzer Mietvertrag gekündigt ist. Bei der Persistierung wird das Repository alle Mieter serialisieren, welche nicht bereits durch Objektreferenzen von anderen Repositories serialisiert wurden.
 
 ### Domain Services
+
+#### TODO
 
 
 
@@ -87,20 +100,22 @@ Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwend
 
 # 3. Programming Principles
 
-## Fokusierte Programmierprinzipien
-(Begründen Sie für 5 (FÜNF) der vorgestellten Prinzipien aus SOLID, GRASP, DRY, … WO das jeweilige Prinzip in Ihrem Projekt berücksichtigt wird bzw. angewendet wird und nennen Sie ein Beispiel AUS IHREM SOURCE CODE dazu; „Das Single-Responsibility-Principle besagt, … Dies wird zum Beispiel in der Klasse XX berücksichtigt, weil…“)
+## Fokussierte Programmierprinzipien
+
+[//]: # (Begründen Sie für 5 der vorgestellten Prinzipien aus SOLID, GRASP, DRY, … WO das jeweilige Prinzip in Ihrem Projekt berücksichtigt wird bzw. angewendet wird und nennen Sie ein Beispiel AUS IHREM SOURCE CODE dazu; „Das Single-Responsibility-Principle besagt, … Dies wird zum Beispiel in der Klasse XX berücksichtigt, weil…“)
 
 <ol>
-    <li></li>
-    <dd></dd>
-    <li></li>
-    <dd></dd>
-    <li></li>
-    <dd></dd>
-    <li></li>
-    <dd></dd>
-    <li></li>
-    <dd></dd>
+<li>SOLID - SRP - Single Responsibility Principle</li>
+<dd>TODO anhand Lease Agreement
+</dd>
+<li>SOLID - DIP - Dependency Inversion Principle</li>
+<dd>TODO anhand Repo</dd>
+<li>GRASP - Pure Fabrication</li>
+<dd>TODO anhand Repo</dd>
+<li>GRASP - Protected Variations</li>
+<dd>TODO anhand Repo</dd>
+<li>YAGNI - You ain't gonna need it</li>
+<dd>TODO anhand einer NotImplemented</dd>
 </ol>
 
 
@@ -109,6 +124,63 @@ Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwend
 
 ## Identifizierte Code Smells
 (mindestens 4 Code Smells; Auszug SonarQube o.ä.; Link zu Commit mit letzten smell (falls refactored); https://refactoring.guru/refactoring/smells)
+
+### Long Parameter List
+
+### Primitive Obsession
+
+
+### Alternative Classes with Different Interfaces
+Das ContactAvenue (Kontaktmöglichkeit) Interface ist im aktuellen Zustand nicht sehr nützlich, da es leer ist.
+```java
+public interface ContactAvenue {
+}
+```
+Somit dient es nur dem "gruppieren" verschiedener Kontaktmöglichkeiten. Schaut man nun auf die implementieren Klassen, wird die Problematik schnell erkenntlich: Die Klassen verhalten sich identisch, jedoch haben sie aus semantischen Gründen verschiedene Namen.
+
+```java
+public class ContactAvenueEmail implements ContactAvenue {
+    public String getEmail() { return email; }
+    ...
+
+public class ContactAvenueMail implements ContactAvenue {
+    public Address getAddress() { return address; }
+    ...
+
+public class ContactAvenuePhone implements ContactAvenue {
+    public PhoneNumber getPhone() { return phone; }
+    ...
+```
+
+Mit einem Refactoring könnte diese Funktionalität in eine Abstrakte Klasse gezogen werden und einen generischen Namen wie "getContact" bekommen. Da die Validierung, welche durch die verschiedenen Datentypen erzielt wurde, ist bereits geschehen, kann hier der Rückgabetyp auf String geändert werden.
+
+### Shotgun Surgery
+Betrachtet man die Implementation des Interface Rental, so fällt auf, dass keinerlei Funktionen im Bezug auf die Anschrift einer Mietunterkunft vorgeschrieben werden. Bei genauerem hinsehen fällt jedoch auf, dass sowohl RentalApartmentUnit als auch RentalProperty diese Informationen auf verschiedene Arten hinterlegt haben. Im Falle von RentalProperty sind die Daten direkt hinterlegt.
+
+```java
+public class RentalProperty implements Rental {
+    private final Address address;
+    private final LocalDate dateOfConstruction;
+    ...
+```
+
+RentalApartmentUnit hingegen überlässt die Speicherung der Adressdaten jedoch dem ApartmentComplex Entity. Außerdem führt es weitere Felder ein, welche im Kontext eines Wohnheims zutreffend sind.
+```java
+public class RentalApartmentUnit implements Rental {
+    private int apartmentNumber;
+    private final int floor;
+    private final ApartmentComplex parentApartmentComplex;
+    ...
+
+public class ApartmentComplex {
+    private final Address address;
+    private final LocalDate dateOfConstruction;
+    ...
+```
+
+Daraus folgt, dass bei einer Änderung an einem der Entities, mindestens auch das Gegenstück geändert werden muss. Betrachtet man die weiteren Auswirkungen durch diese nachteilige Anbindung, fällt auf, dass vermutlich noch weitere Stellen in anderen Ebenen als der Domäne betroffen sind.\
+Eine mögliche Korrektur ist möglich, indem man delegierende Methoden einführt, welche die Aufrufe an ApartmentComplex weiterleiten. Diese sollte bei der nächsten Änderung anstelle der Shotgun Surgery durchgeführt werden.
+
 
 
 ## Durchgeführte Refactorings
