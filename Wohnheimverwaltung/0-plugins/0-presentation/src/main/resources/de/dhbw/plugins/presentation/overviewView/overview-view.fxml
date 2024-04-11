@@ -32,7 +32,14 @@
     <Tab text="Unterkünfte" closable="false">
         <BorderPane>
             <top>
-                <TextField fx:id="searchField" promptText="Search..."/>
+                <HBox>
+                    <TextField fx:id="searchField" promptText="Search..." disable="true" prefWidth="1000"/>
+                    <Button>
+                        <FontIcon iconLiteral="gmi-add" iconSize="32"/>
+                    </Button>
+
+                </HBox>
+
             </top>
 
             <center>

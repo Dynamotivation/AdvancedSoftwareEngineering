@@ -1,5 +1,7 @@
 package de.dhbw.domain.aggregateRoots;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.Address;
@@ -22,7 +24,16 @@ public class RentalProperty implements Rental {
     private int maxTenants;
     private Size size;
 
-    public RentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, Size size, int maxTenants) {
+    @JsonCreator
+    public RentalProperty(
+            @JsonProperty("streetName") String streetName,
+            @JsonProperty("houseNumber") String houseNumber,
+            @JsonProperty("postalCode") String postalCode,
+            @JsonProperty("city") String city,
+            @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction,
+            @JsonProperty("size") Size size,
+            @JsonProperty("maxTenants") int maxTenants
+    ) {
         // Validate date of construction (implicitly checked for null)
         if (dateOfConstruction.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Date of construction may not be in the future");

@@ -1,8 +1,8 @@
 package de.dhbw.domain.valueObjects;
 
-import org.apache.commons.validator.routines.EmailValidator;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
 
-public class ContactAvenueMail {
+public class ContactAvenueMail implements ContactAvenue {
     // Mail addresses as a contact avenue should be a value object.
     // It is obvious that multiple tenants can have the same address. A message would be aggregated by the tenants details.
     private final Address address;

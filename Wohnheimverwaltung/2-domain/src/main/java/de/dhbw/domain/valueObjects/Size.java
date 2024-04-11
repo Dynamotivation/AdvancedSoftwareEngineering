@@ -5,7 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-public final class Size {
+public class Size {
     private final BigDecimal value;
     private final SizeUnit unit;
 
