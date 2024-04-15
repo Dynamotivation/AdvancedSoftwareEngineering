@@ -42,5 +42,7 @@ public class ApartmentComplexManagementService {
 
     public void loadApartmentComplexes() {
         apartmentComplexRepository.load();
+
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

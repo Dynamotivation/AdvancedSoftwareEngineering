@@ -6,6 +6,22 @@
 
 
 
+- [1. Domain Driven Design](#1-domain-driven-design)
+  - [Ubiquitous Language](#ubiquitous-language)
+  - [Verwendete taktischer Muster des DDD](#verwendete-taktischer-muster-des-ddd)
+- [2. Clean Architecture](#2-clean-architecture)
+  - [Geplante Schichtenarchitektur](#geplante-schichtenarchitektur)
+- [3. Programming Principles](#3-programming-principles)
+  - [Fokussierte Programmierprinzipien](#fokussierte-programmierprinzipien)
+- [5. Refactoring](#5-refactoring)
+  - [Identifizierte Code Smells](#identifizierte-code-smells)
+  - [Durchgeführte Refactorings](#durchgeführte-refactorings)
+- [6. Entwurfsmuster](#6-entwurfsmuster)
+  - [Gewählte(s) Entwurfsmuster](#gewähltes-entwurfsmuster)
+
+
+
+
 # 1. Domain Driven Design
 
 ## Ubiquitous Language
@@ -14,26 +30,26 @@
 
 | Begrifflichkeiten                           | Fachliche Bedeutung                                                                                                                                                                                                                             | Regeln                                                                                 |
 |---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| Mietobjekt (Rental)                     | Eine Mietobjekt ist ein Mietwohnhaus oder eine Mietwohnung in einem Miethaus. Sie kann an einen oder mehrere Mieter vermietet werden.                                                                                                       | - Obergrenze an Mietern muss mindestens 1 betragen<br/>- Fläche muss größer als 0 sein |
-| Miethaus (Apartment Complex)                | Ein Gebäude, dass eine oder mehrere Mietwohnungen enthält über die ein Vermieter verfügt.                                                                                                                                                       |                                                                                        |
+| Mietobjekt (Rental)                     | Eine Mietobjekt ist ein Mietwohnhaus oder eine Mietwohnung in einem Wohnheim. Sie kann an einen oder mehrere Mieter vermietet werden.                                                                                                       | - Obergrenze an Mietern muss mindestens 1 betragen<br/>- Fläche muss größer als 0 sein |
+| Wohnheim (Apartment Complex)                | Ein Gebäude, dass eine oder mehrere Mietwohnungen enthält über die ein Vermieter verfügt.                                                                                                                                                       |                                                                                        |
 | Mietwohnhaus (Property)                     | Eine konkrete Mietobjekt.                                                                                                                                                                                                                   | siehe "Mietobjekt"                                                                 |
-| Mietwohnung (Apartment)                     | Eine konkrete Form einer Mietobjekt, welche ein Bestandteil eines Miethauses ist.                                                                                                                                                           | - Genau ein zugehöriges Mietshaus<br/>- siehe Mietobjekt                           |
+| Mietwohnung (Apartment)                     | Eine konkrete Form einer Mietobjekt, welche ein Bestandteil eines Wohnheimes ist.                                                                                                                                                           | - Genau ein zugehöriges Mietshaus<br/>- siehe Mietobjekt                           |
 | Mieter (Tenant)                             | Mietet eine Mietobjekt unter den Bedingungen eines Mietvertrages.                                                                                                                                                                           | - Plausible Kontaktdaten                                                               |
 | Miete (Rent)                                | Ein im Mietvertrag festgelegter Betrag, welcher von allen Mietern bezahlt wird.                                                                                                                                                                 | - Positiv                                                                              |
 | Mietvertrag (Lease Agreement)               | Ein Vertrag zwischen einem Vermieter und allen Mietern in einer Wohnung, welcher durch seine Eckdaten (Miete, Vertragsbeginn, Befristung, Vertragsende im Falle von Befristung, Kündigungsfristen falls keine Befristung) charakterisiert wird. | - Mindestens ein Mieter                                                                |
 | Transaktion (Transaction)                   | Ein Dachbegriff für Forderungen und Zahlungen, welche einem Mieter zur Last gelegt werden.                                                                                                                                                      |                                                                                        |
 | Forderung (Charge)                          | Eine konkrete Transaktion, welche eine Forderung über einen bestimmten Betrag an einen Mieter darstellt.                                                                                                                                        | - Forderung muss kleiner als 0 sein                                                    |
 | Mietforderung (Rent Charge)                 | Eine konkrete Forderung, welche periodische Zahlung in Höhe der Miete darstellt.                                                                                                                                                                | siehe "Forderung"                                                                      |
-| Außerordentliche Forderung (Special Charge) | Eine konkrete Art der Forderung über einen Betrag, welche über die reguläre Mietsforderung hinaus entstanden ist.                                                                                                                               | siehe "Forderung"                                                                      |
+| Außerordentliche Forderung (Special Charge) | Eine konkrete Art der Forderung über einen Betrag, welche über die reguläre Mietforderung hinaus entstanden ist.                                                                                                                               | siehe "Forderung"                                                                      |
 | Einzahlung (Payment)                        | Eine konkrete Form der Transaktion über einen bestimmten Geldbetrag, welcher zur Deckung akkumulierter Forderungen dient.                                                                                                                       | - Zahlungsbetrag größer als 0 sein                                                     |
-| Startguthaben (Starting Balance)            | Eine konkrete Art der Transaktion, welche das Guthaben eines Mieters darstellt, sollte das Mietsverhältnis erst nachträglich in das System eingepflegt werden. Somit müssen nicht alle Rückliegenden Transaktionen eingepflegt werden.          |                                                                                        |
+| Startguthaben (Starting Balance)            | Eine konkrete Art der Transaktion, welche das Guthaben eines Mieters darstellt, sollte das Mietverhältnis erst nachträglich in das System eingepflegt werden. Somit müssen nicht alle zurückliegenden Transaktionen eingepflegt werden.          |                                                                                        |
 | Vermieter                                   | Eine zur Verwaltung von Mietwohnungen in einem Gebäude berechtigte Person. Oftmals der Anwender der Software oder dessen Arbeitgeber.                                                                                                          |
 
 | Prozesse  |                                                                                                                          |
 |-----------|--------------------------------------------------------------------------------------------------------------------------|
 | Ausziehen | Der Prozess des Verlassens eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen. |
 | Einziehen | Der Prozess des beziehen eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen.   |
-| Mieten    | Der Prozess des Bewohnen einer Mietwohnung durch einen Mieter unter Einhaltung der Bedingungen des Mietsvertrags.       |
+| Mieten    | Der Prozess des Bewohnen einer Mietwohnung durch einen Mieter unter Einhaltung der Bedingungen des Mietvertrags.       |
 | Vermieten | Der Prozess in dem ein Vermieter und ein oder mehrere Mieter sich auf einen Mietvertrag einigen und diesen Abschließen.  |
 
 (Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe ✅ und deren fachliche Bedeutung ✅, Aufgaben ❔ und Regeln ✅ dokumentieren)
@@ -42,32 +58,34 @@
 ## Verwendete taktischer Muster des DDD
 (Alle genannten Muster des DDD sind im Source Code zu verwenden (Value Objects, Entities, Aggregates, Repositories, Domain Services); Begründen Sie jedes einzelne, oben genannte Muster anhand von je einem konkreten Beispiel aus Ihrem Source Code; „XX ist als ValueObject implementiert, weil…")
 
-### Value Objects
+### [Value Objects](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/)
 
-#### Size
+#### [Size](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Size.java)
 Die Größe / Fläche einer Mietobjekt besteht aus einer Zahl und einer Einheit und ist als Value Object implementiert. Der Wert kann aus einer beliebigen Kombination der akzeptierten Werte erzeugt werden und umgerechnet werden. Ändert sich in einer künftigen Version durch z.B. renovieren eine Größenangabe, so ist das Resultat eine neue Größe.
 
 
-### Entities
+### [Entities](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/)
 
-#### Lease Agreement
+#### [Lease Agreement](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java)
 Der Mietvertrag ist als Entity implementiert, weil er neben finalen Attributen auch einige veränderbare, wie beispielsweise das End-Datum, beinhaltet. Außerdem besitzt der Vertrag eine Identität, um ihn eindeutig ausmachen zu können.
 
 
-### Aggregates
+### [Aggregates](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/)
 
-#### Tenant Aggregate
-Das Tenant Aggregate wurde so gewählt, dass ein Mieter als Aggregate Root auftritt, denn in ihm werden verschiedene Personalien (Value Objects) und eine Liste der Mietverträge (Entities) zusammengeführt.
+#### [Tenant Aggregate](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/Tenant.java)
+Das Mieter Aggregate wurde so gewählt, dass ein Mieter als Aggregate Root auftritt, denn in ihm werden verschiedene Personalien (Value Objects (Kontaktdaten, Name und ID)) und eine Liste der Mietverträge (Entities) zusammengeführt. Außerdem führt es eine Liste der zugehörigen ausstehenden Transaktionen, die "lazy" anhand der Mietverträge, des Zahltags und des letzten Zahlungsdatums abgerufen.
 
 
-### Repositories
+### [Repositories](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/)
 
-#### Tenant Repository
-Das Tenant Repository existiert als zentrale Sammelstelle für alle Mieter. Diese herangehensweise wurde gewählt, damit ein Mieter nicht aufhört zu existieren, sobald sein letzer Mietvertrag gekündigt ist. Bei der Persistierung wird das Repository alle Mieter serialisieren, welche nicht bereits durch Objektreferenzen von anderen Repositories serialisiert wurden.
+#### [Tenant Repository](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/TenantRepository.java)
+Das Tenant Repository existiert als zentrale Sammelstelle für alle Mieter. Diese Herangehensweise wurde gewählt, damit ein Mieter nicht aufhört zu existieren, sobald sein letzter Mietvertrag gekündigt ist. Bei der Speicherung empfängt das Repository einzeln die zu serialisierenden Mieter. Dadurch wird es Application Services ermöglicht beispielsweise nur alle Mieter zu serialisieren, welche nicht bereits durch Objektreferenzen von anderen Repositories serialisiert wurden.
 
-### Domain Services
 
-#### TODO
+### [Domain Services](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/services/)
+
+#### [Renting Service](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/services/RentingService.java)
+Der Renting Service ermöglicht es in den jeweiligen Implementierungen des Rental Interface den Code nicht doppelt implementieren oder Rental zu einer abstrakten Klasse ändern zu müssen. So können die Implementierungen auf die Validierung der Variablen und ausgeübten Aktionen fokussiert bleiben. Namentlich kann so der "[Large Class](https://refactoring.guru/smells/large-class)" Code Smell verhindert werden. 
 
 
 
@@ -78,22 +96,24 @@ Das Tenant Repository existiert als zentrale Sammelstelle für alle Mieter. Dies
 ## Geplante Schichtenarchitektur
 Für einen anschaulichen Prototypen der Software sind die folgenden drei Schichten wichtig und bereits implementiert.
 
-### Domain Layer
+### [Domain Layer](/Wohnheimverwaltung/2-domain/)
 Implementiert: ✅\
 In der Domain Layer befindet sich der logische Kern der Anwendung und dessen Regeln, eine Implementierung der Ubiquitous Language mit samt ihrer Regeln. Sie ist der Kern, denn ohne sie geht nichts. Änderungen treten nur bei der Feststellung von Bugs oder Veränderungen an der Definition der Ubiquitious Language auf.
 
-### Application Layer
+### [Application Layer](/Wohnheimverwaltung/1-application/)
 Implementiert: ✅\
 Die Application Layer enthält eine andere Art Services als die Domänenschicht, denn sie behandeln nicht fachlische Aspekte, sondern technische. In der vorliegenden Implementation dienen die Services als Zugriffsweg auf die Repositories. Dieser Zwischenstopp ist notwendig, damit die Domain Layer sauber nur fachlich relevante Funktionen ihren Repository Interfaces implementieren muss, während der zugehörige Service weitere verbos-benannte Funktionen anbieten kann. Damit ist die Anbindung in die Presentation Logic einfacher und klar lesbar. Außerdem können künftig durch die map-Befehle auch sehr einfach Adapter eingesetzt werden. Im aktuellen Stadium werden Domain Entities 1-zu-1 auf Domain Entity DTO (Date Transfer Objects) gespiegelt, wodurch all ihre Variablen final und read only werden.
 
-### Plugin Layer
+### [Plugin Layer](/Wohnheimverwaltung/0-plugins/)
 Implementiert: ✅\
 Die Plugin Layer repräsentiert die kurzlebige äußere Schicht im Domain Driven Design. Darunter fallen beispielsweise Implementierungen der Repository Interfaces der Domain Layer auf eine bestimmte Speichermethode (versch. DB-Driver, Filesystem, Serialization) und verschiedene die Nutzerschnittstelle (Frontends, CLI).
 
-#### Presentation Layer
+#### [Presentation Layer](/Wohnheimverwaltung/0-plugins/0-presentation/)
+Implementiert: 〰️ (Einige Use Cases sind exklusiv programmatisch Aufrufbar)\
 Die Presentation Layer Umfasst hier das JavaFX Frontend der Anwendung. Dies ist nötig, damit ein Nutzer das Programm verwenden kann.
 
-#### Persistence Layer
+#### [Persistence Layer](/Wohnheimverwaltung/0-plugins/0-persistence/)
+Implementiert: ✅\
 Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwendung wird dies durch Serialisierung in das JSON Format gehandhabt. Dafür wurde die Bibliothek Jackson verwendet.
 
 
@@ -104,18 +124,99 @@ Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwend
 
 [//]: # (Begründen Sie für 5 der vorgestellten Prinzipien aus SOLID, GRASP, DRY, … WO das jeweilige Prinzip in Ihrem Projekt berücksichtigt wird bzw. angewendet wird und nennen Sie ein Beispiel AUS IHREM SOURCE CODE dazu; „Das Single-Responsibility-Principle besagt, … Dies wird zum Beispiel in der Klasse XX berücksichtigt, weil…“)
 
-<ol>
-<li>SOLID - SRP - Single Responsibility Principle</li>
-<dd>TODO anhand Lease Agreement
+### 1. SOLID - SRP - Single Responsibility Principle
+TODO anhand Lease Agreement
+
+
+### 2. SOLID - DIP - Dependency Inversion Principle
+Das Dependency Inversion Principle besagt, dass Module höherer Ebenen anstelle von Detail behafteten Objekten aus niedrigeren Schichten von generalisierenden Interfaces abhängig sein sollen. Diese werden Abstraktionen genannt. Die Details selbst hängen von der Abstraktion ab.
+
+Die Abhängigkeit zu Abstraktionen lässt sich durch die Extraktion von Merkmalen in ein Interface oder eine Abstrakte Klasse durchführen. Dadurch entsteht ein Vertrag / Protokoll. Innerhalb einer Ebene und in allen Ebenen darüber kann man sich nun auf den Vertrag verlassen, die Details der Implementierung spielen keine Rolle.
+
+Diese Prinzip wird in diesem Projekt von beispielsweise dem [Jackson Tenant Repository](/Wohnheimverwaltung/0-plugins/0-persistence/src/main/java/de/dhbw/plugin/persistence/TenantJacksonJsonRepository.java) verwirklicht. Statt alle für die Use Cases benötigten Verwaltungsfunktionen in Services und Repositories der Domain Layer zu implementieren, wird hier im Falle der Repositories bloß die [Abstraktion](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/TenantRepository.java) mit den "Protokolldetails" festgehalten. Die wahren Details, wie genau das zwischenspeicher, abspeichern und laden abläuft, passieren in der erwähnten Jackson spezifischen Implementierung.
+
+Hierzu kommt, dass das die Application Layer ebenfalls nur von der Abstraktion abhängig ist und gar nichts über die Details wissen muss. Also kann sie, ohne dass sie hierfür eine Abhängigkeit geschaffen werden muss, über Dependency Injection im Konstruktor dennoch mit einer über das Protokoll hinaus fremden Instanz umgehen.
+
+*Persistence Layer - Die Details beruhen auf der Abstraktion*
+```java
+public class TenantJacksonJsonRepository implements TenantRepository {
+    ...
+```
+
+*Presentation Layer (Einstiegspunkt) - Selbstverständlich kann eine Klasse die von Abstraktion und den Details abhängt mit beidem umgehen*
+```java
+public class MainApp {
+     public static void main(String[] args) {
+        // Create repositories
+        ...
+        TenantRepository tenantRepository = new TenantJacksonJsonRepository();
+
+        // Inject Repositories into Application Layer
+        ...
+        tenantManagementService = new TenantManagementService(tenantRepository);
+        ...
+```
+
+*Application Layer - Trotz der fehlenden Abhängigkeit zu den Details kann auch die Application Layer dank Vertrag bis zu dem vordefinierten Grad mit den Details umgehen*
+```java
+public class TenantManagementService {
+    private final TenantRepository tenantRepository;
+
+    public TenantManagementService(TenantRepository tenantRepository) {
+        this.tenantRepository = tenantRepository;
+    }
+    ...
+
+```
+
+*Domain Layer - Der Vertrag wurde ohne jeglichen Bezug auf Jackson definiert und ist frei von Abhängigkeiten*
+```java
+public interface TenantRepository {
+    List<Tenant> listAll();
+    Tenant findById(TenantId tenantId);
+    List<Tenant> findByRentalId(RentalId rentalId);
+    List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
+    void add(Tenant tenant);
+    void save(Tenant tenant);
+    void load();
+}
+```
+
+Somit werden durch die Separation of Concerns die Regeln des Domain Driven Design zur Richtung von Abhängigkeiten gewahrt und Flexibilität geschaffen.
+
+
+
+### 3. GRASP - Pure Fabrication
+TODO anhand Repo
+
+
+### 4. GRASP - Protected Variations
+TODO anhand Repo
+
+
+### 5. YAGNI - You ain't gonna need it
+Das YAGNI Prinzip beschreibt die Abwesenheit von zurzeit nicht verwendeten Methoden, welche sonst durch Gedanken wie "So etwas können wir bestimmt einmal gebrauchen!" entstehen. Es ist ein wenig wie der Unterschied zwischen dem Einkaufen mit und ohne Einkaufsliste, daher ist es auch genau so schwer zu demonstrieren _was genau_ nun weggelassen wurde.
+
+In dieser Software wird das YAGNI Prinzip unter anderem im [Rental Repository](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/RentalRepository.java) angewandt.
+```java
+public interface RentalRepository {
+    List<Rental> listAll();
+    Rental findById(RentalId rentalId);
+    List<Rental> findByTenantId(TenantId tenantId);
+    List<Rental> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
+    List<Rental> findByApartmentComplexId(ApartmentComplexId apartmentComplexId);
+    List<RentalApartmentUnit> listAllRentalApartmentUnits();
+    List<RentalProperty> listAllRentalProperties();
+    void add(Rental rental);
+    void save(Rental rental);
+    void load();
+}
+```
+Wo _genau_ fehlt hier etwas "fehlt" ist natürlich schwer zu sagen. Eine Möglichkeit wäre, ähnlich zum Überladen von Konstruktoren, mehrere ```save(...)``` Methoden zu implementieren. So könnte man z.B. eine "Export" Funktion mit der vorhanden Methode ```save(Rental rental)``` implementieren, jedoch das Speichern des Programmzustandes mit ```Save(List<Rental> rental)```. Das _könnte_ den Vorteil haben, dass man beispielsweise nur einen offenen File Handle hat beim speichern. Da es sich hierbei jedoch um eine kleine Prototyp-Anwendung für Kleinvermieter in Deutschland handelt, ist eine etwaige Beschleunigung durch das aufteilen auf zwei solcher Methoden äußerst unausgewogen gegenüber der zusätzlich eingeführten Komplexität.
+
+Im Anbetracht des Prototypen-Stadiums der Software, wäre eine der Implementierungen wahrscheinlich ohnehin nur mit ```throw new UnsupportedOperationException("Not implemented yet");``` verendet.
+
 </dd>
-<li>SOLID - DIP - Dependency Inversion Principle</li>
-<dd>TODO anhand Repo</dd>
-<li>GRASP - Pure Fabrication</li>
-<dd>TODO anhand Repo</dd>
-<li>GRASP - Protected Variations</li>
-<dd>TODO anhand Repo</dd>
-<li>YAGNI - You ain't gonna need it</li>
-<dd>TODO anhand einer NotImplemented</dd>
 </ol>
 
 
