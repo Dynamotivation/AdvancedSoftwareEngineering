@@ -33,9 +33,11 @@
         <BorderPane>
             <top>
                 <HBox>
-                    <TextField fx:id="searchField" promptText="Search..." disable="true" prefWidth="1000"/>
-                    <Button>
-                        <FontIcon iconLiteral="gmi-add" iconSize="32"/>
+                    <TextField fx:id="searchField" promptText="Suchen..." disable="true" prefWidth="100000000"/>
+                    <Button fx:id="addNew">
+                        <graphic>
+                            <FontIcon iconLiteral="gmi-add"/>
+                        </graphic>
                     </Button>
 
                 </HBox>

@@ -12,6 +12,7 @@ module de.dhbw.plugin.presentation {
     requires org.kordamp.ikonli.material;
     requires jfxflexbox;
     requires flexbox;
+    requires java.compiler;
 
     // Export to JavaFX
     exports de.dhbw.plugins.presentation to javafx.graphics;
@@ -20,4 +21,6 @@ module de.dhbw.plugin.presentation {
     opens de.dhbw.plugins.presentation.startView to javafx.fxml;
     exports de.dhbw.plugins.presentation.overviewView to javafx.graphics;
     opens de.dhbw.plugins.presentation.overviewView to javafx.fxml;
+    exports de.dhbw.plugins.presentation.addPropertyView to javafx.graphics;
+    opens de.dhbw.plugins.presentation.addPropertyView to javafx.fxml;
 }
