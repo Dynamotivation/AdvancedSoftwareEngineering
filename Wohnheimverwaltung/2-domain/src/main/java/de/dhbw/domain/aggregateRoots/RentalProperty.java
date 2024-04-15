@@ -24,21 +24,26 @@ public class RentalProperty implements Rental {
     private int maxTenants;
     private Size size;
 
+    public RentalProperty(String streetName, String houseNumber, String postalCode, String city,
+                          LocalDate dateOfConstruction, Size size, int maxTenants) {
+        this(new Address(streetName, houseNumber, postalCode, city),
+                dateOfConstruction, new RentalId(), null, maxTenants, size);
+    }
+
     @JsonCreator
-    public RentalProperty(
-            @JsonProperty("streetName") String streetName,
-            @JsonProperty("houseNumber") String houseNumber,
-            @JsonProperty("postalCode") String postalCode,
-            @JsonProperty("city") String city,
+    private RentalProperty(
+            @JsonProperty("address") Address address,
             @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction,
-            @JsonProperty("size") Size size,
-            @JsonProperty("maxTenants") int maxTenants
+            @JsonProperty("id") RentalId id,
+            @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
+            @JsonProperty("maxTenants") int maxTenants,
+            @JsonProperty("size") Size size
     ) {
         // Validate date of construction (implicitly checked for null)
         if (dateOfConstruction.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Date of construction may not be in the future");
 
-        this.address = new Address(streetName, houseNumber, postalCode, city);
+        this.address = address;
         this.dateOfConstruction = dateOfConstruction;
         this.id = new RentalId();
         this.size = size;

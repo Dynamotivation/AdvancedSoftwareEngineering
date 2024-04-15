@@ -1,12 +1,19 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class Name {
     private final String name;
     private final String surname;
 
-    public Name(String name, String surname) {
+    @JsonCreator
+    public Name(
+            @JsonProperty("name") String name,
+            @JsonProperty("surname") String surname
+    ) {
         this.name = validateName(name);
         this.surname = validateName(surname);
     }

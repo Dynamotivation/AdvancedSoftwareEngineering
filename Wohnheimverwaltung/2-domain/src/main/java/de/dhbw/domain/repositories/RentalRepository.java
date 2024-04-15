@@ -20,5 +20,5 @@ public interface RentalRepository {
     List<RentalProperty> listAllRentalProperties();
     void add(Rental rental);
     void save(Rental rental);
-    void load(Rental rental);
+    void load();
 }

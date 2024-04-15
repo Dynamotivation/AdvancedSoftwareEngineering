@@ -1,5 +1,7 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
@@ -9,7 +11,10 @@ public class ContactAvenuePhone implements ContactAvenue {
     // Even if multiple tenants have the same phone number we do not discriminate against a shared landline.
     private final PhoneNumber phone;
 
-    public ContactAvenuePhone(PhoneNumber phone) {
+    @JsonCreator
+    public ContactAvenuePhone(
+            @JsonProperty("phone") PhoneNumber phone
+    ) {
         if (!PhoneNumberUtil.getInstance().isValidNumber(phone))
             throw new IllegalArgumentException("Invalid phone number");
 

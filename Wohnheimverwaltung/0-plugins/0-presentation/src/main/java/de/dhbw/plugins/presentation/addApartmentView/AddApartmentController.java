@@ -3,6 +3,7 @@ package de.dhbw.plugins.presentation.addApartmentView;
 import de.dhbw.plugins.presentation.MainApp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -54,7 +55,7 @@ public class AddApartmentController {
     private void addTooltips() {
         List<Tooltip> tooltips = new ArrayList<>();
 
-        tooltips.add(new Tooltip("Wählen Sie ein gültiges Miethaus aus"));
+        tooltips.add(new Tooltip("Wählen Sie ein gültiges Wohnheim aus"));
         tooltips.add(new Tooltip("Geben Sie eine gültige Wohnungsnummer ein (größer als 0)"));
         tooltips.add(new Tooltip("Geben Sie eine gültige Etage ein (größer als 0)"));
         tooltips.add(new Tooltip("Geben Sie eine gültige Größe in Quadratmetern ein (größer als 0)"));
@@ -113,5 +114,9 @@ public class AddApartmentController {
 
     public void showAddComplexView() {
         mainApp.showAddComplexView();
+    }
+
+    public void handleShowOverview() {
+        mainApp.showOverviewView();
     }
 }

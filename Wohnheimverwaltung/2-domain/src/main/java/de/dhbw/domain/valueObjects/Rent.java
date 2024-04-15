@@ -1,5 +1,8 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
@@ -15,7 +18,10 @@ public class Rent {
         cachedCommaSeparator = symbols.getDecimalSeparator();
     }
 
-    public Rent(int amount) {
+    @JsonCreator
+    public Rent(
+            @JsonProperty("amount") int amount
+    ) {
         if (amount <= 0)
             throw new IllegalArgumentException("Rent must be greater than 0");
 

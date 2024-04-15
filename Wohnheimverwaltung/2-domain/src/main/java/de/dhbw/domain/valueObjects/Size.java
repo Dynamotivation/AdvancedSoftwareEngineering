@@ -1,5 +1,8 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -9,24 +12,36 @@ public class Size {
     private final BigDecimal value;
     private final SizeUnit unit;
 
-    private Size(final BigDecimal value, final SizeUnit sizeUnit) {
+    @JsonCreator
+    public Size(
+            @JsonProperty("value") BigDecimal value,
+            @JsonProperty("unit") SizeUnit unit
+    ) {
         if (value.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Size must be positive");
         }
 
         this.value = value;
-        this.unit = sizeUnit;
+        this.unit = unit;
     }
 
-    public static Size squareMeters(BigDecimal value) {
-        return new Size(value, SizeUnit.SQUARE_METERS);
+    public static Size squareMeters(BigDecimal bigDecimal) {
+        return new Size(bigDecimal, SizeUnit.SQUARE_METERS);
     }
 
-    public static Size squareFeet(BigDecimal value) {
-        return new Size(value, SizeUnit.SQUARE_FEET);
+    public static Size squareFeet(BigDecimal bigDecimal) {
+        return new Size(bigDecimal, SizeUnit.SQUARE_FEET);
     }
 
-    public BigDecimal getValueInPreferredUnit(final SizeUnit newUnit) {
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public SizeUnit getUnit() {
+        return unit;
+    }
+
+    public BigDecimal getValueInPreferredUnit(SizeUnit newUnit) {
         if (unit == newUnit) {
             return value;
         }
@@ -34,7 +49,6 @@ public class Size {
         return switch (newUnit) {
             case SQUARE_METERS -> convertSquareFeetToSquareMeters(value);
             case SQUARE_FEET -> convertSquareMetersToSquareFeet(value);
-            default -> throw new IllegalArgumentException("Unknown unit");
         };
     }
 

@@ -86,4 +86,14 @@ public class RentalManagementService {
                 .map(RentalApartmentUnitSnapshotDTO::new)
                 .toList();
     }
+
+    public void saveAllRentals() {
+        for (Rental rental : rentalRepository.listAll()) {
+            rentalRepository.save(rental);
+        }
+    }
+
+    public void loadRentals() {
+        rentalRepository.load();
+    }
 }

@@ -1,6 +1,7 @@
 package de.dhbw.plugins.presentation.addComplexView;
 
 import de.dhbw.plugins.presentation.MainApp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -96,5 +97,9 @@ public class AddComplexController {
 
             mainApp.showOverviewView();
         }
+    }
+
+    public void handleShowOverview() {
+        mainApp.showOverviewView();
     }
 }

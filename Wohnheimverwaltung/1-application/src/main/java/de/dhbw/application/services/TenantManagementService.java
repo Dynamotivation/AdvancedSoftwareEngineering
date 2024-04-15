@@ -35,4 +35,8 @@ public class TenantManagementService {
 
         return new TenantSnapshotDTO(tenant);
     }
+
+    public void loadTenants() {
+        tenantRepository.load();
+    }
 }

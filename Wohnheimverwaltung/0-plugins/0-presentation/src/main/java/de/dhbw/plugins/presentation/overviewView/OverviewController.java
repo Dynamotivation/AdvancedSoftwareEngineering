@@ -4,6 +4,7 @@ import com.dukescript.layouts.flexbox.FlexboxLayout;
 import de.dhbw.application.snapshotObjects.ApartmentComplexSnapshotDTO;
 import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
 import de.dhbw.plugins.presentation.MainApp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -57,7 +58,7 @@ public class OverviewController {
     }
 
     private void createAddButtonDropDown() {
-        MenuItem option1 = new MenuItem("Neues Miethaus");
+        MenuItem option1 = new MenuItem("Neues Wohnheim");
         MenuItem option2 = new MenuItem("Neue Mietwohnung");
         MenuItem option3 = new MenuItem("Neues Mietwohnhaus");
 
@@ -170,5 +171,9 @@ public class OverviewController {
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public void handleSaveAndQuit() {
+        mainApp.saveAndQuit();
     }
 }

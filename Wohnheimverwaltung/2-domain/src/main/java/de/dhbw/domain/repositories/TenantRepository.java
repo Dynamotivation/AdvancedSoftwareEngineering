@@ -14,5 +14,5 @@ public interface TenantRepository {
     List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
     void add(Tenant tenant);
     void save(Tenant tenant);
-    void load(Tenant tenant);
+    void load();
 }

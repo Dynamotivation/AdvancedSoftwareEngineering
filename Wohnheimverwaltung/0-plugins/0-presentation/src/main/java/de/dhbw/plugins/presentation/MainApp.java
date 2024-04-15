@@ -20,7 +20,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class MainApp extends Application {
     private static RentalManagementService rentalManagementService;
@@ -132,10 +134,27 @@ public class MainApp extends Application {
             addComplexController.setMainApp(this);
             Scene addComplexScene = new Scene(addComplexRoot);
 
-            primaryStage.setTitle("Neues Miethaus hinzufügen");
+            primaryStage.setTitle("Neues Wohnheim hinzufügen");
             primaryStage.setScene(addComplexScene);
             primaryStage.show();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAndQuit() {
+        try {
+            System.out.println("Deleting existing saves...");
+            Files.deleteIfExists(new File("tenant.save").toPath());
+            Files.deleteIfExists(new File("rental.save").toPath());
+            Files.deleteIfExists(new File("complex.save").toPath());
+
+            System.out.println("Saving all data...");
+            rentalManagementService.saveAllRentals();
+            apartmentComplexManagementService.saveAllOrphanApartments();
+            //tenantManagementService.saveAllOrphanTenants();
+            primaryStage.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

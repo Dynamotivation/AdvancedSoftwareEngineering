@@ -1,5 +1,7 @@
 package de.dhbw.domain.valueObjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -8,7 +10,10 @@ public class ContactAvenueEmail implements ContactAvenue {
     // Tenants are free to register a shared inbox for their living space.
     private final String email;
 
-    public ContactAvenueEmail(String email) {
+    @JsonCreator
+    public ContactAvenueEmail(
+            @JsonProperty("email") String email
+    ) {
         if (!EmailValidator.getInstance(true, true).isValid(email))
             throw new IllegalArgumentException("Invalid email address");
 

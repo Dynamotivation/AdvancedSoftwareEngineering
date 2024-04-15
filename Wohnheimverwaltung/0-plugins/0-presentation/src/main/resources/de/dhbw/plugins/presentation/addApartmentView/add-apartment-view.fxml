@@ -9,7 +9,7 @@
 
     <center>
         <GridPane hgap="10" vgap="10" alignment="CENTER">
-            <Label text="Apartment Complex:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label text="Wohnheim:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">
                 <ComboBox fx:id="apartmentComplexComboBox"/>
                 <Button onAction="#showAddComplexView">
@@ -19,24 +19,27 @@
                 </Button>
             </HBox>
 
-            <Label text="Apartment Number:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label text="Wohnungsnummer:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
             <Spinner fx:id="apartmentNumberSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1"
                      min="1" max="999" initialValue="1"/>
 
-            <Label text="Floor:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label text="Stockwerk:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
             <Spinner fx:id="floorSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                     min="1" max="9999" initialValue="1"/>
+                     initialValue="1"/>
 
-            <Label text="Size (sqm):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <Label text="Größe (m²):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
             <Spinner fx:id="sizeSpinner" GridPane.columnIndex="1" GridPane.rowIndex="3"
                      min="0" max="999999" initialValue="100"/>
 
-            <Label text="Max Tenants:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <Label text="Max. Mieter:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
             <Spinner fx:id="maxTenantsSpinner" GridPane.columnIndex="1" GridPane.rowIndex="4"
                      min="0" max="9999" initialValue="1"/>
 
-            <Button text="Create Rental Apartment" fx:id="createButton" disable="true" onAction="#handleCreateApartment"
+            <Button text="Zurück" onAction="#handleShowOverview"
                     GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+
+            <Button text="Mietwohnung erstellen" fx:id="createButton" disable="true" onAction="#handleCreateApartment"
+                    GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
         </GridPane>
     </center>
 </BorderPane>

@@ -31,4 +31,16 @@ public class ApartmentComplexManagementService {
     public ApartmentComplexSnapshotDTO findByApartmentId(ApartmentComplexId apartmentComplexId) {
         return new ApartmentComplexSnapshotDTO(apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId));
     }
+
+    public void saveAllOrphanApartments() {
+        for (ApartmentComplex apartmentComplex : apartmentComplexRepository.listAll()) {
+            if (apartmentComplex.getRentalApartmentUnits().isEmpty()) {
+                apartmentComplexRepository.save(apartmentComplex);
+            }
+        }
+    }
+
+    public void loadApartmentComplexes() {
+        apartmentComplexRepository.load();
+    }
 }

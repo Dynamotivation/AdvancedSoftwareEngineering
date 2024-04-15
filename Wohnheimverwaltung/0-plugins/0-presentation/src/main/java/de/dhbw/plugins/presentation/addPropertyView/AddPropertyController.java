@@ -1,6 +1,7 @@
 package de.dhbw.plugins.presentation.addPropertyView;
 
 import de.dhbw.plugins.presentation.MainApp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -97,17 +98,29 @@ public class AddPropertyController {
 
     @FXML
     private void handleCreateRentalProperty() {
-        if (isInputValid()) {
-            String streetName = streetNameField.getText();
-            String houseNumber = houseNumberField.getText();
-            String postalCode = postalCodeField.getText();
-            String city = cityField.getText();
-            LocalDate dateOfConstruction = dateOfConstructionPicker.getValue();
-            BigDecimal size = BigDecimal.valueOf(sizeSpinner.getValue());
-            int maxTenants = maxTenantsSpinner.getValue();
+        try {
+            if (isInputValid()) {
+                String streetName = streetNameField.getText();
+                String houseNumber = houseNumberField.getText();
+                String postalCode = postalCodeField.getText();
+                String city = cityField.getText();
+                LocalDate dateOfConstruction = dateOfConstructionPicker.getValue();
+                BigDecimal size = BigDecimal.valueOf(sizeSpinner.getValue());
+                int maxTenants = maxTenantsSpinner.getValue();
 
-            MainApp.getRentalManagementService().createRentalProperty(streetName, houseNumber, postalCode, city, dateOfConstruction, size, maxTenants);
-            mainApp.showOverviewView();
+                MainApp.getRentalManagementService().createRentalProperty(streetName, houseNumber, postalCode, city, dateOfConstruction, size, maxTenants);
+                mainApp.showOverviewView();
+            }
+        } catch (Exception e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Fehler");
+            alert.setHeaderText("Fehler beim Erstellen des Mietobjekts");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
+    }
+
+    public void handleShowOverview() {
+        mainApp.showOverviewView();
     }
 }
