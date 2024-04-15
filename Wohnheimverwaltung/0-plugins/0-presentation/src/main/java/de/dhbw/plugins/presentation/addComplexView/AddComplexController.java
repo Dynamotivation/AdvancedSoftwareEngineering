@@ -1,17 +1,16 @@
-package de.dhbw.plugins.presentation.addPropertyView;
+package de.dhbw.plugins.presentation.addComplexView;
 
 import de.dhbw.plugins.presentation.MainApp;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddPropertyController {
-    private MainApp mainApp;
-
+public class AddComplexController {
     @FXML
     private TextField streetNameField;
 
@@ -28,13 +27,9 @@ public class AddPropertyController {
     private DatePicker dateOfConstructionPicker;
 
     @FXML
-    private Spinner<Integer> sizeSpinner;
-
-    @FXML
-    private Spinner<Integer> maxTenantsSpinner;
-
-    @FXML
     private Button createButton;
+
+    private MainApp mainApp;
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
@@ -54,8 +49,6 @@ public class AddPropertyController {
         tooltips.add(new Tooltip("Geben Sie eine gültige Postleitzahl ein (genau 5 numerische Ziffern)"));
         tooltips.add(new Tooltip("Geben Sie einen gültigen Stadtnamen ein (Buchstaben, Leerzeichen und Sonderzeichen äöüÄÖÜß)"));
         tooltips.add(new Tooltip("Wählen Sie das Baujahr aus"));
-        tooltips.add(new Tooltip("Geben Sie eine gültige Größe in Quadratmetern ein (größer als 0)"));
-        tooltips.add(new Tooltip("Geben Sie die maximale Anzahl von Mietern ein (größer als 0)"));
 
         for (Tooltip tooltip : tooltips) {
             tooltip.setShowDelay(javafx.util.Duration.millis(50));
@@ -66,8 +59,6 @@ public class AddPropertyController {
         Tooltip.install(postalCodeField, tooltips.get(2));
         Tooltip.install(cityField, tooltips.get(3));
         Tooltip.install(dateOfConstructionPicker, tooltips.get(4));
-        Tooltip.install(sizeSpinner, tooltips.get(5));
-        Tooltip.install(maxTenantsSpinner, tooltips.get(6));
     }
 
     private void addFieldValidationListeners() {
@@ -76,8 +67,6 @@ public class AddPropertyController {
         postalCodeField.textProperty().addListener((observable, oldValue, newValue) -> validateFields());
         cityField.textProperty().addListener((observable, oldValue, newValue) -> validateFields());
         dateOfConstructionPicker.valueProperty().addListener((observable, oldValue, newValue) -> validateFields());
-        sizeSpinner.valueProperty().addListener((observable, oldValue, newValue) -> validateFields());
-        maxTenantsSpinner.valueProperty().addListener((observable, oldValue, newValue) -> validateFields());
     }
 
     private void validateFields() {
@@ -90,23 +79,21 @@ public class AddPropertyController {
                 houseNumberField.getText().matches("^[1-9][0-9]*[a-z]?") &&
                 postalCodeField.getText().matches("^[0-9]{5}") &&
                 cityField.getText().matches("^[a-zA-ZäöüÄÖÜß\\s]+") &&
-                dateOfConstructionPicker.getValue() != null &&
-                sizeSpinner.getValue() > 0 &&
-                maxTenantsSpinner.getValue() > 0;
+                dateOfConstructionPicker.getValue() != null;
     }
 
     @FXML
-    private void handleCreateRentalProperty() {
+    private void handleCreateComplex() {
         if (isInputValid()) {
-            String streetName = streetNameField.getText();
-            String houseNumber = houseNumberField.getText();
-            String postalCode = postalCodeField.getText();
-            String city = cityField.getText();
-            LocalDate dateOfConstruction = dateOfConstructionPicker.getValue();
-            BigDecimal size = BigDecimal.valueOf(sizeSpinner.getValue());
-            int maxTenants = maxTenantsSpinner.getValue();
+            var streetName = streetNameField.getText();
+            var houseNumber = houseNumberField.getText();
+            var postalCode = postalCodeField.getText();
+            var city = cityField.getText();
+            var dateOfConstruction = dateOfConstructionPicker.getValue();
 
-            MainApp.getRentalManagementService().createRentalProperty(streetName, houseNumber, postalCode, city, dateOfConstruction, size, maxTenants);
+            MainApp.getApartmentComplexManagementService()
+                    .createApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction);
+
             mainApp.showOverviewView();
         }
     }

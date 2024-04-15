@@ -9,6 +9,8 @@ import de.dhbw.domain.repositories.TenantRepository;
 import de.dhbw.plugin.persistence.ApartmentComplexJacksonJsonRepository;
 import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
+import de.dhbw.plugins.presentation.addApartmentView.AddApartmentController;
+import de.dhbw.plugins.presentation.addComplexView.AddComplexController;
 import de.dhbw.plugins.presentation.addPropertyView.AddPropertyController;
 import de.dhbw.plugins.presentation.overviewView.OverviewController;
 import de.dhbw.plugins.presentation.startView.HomeController;
@@ -19,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class MainApp extends Application {
     private static RentalManagementService rentalManagementService;
@@ -50,7 +50,7 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-    public void showNewView() {
+    public void showOverviewView() {
         try {
             FXMLLoader overviewLoader = new FXMLLoader(MainApp.class.getResource("overviewView/overview-view.fxml"));
             Parent overviewRoot = overviewLoader.load();
@@ -92,10 +92,6 @@ public class MainApp extends Application {
         return apartmentComplexManagementService;
     }
 
-    public void showAddApartmentView() {
-
-    }
-
     public void showAddPropertyView() {
         try {
             FXMLLoader addPropertyLoader = new FXMLLoader(MainApp.class.getResource("addPropertyView/add-property-view.fxml"));
@@ -106,6 +102,38 @@ public class MainApp extends Application {
 
             primaryStage.setTitle("Neues Mietwohnhaus hinzufügen");
             primaryStage.setScene(addPropertyScene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAddApartmentView() {
+        try {
+            FXMLLoader addApartmentLoader = new FXMLLoader(MainApp.class.getResource("addApartmentView/add-apartment-view.fxml"));
+            Parent addApartmentRoot = addApartmentLoader.load();
+            AddApartmentController addApartmentController = addApartmentLoader.getController();
+            addApartmentController.setMainApp(this);
+            Scene addApartmentScene = new Scene(addApartmentRoot);
+
+            primaryStage.setTitle("Neue Mietwohnung hinzufügen");
+            primaryStage.setScene(addApartmentScene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showAddComplexView() {
+        try {
+            FXMLLoader addComplexLoader = new FXMLLoader(MainApp.class.getResource("addComplexView/add-complex-view.fxml"));
+            Parent addComplexRoot = addComplexLoader.load();
+            AddComplexController addComplexController = addComplexLoader.getController();
+            addComplexController.setMainApp(this);
+            Scene addComplexScene = new Scene(addComplexRoot);
+
+            primaryStage.setTitle("Neues Miethaus hinzufügen");
+            primaryStage.setScene(addComplexScene);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

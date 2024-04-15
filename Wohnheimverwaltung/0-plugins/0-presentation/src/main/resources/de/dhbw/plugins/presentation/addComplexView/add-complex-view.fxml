@@ -2,9 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            fx:controller="de.dhbw.plugins.presentation.addPropertyView.AddPropertyController">
+            fx:controller="de.dhbw.plugins.presentation.addComplexView.AddComplexController">
 
     <center>
         <GridPane hgap="10" vgap="10" alignment="CENTER">
@@ -23,15 +24,7 @@
             <Label text="Date of Construction:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
             <DatePicker fx:id="dateOfConstructionPicker" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-            <Label text="Size (sqm):" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-            <Spinner fx:id="sizeSpinner" GridPane.columnIndex="1" GridPane.rowIndex="5"
-                     min="0" max="999999" initialValue="100"/>
-
-            <Label text="Max Tenants:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-            <Spinner fx:id="maxTenantsSpinner" GridPane.columnIndex="1" GridPane.rowIndex="6"
-                     min="0" max="999" initialValue="1"/>
-
-            <Button text="Create Rental Property" fx:id="createButton" disable="true" onAction="#handleCreateRentalProperty"
+            <Button text="Create Rental Property" fx:id="createButton" disable="true" onAction="#handleCreateComplex"
                     GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2"/>
         </GridPane>
     </center>

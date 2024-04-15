@@ -23,4 +23,8 @@ module de.dhbw.plugin.presentation {
     opens de.dhbw.plugins.presentation.overviewView to javafx.fxml;
     exports de.dhbw.plugins.presentation.addPropertyView to javafx.graphics;
     opens de.dhbw.plugins.presentation.addPropertyView to javafx.fxml;
+    exports de.dhbw.plugins.presentation.addApartmentView to javafx.graphics;
+    opens de.dhbw.plugins.presentation.addApartmentView to javafx.fxml;
+    exports de.dhbw.plugins.presentation.addComplexView to javafx.graphics;
+    opens de.dhbw.plugins.presentation.addComplexView to javafx.fxml;
 }

@@ -22,7 +22,7 @@ public class HomeController {
     @FXML
     private void handleNew(ActionEvent event) {
         System.out.println("New button clicked");
-        mainApp.showNewView();
+        mainApp.showOverviewView();
     }
 
     public void setMainApp(MainApp mainApp) {

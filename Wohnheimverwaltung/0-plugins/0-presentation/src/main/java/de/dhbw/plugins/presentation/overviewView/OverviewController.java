@@ -34,12 +34,12 @@ public class OverviewController {
         var rentalProperties = MainApp.getRentalManagementService().listAllRentalPropertySnapshots();
 
         if (rentalProperties.isEmpty() && apartmentComplexes.isEmpty())
-            rentalPropertiesPane.getChildren().add(new Label("Keine Mietobjekte vorhanden"));
+            apartmentComplexesPane.getChildren().add(new Label("Keine Mietobjekte vorhanden"));
 
         if (!apartmentComplexes.isEmpty()) {
             Label label = new Label("Miethäuser:");
             label.setPadding(new Insets(0, 0, 10, 0));
-            rentalPropertiesPane.getChildren().add(label);
+            apartmentComplexesPane.getChildren().add(label);
         }
 
         for (var apartmentComplex : apartmentComplexes)
@@ -57,13 +57,15 @@ public class OverviewController {
     }
 
     private void createAddButtonDropDown() {
-        MenuItem option1 = new MenuItem("Neue Mietwohnung");
-        MenuItem option2 = new MenuItem("Neues Mietwohnhaus");
+        MenuItem option1 = new MenuItem("Neues Miethaus");
+        MenuItem option2 = new MenuItem("Neue Mietwohnung");
+        MenuItem option3 = new MenuItem("Neues Mietwohnhaus");
 
-        option1.setOnAction(e -> showAddApartmentView());
-        option2.setOnAction(e -> showAddRentalPropertyView());
+        option1.setOnAction(e -> showAddComplexView());
+        option2.setOnAction(e -> showAddApartmentView());
+        option3.setOnAction(e -> showAddRentalPropertyView());
 
-        ContextMenu contextMenu = new ContextMenu(option1, option2);
+        ContextMenu contextMenu = new ContextMenu(option1, option2, option3);
 
         addNew.setOnAction(e -> {
             Window window = addNew.getScene().getWindow();
@@ -160,6 +162,10 @@ public class OverviewController {
 
     private void showAddRentalPropertyView() {
         mainApp.showAddPropertyView();
+    }
+
+    private void showAddComplexView() {
+        mainApp.showAddComplexView();
     }
 
     public void setMainApp(MainApp mainApp) {
