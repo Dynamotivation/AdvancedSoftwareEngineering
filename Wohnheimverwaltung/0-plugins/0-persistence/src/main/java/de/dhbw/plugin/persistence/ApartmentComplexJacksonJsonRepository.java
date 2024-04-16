@@ -37,6 +37,11 @@ public class ApartmentComplexJacksonJsonRepository implements ApartmentComplexRe
     }
 
     @Override
+    public void remove(ApartmentComplex apartmentComplex) {
+        apartmentComplexes.remove(apartmentComplex);
+    }
+
+    @Override
     public void save(ApartmentComplex apartmentComplex) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -61,7 +66,6 @@ public class ApartmentComplexJacksonJsonRepository implements ApartmentComplexRe
                 ApartmentComplex apartmentComplex = mapper.readValue(jsonString, ApartmentComplex.class);
                 apartmentComplexes.add(apartmentComplex);
             }
-
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }

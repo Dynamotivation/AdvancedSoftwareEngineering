@@ -10,6 +10,7 @@ import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.repositories.ApartmentComplexRepository;
 import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.repositories.TenantRepository;
+import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
@@ -40,7 +41,7 @@ public class RentalManagementService {
 
     public RentalId createRentalApartmentUnit(ApartmentComplexId apartmentComplexId, int apartmentNumber, int floor, BigDecimal size, int maxTenants) {
         ApartmentComplex apartmentComplex = apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId);
-        RentalApartmentUnit rentalApartmentUnit = new RentalApartmentUnit(apartmentComplex, apartmentNumber, floor, Size.squareMeters(size), maxTenants);
+        RentalApartmentUnit rentalApartmentUnit = new RentalApartmentUnit(apartmentComplex, new DoorNumber(floor, apartmentNumber), Size.squareMeters(size), maxTenants);
         rentalRepository.add(rentalApartmentUnit);
 
         return rentalApartmentUnit.getId();
@@ -85,6 +86,12 @@ public class RentalManagementService {
                 .filter(rental -> rental.getParentApartmentComplex().getId().equals(apartmentComplexId))
                 .map(RentalApartmentUnitSnapshotDTO::new)
                 .toList();
+    }
+
+    public void clearAllRentals() {
+        for (Rental rental : rentalRepository.listAll()) {
+            rentalRepository.remove(rental);
+        }
     }
 
     public void saveAllRentals() {

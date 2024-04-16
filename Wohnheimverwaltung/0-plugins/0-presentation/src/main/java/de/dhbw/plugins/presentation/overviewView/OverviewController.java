@@ -136,7 +136,7 @@ public class OverviewController {
             // Create rental unit info pane
             BorderPane rentalInfoPane = new BorderPane();
             rentalInfoPane.setPrefSize(100, 100);
-            rentalInfoPane.setTop(new Label(apartment.getApartmentNumber() + " - " + apartment.getFloor()));
+            rentalInfoPane.setTop(new Label(apartment.getDoorNumber().toString()));
             FontIcon rentalIcon = new FontIcon("gmi-home-work");
             rentalIcon.setIconSize(32);
             rentalInfoPane.setCenter(rentalIcon);

@@ -19,6 +19,7 @@ public interface RentalRepository {
     List<RentalApartmentUnit> listAllRentalApartmentUnits();
     List<RentalProperty> listAllRentalProperties();
     void add(Rental rental);
+    void remove(Rental rental);
     void save(Rental rental);
     void load();
 }

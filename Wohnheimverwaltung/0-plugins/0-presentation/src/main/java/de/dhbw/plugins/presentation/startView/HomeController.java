@@ -49,6 +49,11 @@ public class HomeController {
                     new File("").getAbsolutePath()));
             alert.setContentText(e.getMessage());
             alert.show();
+
+            // Rollback
+            MainApp.getRentalManagementService().clearAllRentals();
+            MainApp.getTenantManagementService().clearAllTenants();
+            MainApp.getApartmentComplexManagementService().clearAllApartmentComplexes();
         }
     }
 

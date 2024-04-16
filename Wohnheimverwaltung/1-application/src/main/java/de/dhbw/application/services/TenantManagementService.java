@@ -39,4 +39,10 @@ public class TenantManagementService {
     public void loadTenants() {
         tenantRepository.load();
     }
+
+    public void clearAllTenants() {
+        for (Tenant tenant : tenantRepository.listAll()) {
+            tenantRepository.remove(tenant);
+        }
+    }
 }

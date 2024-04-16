@@ -13,6 +13,7 @@ public interface TenantRepository {
     List<Tenant> findByRentalId(RentalId rentalId);
     List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
     void add(Tenant tenant);
+    void remove(Tenant tenant);
     void save(Tenant tenant);
     void load();
 }

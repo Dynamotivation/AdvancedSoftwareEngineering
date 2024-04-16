@@ -78,6 +78,11 @@ public class RentalJacksonJsonRepository implements RentalRepository {
     }
 
     @Override
+    public void remove(Rental rental) {
+        rentals.remove(rental);
+    }
+
+    @Override
     public void save(Rental rental) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

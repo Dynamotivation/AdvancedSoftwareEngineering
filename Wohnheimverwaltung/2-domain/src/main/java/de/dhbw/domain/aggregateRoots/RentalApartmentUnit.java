@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.Rental;
+import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
@@ -14,10 +15,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class RentalApartmentUnit implements Rental {
-    // In case of remodelling the apartmentNumber and size should be mutable. Rent can change.
+    // In case of remodelling the doorNumber and size should be mutable. Rent can naturally change.
     // Implementation specific variables
-    private int apartmentNumber;
-    private final int floor;
+    private DoorNumber doorNumber;
     private final ApartmentComplex parentApartmentComplex;
 
     // Required variables
@@ -29,37 +29,22 @@ public class RentalApartmentUnit implements Rental {
     @JsonCreator
     public RentalApartmentUnit(
             @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
-            @JsonProperty("apartmentNumber") int apartmentNumber,
-            @JsonProperty("floor") int floor,
+            @JsonProperty("doorNumber") DoorNumber doorNumber,
             @JsonProperty("size") Size size,
             @JsonProperty("maxTenants") int maxTenants) {
         this.parentApartmentComplex = parentApartmentComplex;
-        setApartmentNumber(apartmentNumber);
-        this.floor = floor;
+        this.doorNumber = doorNumber;
         setSize(size);
         setMaxTenants(maxTenants);
         this.id = new RentalId();
     }
 
-    public int getApartmentNumber() {
-        return apartmentNumber;
+    public DoorNumber getDoorNumber() {
+        return doorNumber;
     }
 
-    public void setApartmentNumber(int apartmentNumber) {
-        if (apartmentNumber <= 0)
-            throw new IllegalArgumentException("Invalid apartment number");
-
-        // Check if an apartment with the same number already exists
-        for (RentalApartmentUnit rentalApartmentUnit : this.parentApartmentComplex.getRentalApartmentUnits()) {
-            if (rentalApartmentUnit.getApartmentNumber() == apartmentNumber)
-                throw new IllegalArgumentException("Apartment with this number already exists");
-        }
-
-        this.apartmentNumber = apartmentNumber;
-    }
-
-    public int getFloor() {
-        return floor;
+    public void setDoorNumber(DoorNumber doorNumber) {
+        this.doorNumber = doorNumber;
     }
 
     public ApartmentComplex getParentApartmentComplex() {
@@ -120,12 +105,19 @@ public class RentalApartmentUnit implements Rental {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         RentalApartmentUnit that = (RentalApartmentUnit) o;
-        return apartmentNumber == that.apartmentNumber && floor == that.floor && maxTenants == that.maxTenants && Objects.equals(parentApartmentComplex, that.parentApartmentComplex) && Objects.equals(id, that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && Objects.equals(size, that.size);
+        return maxTenants == that.maxTenants && doorNumber.equals(that.doorNumber) && parentApartmentComplex.equals(that.parentApartmentComplex) && id.equals(that.id) && leaseAgreement.equals(that.leaseAgreement) && size.equals(that.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(apartmentNumber, floor, parentApartmentComplex, id, leaseAgreement, maxTenants, size);
+        int result = doorNumber.hashCode();
+        result = 31 * result + parentApartmentComplex.hashCode();
+        result = 31 * result + id.hashCode();
+        result = 31 * result + leaseAgreement.hashCode();
+        result = 31 * result + maxTenants;
+        result = 31 * result + size.hashCode();
+        return result;
     }
 }

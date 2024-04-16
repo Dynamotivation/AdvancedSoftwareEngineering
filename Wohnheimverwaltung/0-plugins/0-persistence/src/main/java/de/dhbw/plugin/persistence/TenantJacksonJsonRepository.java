@@ -59,6 +59,11 @@ public class TenantJacksonJsonRepository implements TenantRepository {
     }
 
     @Override
+    public void remove(Tenant tenant) {
+        tenants.remove(tenant);
+    }
+
+    @Override
     public void save(Tenant tenant) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

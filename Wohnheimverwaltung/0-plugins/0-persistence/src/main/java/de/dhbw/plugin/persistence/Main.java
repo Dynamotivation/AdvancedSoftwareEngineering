@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.entities.ApartmentComplex;
+import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Size;
 
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ public class Main {
 
         // Serialize object to JSON
         var complex = new ApartmentComplex("Rheinstraße", "1", "68163", "Mannheim", LocalDate.of(2000, 10, 3));
-        RentalApartmentUnit apartmentUnit = new RentalApartmentUnit(complex, 1,1, Size.squareMeters(new BigDecimal(1)),1);
+        RentalApartmentUnit apartmentUnit = new RentalApartmentUnit(complex, new DoorNumber(1,1), Size.squareMeters(new BigDecimal(1)),1);
 
         String jsonString = null;
 
