@@ -1,9 +1,13 @@
 package de.dhbw.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.miscellaneous.NthDayOfMonthAdjuster;
+import de.dhbw.domain.miscellaneous.RentCharger;
+import de.dhbw.domain.services.DefaultRentCharger;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
@@ -16,27 +20,50 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class LeaseAgreement {
     private final LocalDate inclusiveStartDate;
-    private LocalDate inclusiveEndDate;
-    private final int monthlyDayOfPayment;
-    private LocalDate nextPaymentDate;
+    private final NthDayOfMonthAdjuster monthlyDayOfPayment;
     private final Rent rent;
     private final List<Tenant> tenants;
     private final LeaseAgreementId id;
     private final RentalId associatedRentalId;
+    private final RentCharger rentCharger;
+    private LocalDate inclusiveEndDate;
+    private LocalDate nextPaymentDate;
 
-    public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, RentalId associatedRentalId) {
-        // Validate monthly day of payment
-        if (monthlyDayOfPayment < 1 || monthlyDayOfPayment > 31)
-            throw new IllegalArgumentException("Monthly day of payment must be between 1 and 31. Shorter months are accounted for automatically.");
+    public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate,
+                          Rent rent, int monthlyDayOfPayment, RentalId associatedRentalId) {
+        this(
+                inclusiveStartDate,
+                null,
+                monthlyDayOfPayment,
+                inclusiveStartDate,
+                rent,
+                tenants,
+                new LeaseAgreementId(),
+                associatedRentalId,
+                new DefaultRentCharger()
+        );
+    }
 
-
+    @JsonCreator
+    private LeaseAgreement(
+            @JsonProperty("inclusiveStartDate") LocalDate inclusiveStartDate,
+            @JsonProperty("inclusiveEndDate") LocalDate inclusiveEndDate,
+            @JsonProperty("monthlyDayOfPayment") int monthlyDayOfPayment,
+            @JsonProperty("nextPaymentDate") LocalDate nextPaymentDate,
+            @JsonProperty("rent") Rent rent,
+            @JsonProperty("tenants") List<Tenant> tenants,
+            @JsonProperty("id") LeaseAgreementId id,
+            @JsonProperty("associatedRentalId") RentalId associatedRentalId,
+            @JsonProperty("rentCharger") RentCharger rentCharger
+    ) {
         this.inclusiveStartDate = inclusiveStartDate;
         this.nextPaymentDate = inclusiveStartDate;
-        this.monthlyDayOfPayment = monthlyDayOfPayment;
+        this.monthlyDayOfPayment = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
         this.tenants = tenants;
-        this.id = new LeaseAgreementId();
+        this.id = id;
         this.rent = rent;
         this.associatedRentalId = associatedRentalId;
+        this.rentCharger = rentCharger;
 
         // Notifies the tenants of the new lease agreement
         tenants.forEach(tenant -> tenant.addLeaseAgreement(this));
@@ -64,7 +91,7 @@ public class LeaseAgreement {
         return new ArrayList<>(tenants);
     }
 
-    public int getMonthlyDayOfPayment() {
+    public NthDayOfMonthAdjuster getMonthlyDayOfPayment() {
         return monthlyDayOfPayment;
     }
 
@@ -85,12 +112,7 @@ public class LeaseAgreement {
     }
 
     public void chargeRent() {
-        NthDayOfMonthAdjuster nthDayOfMonthAdjuster = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
-
-        while (nextPaymentDate.isBefore(LocalDate.now())) {
-            tenants.forEach(tenant -> tenant.addTransaction(new RentCharge(-rent.getAmount(), nextPaymentDate, id)));
-            nextPaymentDate = nextPaymentDate.plusMonths(1).with(nthDayOfMonthAdjuster);
-        }
+        nextPaymentDate = rentCharger.chargeRent(this);
     }
 
     @Override

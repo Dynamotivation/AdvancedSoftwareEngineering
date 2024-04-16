@@ -102,7 +102,6 @@ public class RentalJacksonJsonRepository implements RentalRepository {
                 Rental rental = mapper.readValue(jsonString, Rental.class);
                 rentals.add(rental);
             }
-
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,7 @@
 package de.dhbw.application.snapshotObjects;
 
 import de.dhbw.domain.entities.LeaseAgreement;
+import de.dhbw.domain.miscellaneous.NthDayOfMonthAdjuster;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
@@ -10,9 +11,9 @@ import java.util.List;
 
 public class LeaseAgreementSnapshotDTO {
     private final LocalDate inclusiveStartDate;
-    private LocalDate inclusiveEndDate;
-    private final int monthlyDayOfPayment;
-    private LocalDate nextPaymentDate;
+    private final LocalDate inclusiveEndDate;
+    private final NthDayOfMonthAdjuster monthlyDayOfPayment;
+    private final LocalDate nextPaymentDate;
     private final Rent rent;
     private final List<TenantSnapshotDTO> tenants;
     private final LeaseAgreementId id;
@@ -37,7 +38,7 @@ public class LeaseAgreementSnapshotDTO {
         return inclusiveEndDate;
     }
 
-    public int getMonthlyDayOfPayment() {
+    public NthDayOfMonthAdjuster getMonthlyDayOfPayment() {
         return monthlyDayOfPayment;
     }
 
