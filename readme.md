@@ -458,7 +458,7 @@ Im Anbetracht des Prototypen-Stadiums der Software, wäre eine der Implementieru
 ## Identifizierte Code Smells
 [//]: # (mindestens 4 Code Smells; Auszug SonarQube o.ä.; Link zu Commit mit letzten smell falls refactored; https://refactoring.guru/refactoring/smells)
 
-### **Long Parameter List**
+### **[Long Parameter List](https://refactoring.guru/smells/long-parameter-list)**
 Die Klasse [Rental Property](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/RentalProperty.java) weißt den Code Smell "Long Parameter List" zum einen in ihrem öffentlichen, als auch in ihrem privaten Konstruktor für die Deserialisierung auf.
 
 Während der private Konstruktor unbedingt seine jetzige Form behalten muss, könnte der öffentliche optimiert werden. ```streetName, houseNumber, postalCode, city``` könnten stattdessen direkt als [Address](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Address.java) Value Object übergeben werden.
@@ -483,7 +483,7 @@ Während der private Konstruktor unbedingt seine jetzige Form behalten muss, kö
 ```
 
 ---
-### **Primitive Obsession**
+### **[Primitive Obsession](https://refactoring.guru/smells/primitive-obsession)**
 Der Commit *"Implemented Rent Charging"* (b1dfa8c) weißt in seiner Version von [Rental Apartment Unit](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/blob/b1dfa8c78c4202e90ed803ffa89d3006797d31d8/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/RentalApartmentUnit.java) (GitHub Link) Primitive Obsession auf. 
 
 ```java
@@ -567,8 +567,37 @@ Eine mögliche Korrektur ist möglich, indem man delegierende Methoden einführt
 ## Durchgeführte Refactorings
 (2 konkrete Refactorings; Commit des Refactorings verlinken; Begründen; https://refactoring.guru/refactoring/techniques)
 
-### **Todo**
+### **[Introduce Parameter Object](https://refactoring.guru/introduce-parameter-object)**
 
+Um den Identifizierten Code Smell ["Primitive Obsession"](#primitive-obsession) in [Rental Apartment Unit](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/blob/b1dfa8c78c4202e90ed803ffa89d3006797d31d8/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/RentalApartmentUnit.java) (GitHub Link) zu beheben, wurden in zwei verschiedenen Commits jeweils ein neues Parameter Object in Form eines neuen Value Objects angelegt.
+
+Commit *"Implemented Rent Charging"* (b1dfa8c) verringert zwar nicht direkt die Anzahl der Parameter, sondern verhindert direkt das Hinzukommen des neuen Parameters ```sizeUnit``` indem er mit ```int size``` zum neuen Value Object [Size](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Size.java) wird.
+
+Commit *Extracted DoorNumber from RentalApartmentUnit* (35851bc) kombiniert die verbleibenden zwei Primitives ```int floor``` und ```int apartmentNumber``` in das neue Value Object [DoorNumber](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/DoorNumber.java). Hierdurch wird die endgültige Parameterzahl von möglichen 6 auf 4 reduziert. 
+
+Refactored Version:
+```java
+public class RentalApartmentUnit implements Rental {
+    ...
+    private DoorNumber doorNumber;
+    ...
+    private Size size;
+
+    @JsonCreator
+    public RentalApartmentUnit(
+            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
+            @JsonProperty("doorNumber") DoorNumber doorNumber,
+            @JsonProperty("size") Size size,
+            @JsonProperty("maxTenants") int maxTenants) {
+        this.parentApartmentComplex = parentApartmentComplex;
+        this.doorNumber = doorNumber;
+        setSize(size);
+        setMaxTenants(maxTenants);
+        this.id = new RentalId();
+    }
+    ...
+```
+*Auszug RentalApartmentUnit.java*
 
 ---
 ### **Todo**
