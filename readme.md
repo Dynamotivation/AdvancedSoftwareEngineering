@@ -459,12 +459,51 @@ Im Anbetracht des Prototypen-Stadiums der Software, wäre eine der Implementieru
 [//]: # (mindestens 4 Code Smells; Auszug SonarQube o.ä.; Link zu Commit mit letzten smell falls refactored; https://refactoring.guru/refactoring/smells)
 
 ### **Long Parameter List**
-TODO
+Die Klasse [Rental Property](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/RentalProperty.java) weißt den Code Smell "Long Parameter List" zum einen in ihrem öffentlichen, als auch in ihrem privaten Konstruktor für die Deserialisierung auf.
 
+Während der private Konstruktor unbedingt seine jetzige Form behalten muss, könnte der öffentliche optimiert werden. ```streetName, houseNumber, postalCode, city``` könnten stattdessen direkt als [Address](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Address.java) Value Object übergeben werden.
+
+```java
+    ...
+    public RentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, Size size, int maxTenants) {
+        this(new Address(streetName, houseNumber, postalCode, city),
+                dateOfConstruction, new RentalId(), null, maxTenants, size);
+    }
+
+    @JsonCreator
+    private RentalProperty(
+            @JsonProperty("address") Address address,
+            @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction,
+            @JsonProperty("id") RentalId id,
+            @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
+            @JsonProperty("maxTenants") int maxTenants,
+            @JsonProperty("size") Size size
+    ) {
+        ...
+```
 
 ---
 ### **Primitive Obsession**
-Todo
+Der Commit *"Implemented Rent Charging"* (b1dfa8c) weißt in seiner Version von [Rental Apartment Unit](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/blob/b1dfa8c78c4202e90ed803ffa89d3006797d31d8/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/RentalApartmentUnit.java) (GitHub Link) Primitive Obsession auf. 
+
+```java
+public class RentalApartmentUnit implements Rental {
+    ...
+    private int apartmentNumber; // TODO make into a value object or annotate verifications
+    private final int floor; // TODO make into a value object or annotate verifications
+    private final ApartmentComplex parentApartmentComplex;
+
+    // Required variables
+    private final RentalId id;
+    private LeaseAgreement leaseAgreement;
+    private int maxTenants; // TODO move into RentalInformation
+    private double size; // TODO move into RentalInformation
+    ...
+```
+*Auszug aus RentalApartmentUnit.java (Commit "Implemented Rent Charging")*
+
+```apartmentNumber```, ```floor``` und ```size``` sind lediglich integers. Die ersten beiden könnten gut zu einem gemeinsamen Value Object kombiniert werden, während letzteres zusammen mit einer Einheit zu einem eigenen Value Object werden sollte. Somit kann die Validierung ausgelagert werden und künftig deren ```.equals()``` Methoden verwendet werden.
+
 
 ---
 ### **Alternative Classes with Different Interfaces**
