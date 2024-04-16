@@ -20,6 +20,7 @@
   - [Gewählte(s) Entwurfsmuster](#gewähltes-entwurfsmuster)
 
 
+<div class="page"/>
 
 
 # 1. Domain Driven Design
@@ -45,6 +46,9 @@
 | Startguthaben (Starting Balance)            | Eine konkrete Art der Transaktion, welche das Guthaben eines Mieters darstellt, sollte das Mietverhältnis erst nachträglich in das System eingepflegt werden. Somit müssen nicht alle zurückliegenden Transaktionen eingepflegt werden.          |                                                                                        |
 | Vermieter                                   | Eine zur Verwaltung von Mietwohnungen in einem Gebäude berechtigte Person. Oftmals der Anwender der Software oder dessen Arbeitgeber.                                                                                                          |
 
+
+<div class="page"/>
+
 | Prozesse  |                                                                                                                          |
 |-----------|--------------------------------------------------------------------------------------------------------------------------|
 | Ausziehen | Der Prozess des Verlassens eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen. |
@@ -52,41 +56,47 @@
 | Mieten    | Der Prozess des Bewohnen einer Mietwohnung durch einen Mieter unter Einhaltung der Bedingungen des Mietvertrags.       |
 | Vermieten | Der Prozess in dem ein Vermieter und ein oder mehrere Mieter sich auf einen Mietvertrag einigen und diesen Abschließen.  |
 
-(Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe ✅ und deren fachliche Bedeutung ✅, Aufgaben ❔ und Regeln ✅ dokumentieren)
+[//]: # (Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe ✅ und deren fachliche Bedeutung ✅, Aufgaben ❔ und Regeln ✅ dokumentieren)
 
 
 ## Verwendete taktischer Muster des DDD
 (Alle genannten Muster des DDD sind im Source Code zu verwenden (Value Objects, Entities, Aggregates, Repositories, Domain Services); Begründen Sie jedes einzelne, oben genannte Muster anhand von je einem konkreten Beispiel aus Ihrem Source Code; „XX ist als ValueObject implementiert, weil…")
 
-### [Value Objects](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/)
+### [**Value Objects**](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/)
 
 #### [Size](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Size.java)
 Die Größe / Fläche einer Mietobjekt besteht aus einer Zahl und einer Einheit und ist als Value Object implementiert. Der Wert kann aus einer beliebigen Kombination der akzeptierten Werte erzeugt werden und umgerechnet werden. Ändert sich in einer künftigen Version durch z.B. renovieren eine Größenangabe, so ist das Resultat eine neue Größe.
 
 
-### [Entities](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/)
+---
+### [**Entities**](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/)
 
 #### [Lease Agreement](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java)
-Der Mietvertrag ist als Entity implementiert, weil er neben finalen Attributen auch einige veränderbare, wie beispielsweise das End-Datum, beinhaltet. Außerdem besitzt der Vertrag eine Identität, um ihn eindeutig ausmachen zu können.
+Der Mietvertrag ist als Entity implementiert, weil er neben finalen Feldern auch einige veränderbare, wie beispielsweise das End-Datum, beinhaltet. Außerdem besitzt der Vertrag eine Identität, um ihn eindeutig ausmachen zu können.
 
 
-### [Aggregates](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/)
+---
+### [**Aggregates**](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/)
 
 #### [Tenant Aggregate](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/aggregateRoots/Tenant.java)
 Das Mieter Aggregate wurde so gewählt, dass ein Mieter als Aggregate Root auftritt, denn in ihm werden verschiedene Personalien (Value Objects (Kontaktdaten, Name und ID)) und eine Liste der Mietverträge (Entities) zusammengeführt. Außerdem führt es eine Liste der zugehörigen ausstehenden Transaktionen, die "lazy" anhand der Mietverträge, des Zahltags und des letzten Zahlungsdatums abgerufen.
 
 
-### [Repositories](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/)
+---
+### [**Repositories**](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/)
 
 #### [Tenant Repository](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/TenantRepository.java)
 Das Tenant Repository existiert als zentrale Sammelstelle für alle Mieter. Diese Herangehensweise wurde gewählt, damit ein Mieter nicht aufhört zu existieren, sobald sein letzter Mietvertrag gekündigt ist. Bei der Speicherung empfängt das Repository einzeln die zu serialisierenden Mieter. Dadurch wird es Application Services ermöglicht beispielsweise nur alle Mieter zu serialisieren, welche nicht bereits durch Objektreferenzen von anderen Repositories serialisiert wurden.
 
 
-### [Domain Services](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/services/)
+---
+### [**Domain Services**](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/services/)
 
 #### [Renting Service](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/services/RentingService.java)
-Der Renting Service ermöglicht es in den jeweiligen Implementierungen des Rental Interface den Code nicht doppelt implementieren oder Rental zu einer abstrakten Klasse ändern zu müssen. So können die Implementierungen auf die Validierung der Variablen und ausgeübten Aktionen fokussiert bleiben. Namentlich kann so der "[Large Class](https://refactoring.guru/smells/large-class)" Code Smell verhindert werden. 
+Der Renting Service ermöglicht es in den jeweiligen Implementierungen des Rental Interface den Code nicht doppelt implementieren oder Rental zu einer abstrakten Klasse ändern zu müssen. So können die Implementierungen auf die Validierung der Felder und ausgeübten Aktionen fokussiert bleiben. Namentlich kann so der "[Large Class](https://refactoring.guru/smells/large-class)" Code Smell verhindert werden. 
 
+
+<div class="page"/>
 
 
 # 2. Clean Architecture
@@ -96,15 +106,19 @@ Der Renting Service ermöglicht es in den jeweiligen Implementierungen des Renta
 ## Geplante Schichtenarchitektur
 Für einen anschaulichen Prototypen der Software sind die folgenden drei Schichten wichtig und bereits implementiert.
 
-### [Domain Layer](/Wohnheimverwaltung/2-domain/)
+### [**Domain Layer**](/Wohnheimverwaltung/2-domain/)
 Implementiert: ✅\
 In der Domain Layer befindet sich der logische Kern der Anwendung und dessen Regeln, eine Implementierung der Ubiquitous Language mit samt ihrer Regeln. Sie ist der Kern, denn ohne sie geht nichts. Änderungen treten nur bei der Feststellung von Bugs oder Veränderungen an der Definition der Ubiquitious Language auf.
 
-### [Application Layer](/Wohnheimverwaltung/1-application/)
-Implementiert: ✅\
-Die Application Layer enthält eine andere Art Services als die Domänenschicht, denn sie behandeln nicht fachlische Aspekte, sondern technische. In der vorliegenden Implementation dienen die Services als Zugriffsweg auf die Repositories. Dieser Zwischenstopp ist notwendig, damit die Domain Layer sauber nur fachlich relevante Funktionen ihren Repository Interfaces implementieren muss, während der zugehörige Service weitere verbos-benannte Funktionen anbieten kann. Damit ist die Anbindung in die Presentation Logic einfacher und klar lesbar. Außerdem können künftig durch die map-Befehle auch sehr einfach Adapter eingesetzt werden. Im aktuellen Stadium werden Domain Entities 1-zu-1 auf Domain Entity DTO (Date Transfer Objects) gespiegelt, wodurch all ihre Variablen final und read only werden.
 
-### [Plugin Layer](/Wohnheimverwaltung/0-plugins/)
+---
+### [**Application Layer**](/Wohnheimverwaltung/1-application/)
+Implementiert: ✅\
+Die Application Layer enthält eine andere Art Services als die Domänenschicht, denn sie behandeln nicht fachlische Aspekte, sondern technische. In der vorliegenden Implementation dienen die Services als Zugriffsweg auf die Repositories. Dieser Zwischenstopp ist notwendig, damit die Domain Layer sauber nur fachlich relevante Funktionen ihren Repository Interfaces implementieren muss, während der zugehörige Service weitere verbos-benannte Funktionen anbieten kann. Damit ist die Anbindung in die Presentation Logic einfacher und klar lesbar. Außerdem können künftig durch die map-Befehle auch sehr einfach Adapter eingesetzt werden. Im aktuellen Stadium werden Domain Entities 1-zu-1 auf Domain Entity DTO (Date Transfer Objects) gespiegelt, wodurch all ihre Felder final und read only werden.
+
+
+---
+### [**Plugin Layer**](/Wohnheimverwaltung/0-plugins/)
 Implementiert: ✅\
 Die Plugin Layer repräsentiert die kurzlebige äußere Schicht im Domain Driven Design. Darunter fallen beispielsweise Implementierungen der Repository Interfaces der Domain Layer auf eine bestimmte Speichermethode (versch. DB-Driver, Filesystem, Serialization) und verschiedene die Nutzerschnittstelle (Frontends, CLI).
 
@@ -117,6 +131,8 @@ Implementiert: ✅\
 Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwendung wird dies durch Serialisierung in das JSON Format gehandhabt. Dafür wurde die Bibliothek Jackson verwendet.
 
 
+<div class="page"/>
+
 
 # 3. Programming Principles
 
@@ -124,11 +140,130 @@ Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwend
 
 [//]: # (Begründen Sie für 5 der vorgestellten Prinzipien aus SOLID, GRASP, DRY, … WO das jeweilige Prinzip in Ihrem Projekt berücksichtigt wird bzw. angewendet wird und nennen Sie ein Beispiel AUS IHREM SOURCE CODE dazu; „Das Single-Responsibility-Principle besagt, … Dies wird zum Beispiel in der Klasse XX berücksichtigt, weil…“)
 
-### 1. SOLID - SRP - Single Responsibility Principle
-TODO anhand Lease Agreement
+### **1. SOLID - SRP - Single Responsibility Principle**
+Das Single Responsibility Principle besagt, dass eine Klasse nur eine Aufgabe und somit nur einen Grund zur Änderung hat. Dieses Prinzip wird in diesem Projekt an der Klasse [Lease Agreement](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java) demonstriert. Augenscheinlich hat die Klasse zwar ebenfalls Methoden, um den zugehörigen Mietern Miete zu berechnen, jedoch delegiert diese nur an eine Implementierung des Interface [Rent Charger](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/miscellaneous/RentCharger.java) um die Kapselung der Felder zu wahren. Durch diese Separation of Concerns werden die meisten Änderungen nur den Code einer der Klassen betreffen.
 
+<details>
+    <summary>Code Beispiel</summary>
 
-### 2. SOLID - DIP - Dependency Inversion Principle
+```java
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
+public class LeaseAgreement {
+    private final LocalDate inclusiveStartDate;
+    private final NthDayOfMonthAdjuster monthlyDayOfPayment;
+    private final Rent rent;
+    private final List<Tenant> tenants;
+    private final LeaseAgreementId id;
+    private final RentalId associatedRentalId;
+    private final RentCharger rentCharger;
+    private LocalDate inclusiveEndDate;
+    private LocalDate nextPaymentDate;
+
+    public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate,
+                          Rent rent, int monthlyDayOfPayment, RentalId associatedRentalId) {
+        this(
+                inclusiveStartDate,
+                null,
+                monthlyDayOfPayment,
+                inclusiveStartDate,
+                rent,
+                tenants,
+                new LeaseAgreementId(),
+                associatedRentalId,
+                new DefaultRentCharger()
+        );
+    }
+
+    @JsonCreator
+    private LeaseAgreement(
+            @JsonProperty("inclusiveStartDate") LocalDate inclusiveStartDate,
+            @JsonProperty("inclusiveEndDate") LocalDate inclusiveEndDate,
+            @JsonProperty("monthlyDayOfPayment") int monthlyDayOfPayment,
+            @JsonProperty("nextPaymentDate") LocalDate nextPaymentDate,
+            @JsonProperty("rent") Rent rent,
+            @JsonProperty("tenants") List<Tenant> tenants,
+            @JsonProperty("id") LeaseAgreementId id,
+            @JsonProperty("associatedRentalId") RentalId associatedRentalId,
+            @JsonProperty("rentCharger") RentCharger rentCharger
+    ) {
+        this.inclusiveStartDate = inclusiveStartDate;
+        this.nextPaymentDate = inclusiveStartDate;
+        this.monthlyDayOfPayment = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
+        this.tenants = tenants;
+        this.id = id;
+        this.rent = rent;
+        this.associatedRentalId = associatedRentalId;
+        this.rentCharger = rentCharger;
+
+        // Notifies the tenants of the new lease agreement
+        tenants.forEach(tenant -> tenant.addLeaseAgreement(this));
+    }
+
+    public LocalDate getInclusiveStartDate() {
+        return inclusiveStartDate;
+    }
+
+    public LocalDate getInclusiveEndDate() {
+        return inclusiveEndDate;
+    }
+
+    public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
+        // TODO Minimum rental period
+
+        // Validate that the end date is after the start date
+        if (inclusiveEndDate.isBefore(inclusiveStartDate))
+            throw new IllegalArgumentException("End date must be after start date");
+
+        this.inclusiveEndDate = inclusiveEndDate;
+    }
+
+    public List<Tenant> getTenants() {
+        return new ArrayList<>(tenants);
+    }
+
+    public NthDayOfMonthAdjuster getMonthlyDayOfPayment() {
+        return monthlyDayOfPayment;
+    }
+
+    public LocalDate getNextPaymentDate() {
+        return nextPaymentDate;
+    }
+
+    public Rent getRent() {
+        return rent;
+    }
+
+    public LeaseAgreementId getId() {
+        return id;
+    }
+
+    public RentalId getAssociatedRentalId() {
+        return associatedRentalId;
+    }
+
+    public void chargeRent() {
+        nextPaymentDate = rentCharger.chargeRent(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaseAgreement that = (LeaseAgreement) o;
+        return monthlyDayOfPayment == that.monthlyDayOfPayment && Objects.equals(inclusiveStartDate, that.inclusiveStartDate) && Objects.equals(inclusiveEndDate, that.inclusiveEndDate) && Objects.equals(tenants, that.tenants) && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inclusiveStartDate, monthlyDayOfPayment, inclusiveEndDate, tenants, id);
+    }
+}
+```
+*Auszug aus LeaseAgreement.java*
+</details>
+
+---
+### **2. SOLID - DIP - Dependency Inversion Principle**
 Das Dependency Inversion Principle besagt, dass Module höherer Ebenen anstelle von Detail behafteten Objekten aus niedrigeren Schichten von generalisierenden Interfaces abhängig sein sollen. Diese werden Abstraktionen genannt. Die Details selbst hängen von der Abstraktion ab.
 
 Die Abhängigkeit zu Abstraktionen lässt sich durch die Extraktion von Merkmalen in ein Interface oder eine Abstrakte Klasse durchführen. Dadurch entsteht ein Vertrag / Protokoll. Innerhalb einer Ebene und in allen Ebenen darüber kann man sich nun auf den Vertrag verlassen, die Details der Implementierung spielen keine Rolle.
@@ -185,16 +320,111 @@ public interface TenantRepository {
 Somit werden durch die Separation of Concerns die Regeln des Domain Driven Design zur Richtung von Abhängigkeiten gewahrt und Flexibilität geschaffen.
 
 
+---
+### **3. GRASP - Pure Fabrication**
+Bei Pure Fabrication handelt es sich um eine eine Trennung von technischem und Domänenwissen. Das bedeutet, dass die Klasse keinen Bezug zu der Problemdomäne hat, sondern der technischen Umsetzung einen Dienst anbietet.
 
-### 3. GRASP - Pure Fabrication
-TODO anhand Repo
+Auch hierbei können wieder die [Jackson Repository Implementierungen](/Wohnheimverwaltung/0-plugins/0-persistence/src/main/java/de/dhbw/plugin/persistence/) betrachtet werden. Wie bereits bei dem [Dependency Inversion Principle](#2-solid---dip---dependency-inversion-principle) beschrieben, sind die Details von der Abstraktion getrennt. Die Details stellen hierbei das technische Wissen da.
+
+<details>
+    <summary>Code Beispiel</summary>
+
+```java
+public class RentalJacksonJsonRepository implements RentalRepository {
+    private final List<Rental> rentals = new ArrayList<>();
+    ...
+
+    @Override
+    public void save(Rental rental) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        try (var writer = new FileWriter("rental.save", true)) {
+            String jsonString = mapper.writeValueAsString(rental) + "\n";
+
+            writer.write(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void load() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        try (var reader = new BufferedReader(new FileReader("rental.save"))) {
+            while (reader.ready()) {
+                String jsonString = reader.readLine();
+                Rental rental = mapper.readValue(jsonString, Rental.class);
+                rentals.add(rental);
+            }
+
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+*Auszug aus RentalJacksonJsonRepository.java*
+</details>
 
 
-### 4. GRASP - Protected Variations
-TODO anhand Repo
+---
+### **4. KISS - Keep it Simple, Stupid**
+Wie der Name verrät zielt das KISS Prinzip darauf ab, Dinge auf eine einfache Weiße zu implementieren, um unnötige Komplexität zu vermeiden.
+
+Beispielweise beim Persistieren im [Jackson Rental Repository](/Wohnheimverwaltung/0-plugins/0-persistence/src/main/java/de/dhbw/plugin/persistence/RentalJacksonJsonRepository.java) wird jede Entität einzeln als Zeile in eine Datei geschrieben. Selbstverständlich entsteht dadurch auch kein valide JSON Datei, da nur jede Zeile in sich selbst valide ist. Dabei wird allerdings das Problem vermieden, dass es nicht zu [Type Erasure](https://docs.oracle.com/javase/tutorial/java/generics/genTypes.html) wie beim Serialisieren einer ```List<Rental>``` kommt, was die Deserialisierung erheblich erleichtert. Als Konsequenz wird die gespeicherte Datei dann nicht ```.json``` sondern ```.save``` genannt, somit *erwartet* auch niemand korrekten JSON Syntax.\
+Die ```load()``` Methode deserialisiert dann ebenfalls Zeile für Zeile.
+
+KISS trifft hier eben zu, da diese vermeidlich "dumme" Lösung sehr einfach zu implementieren ist und weder ein eigener, komplexer Serialisierer oder Deserialisierer geschrieben werden muss.
+
+<details>
+    <summary>Code Beispiel</summary>
+
+```java
+public class RentalJacksonJsonRepository implements RentalRepository {
+    private final List<Rental> rentals = new ArrayList<>();
+    ...
+
+    @Override
+    public void save(Rental rental) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        try (var writer = new FileWriter("rental.save", true)) {
+            String jsonString = mapper.writeValueAsString(rental) + "\n";
+
+            writer.write(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void load() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        try (var reader = new BufferedReader(new FileReader("rental.save"))) {
+            while (reader.ready()) {
+                String jsonString = reader.readLine();
+                Rental rental = mapper.readValue(jsonString, Rental.class);
+                rentals.add(rental);
+            }
+
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+*Auszug aus RentalJacksonJsonRepository.java*
+</details>
 
 
-### 5. YAGNI - You ain't gonna need it
+---
+### **5. YAGNI - You ain't gonna need it**
 Das YAGNI Prinzip beschreibt die Abwesenheit von zurzeit nicht verwendeten Methoden, welche sonst durch Gedanken wie "So etwas können wir bestimmt einmal gebrauchen!" entstehen. Es ist ein wenig wie der Unterschied zwischen dem Einkaufen mit und ohne Einkaufsliste, daher ist es auch genau so schwer zu demonstrieren _was genau_ nun weggelassen wurde.
 
 In dieser Software wird das YAGNI Prinzip unter anderem im [Rental Repository](/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/repositories/RentalRepository.java) angewandt.
@@ -220,23 +450,31 @@ Im Anbetracht des Prototypen-Stadiums der Software, wäre eine der Implementieru
 </ol>
 
 
+<div class="page"/>
+
 
 # 5. Refactoring
 
 ## Identifizierte Code Smells
-(mindestens 4 Code Smells; Auszug SonarQube o.ä.; Link zu Commit mit letzten smell (falls refactored); https://refactoring.guru/refactoring/smells)
+[//]: # (mindestens 4 Code Smells; Auszug SonarQube o.ä.; Link zu Commit mit letzten smell falls refactored; https://refactoring.guru/refactoring/smells)
 
-### Long Parameter List
+### **Long Parameter List**
+TODO
 
-### Primitive Obsession
 
+---
+### **Primitive Obsession**
+Todo
 
-### Alternative Classes with Different Interfaces
+---
+### **Alternative Classes with Different Interfaces**
 Das ContactAvenue (Kontaktmöglichkeit) Interface ist im aktuellen Zustand nicht sehr nützlich, da es leer ist.
+
 ```java
 public interface ContactAvenue {
 }
 ```
+
 Somit dient es nur dem "gruppieren" verschiedener Kontaktmöglichkeiten. Schaut man nun auf die implementieren Klassen, wird die Problematik schnell erkenntlich: Die Klassen verhalten sich identisch, jedoch haben sie aus semantischen Gründen verschiedene Namen.
 
 ```java
@@ -255,7 +493,9 @@ public class ContactAvenuePhone implements ContactAvenue {
 
 Mit einem Refactoring könnte diese Funktionalität in eine Abstrakte Klasse gezogen werden und einen generischen Namen wie "getContact" bekommen. Da die Validierung, welche durch die verschiedenen Datentypen erzielt wurde, ist bereits geschehen, kann hier der Rückgabetyp auf String geändert werden.
 
-### Shotgun Surgery
+
+---
+### **Shotgun Surgery**
 Betrachtet man die Implementation des Interface Rental, so fällt auf, dass keinerlei Funktionen im Bezug auf die Anschrift einer Mietobjekt vorgeschrieben werden. Bei genauerem hinsehen fällt jedoch auf, dass sowohl RentalApartmentUnit als auch RentalProperty diese Informationen auf verschiedene Arten hinterlegt haben. Im Falle von RentalProperty sind die Daten direkt hinterlegt.
 
 ```java
@@ -279,7 +519,8 @@ public class ApartmentComplex {
     ...
 ```
 
-Daraus folgt, dass bei einer Änderung an einem der Entities, mindestens auch das Gegenstück geändert werden muss. Betrachtet man die weiteren Auswirkungen durch diese nachteilige Anbindung, fällt auf, dass vermutlich noch weitere Stellen in anderen Ebenen als der Domäne betroffen sind.\
+Daraus folgt, dass bei einer Änderung an einem der Entities, mindestens auch das Gegenstück geändert werden muss. Betrachtet man die weiteren Auswirkungen durch diese nachteilige Anbindung, fällt auf, dass vermutlich noch weitere Stellen in anderen Ebenen als der Domäne betroffen sind.
+
 Eine mögliche Korrektur ist möglich, indem man delegierende Methoden einführt, welche die Aufrufe an ApartmentComplex weiterleiten. Diese sollte bei der nächsten Änderung anstelle der Shotgun Surgery durchgeführt werden.
 
 
@@ -287,6 +528,14 @@ Eine mögliche Korrektur ist möglich, indem man delegierende Methoden einführt
 ## Durchgeführte Refactorings
 (2 konkrete Refactorings; Commit des Refactorings verlinken; Begründen; https://refactoring.guru/refactoring/techniques)
 
+### **Todo**
+
+
+---
+### **Todo**
+
+
+<div class="page"/>
 
 
 # 6. Entwurfsmuster
