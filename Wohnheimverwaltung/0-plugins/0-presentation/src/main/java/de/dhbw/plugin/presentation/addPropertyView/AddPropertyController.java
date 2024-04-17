@@ -1,7 +1,6 @@
-package de.dhbw.plugins.presentation.addPropertyView;
+package de.dhbw.plugin.presentation.addPropertyView;
 
-import de.dhbw.plugins.presentation.MainApp;
-import javafx.event.ActionEvent;
+import de.dhbw.plugin.presentation.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 

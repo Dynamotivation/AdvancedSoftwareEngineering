@@ -15,16 +15,16 @@ module de.dhbw.plugin.presentation {
     requires java.compiler;
 
     // Export to JavaFX
-    exports de.dhbw.plugins.presentation to javafx.graphics;
-    opens de.dhbw.plugins.presentation to javafx.fxml;
-    exports de.dhbw.plugins.presentation.startView to javafx.graphics;
-    opens de.dhbw.plugins.presentation.startView to javafx.fxml;
-    exports de.dhbw.plugins.presentation.overviewView to javafx.graphics;
-    opens de.dhbw.plugins.presentation.overviewView to javafx.fxml;
-    exports de.dhbw.plugins.presentation.addPropertyView to javafx.graphics;
-    opens de.dhbw.plugins.presentation.addPropertyView to javafx.fxml;
-    exports de.dhbw.plugins.presentation.addApartmentView to javafx.graphics;
-    opens de.dhbw.plugins.presentation.addApartmentView to javafx.fxml;
-    exports de.dhbw.plugins.presentation.addComplexView to javafx.graphics;
-    opens de.dhbw.plugins.presentation.addComplexView to javafx.fxml;
+    exports de.dhbw.plugin.presentation to javafx.graphics;
+    opens de.dhbw.plugin.presentation to javafx.fxml;
+    exports de.dhbw.plugin.presentation.startView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.startView to javafx.fxml;
+    exports de.dhbw.plugin.presentation.overviewView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.overviewView to javafx.fxml;
+    exports de.dhbw.plugin.presentation.addPropertyView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.addPropertyView to javafx.fxml;
+    exports de.dhbw.plugin.presentation.addApartmentView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.addApartmentView to javafx.fxml;
+    exports de.dhbw.plugin.presentation.addComplexView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.addComplexView to javafx.fxml;
 }

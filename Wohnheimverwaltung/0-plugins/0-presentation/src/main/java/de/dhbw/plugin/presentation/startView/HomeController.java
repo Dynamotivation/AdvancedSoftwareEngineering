@@ -1,6 +1,6 @@
-package de.dhbw.plugins.presentation.startView;
+package de.dhbw.plugin.presentation.startView;
 
-import de.dhbw.plugins.presentation.MainApp;
+import de.dhbw.plugin.presentation.MainApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

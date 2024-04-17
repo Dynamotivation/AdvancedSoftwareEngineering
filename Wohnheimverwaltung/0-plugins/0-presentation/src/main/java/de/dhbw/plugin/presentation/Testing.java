@@ -1,4 +1,4 @@
-package de.dhbw.plugins.presentation;
+package de.dhbw.plugin.presentation;
 
 import de.dhbw.application.services.RentalManagementService;
 import de.dhbw.application.services.TenantManagementService;

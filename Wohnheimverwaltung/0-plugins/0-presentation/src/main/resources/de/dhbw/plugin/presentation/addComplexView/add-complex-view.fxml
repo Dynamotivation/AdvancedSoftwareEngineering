@@ -5,7 +5,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            fx:controller="de.dhbw.plugins.presentation.addComplexView.AddComplexController">
+            fx:controller="de.dhbw.plugin.presentation.addComplexView.AddComplexController">
 
     <center>
         <GridPane hgap="10" vgap="10" alignment="CENTER">

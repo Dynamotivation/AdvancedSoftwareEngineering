@@ -1,10 +1,9 @@
-package de.dhbw.plugins.presentation.overviewView;
+package de.dhbw.plugin.presentation.overviewView;
 
 import com.dukescript.layouts.flexbox.FlexboxLayout;
 import de.dhbw.application.snapshotObjects.ApartmentComplexSnapshotDTO;
 import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
-import de.dhbw.plugins.presentation.MainApp;
-import javafx.event.ActionEvent;
+import de.dhbw.plugin.presentation.MainApp;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

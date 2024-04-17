@@ -1,9 +1,8 @@
-package de.dhbw.plugins.presentation.addApartmentView;
+package de.dhbw.plugin.presentation.addApartmentView;
 
-import de.dhbw.plugins.presentation.MainApp;
+import de.dhbw.plugin.presentation.MainApp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 

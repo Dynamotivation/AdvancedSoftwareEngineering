@@ -1,4 +1,4 @@
-package de.dhbw.plugins.presentation;
+package de.dhbw.plugin.presentation;
 
 import de.dhbw.application.services.ApartmentComplexManagementService;
 import de.dhbw.application.services.RentalManagementService;
@@ -9,11 +9,11 @@ import de.dhbw.domain.repositories.TenantRepository;
 import de.dhbw.plugin.persistence.ApartmentComplexJacksonJsonRepository;
 import de.dhbw.plugin.persistence.RentalJacksonJsonRepository;
 import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
-import de.dhbw.plugins.presentation.addApartmentView.AddApartmentController;
-import de.dhbw.plugins.presentation.addComplexView.AddComplexController;
-import de.dhbw.plugins.presentation.addPropertyView.AddPropertyController;
-import de.dhbw.plugins.presentation.overviewView.OverviewController;
-import de.dhbw.plugins.presentation.startView.HomeController;
+import de.dhbw.plugin.presentation.addApartmentView.AddApartmentController;
+import de.dhbw.plugin.presentation.addComplexView.AddComplexController;
+import de.dhbw.plugin.presentation.addPropertyView.AddPropertyController;
+import de.dhbw.plugin.presentation.overviewView.OverviewController;
+import de.dhbw.plugin.presentation.startView.HomeController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

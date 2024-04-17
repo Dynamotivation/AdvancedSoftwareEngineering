@@ -36,7 +36,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>de.dhbw.presentation/de.dhbw.plugins.presentation.MainApp</mainClass>
+                            <mainClass>de.dhbw.plugin.presentation.MainApp</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
