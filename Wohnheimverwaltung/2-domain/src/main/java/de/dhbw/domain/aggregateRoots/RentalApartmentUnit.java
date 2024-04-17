@@ -93,12 +93,12 @@ public class RentalApartmentUnit implements Rental {
     }
 
     @Override
-    public void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+    public void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice) {
         // Validate that the number of tenants does not exceed the maximum number of tenants
         if (tenants.size() > maxTenants)
             throw new IllegalArgumentException("Too many tenants");
 
-        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, id);
+        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice, id);
     }
 
     @Override

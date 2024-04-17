@@ -16,7 +16,7 @@ public class DefaultRentCharger implements RentCharger {
         while (nextPaymentDate.isBefore(LocalDate.now())) {
             final LocalDate finalNextPaymentDate = nextPaymentDate;
             leaseAgreement.getTenants().forEach(tenant ->
-                    tenant.addTransaction(new RentCharge(-leaseAgreement.getRent().getAmount(),
+                    tenant.getCharged(leaseAgreement, new RentCharge(-leaseAgreement.getRent().getAmount(),
                             finalNextPaymentDate, leaseAgreement.getId())));
 
             nextPaymentDate = finalNextPaymentDate.plusMonths(1).with(nthDayOfMonthAdjuster);

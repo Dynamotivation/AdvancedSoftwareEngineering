@@ -2,13 +2,8 @@ package de.dhbw.plugin.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
-import de.dhbw.domain.aggregateRoots.RentalProperty;
 import de.dhbw.domain.aggregateRoots.Tenant;
-import de.dhbw.domain.miscellaneous.Rental;
-import de.dhbw.domain.repositories.RentalRepository;
 import de.dhbw.domain.repositories.TenantRepository;
-import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
@@ -39,17 +34,14 @@ public class TenantJacksonJsonRepository implements TenantRepository {
 
     @Override
     public List<Tenant> findByRentalId(RentalId rentalId) {
-        return tenants.stream()
-                .filter(tenant -> tenant.getAssociatedLeaseAgreements().stream()
-                        .anyMatch(leaseAgreement -> leaseAgreement.getAssociatedRentalId().equals(rentalId)))
-                .toList();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
     public List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId) {
         return tenants.stream()
-                .filter(tenant -> tenant.getAssociatedLeaseAgreements().stream()
-                        .anyMatch(leaseAgreement -> leaseAgreement.getId().equals(leaseAgreementId)))
+                .filter(tenant -> tenant.getAssociatedLeaseAgreementIds().stream()
+                        .anyMatch(leaseAgreement -> leaseAgreement.equals(leaseAgreementId)))
                 .toList();
     }
 

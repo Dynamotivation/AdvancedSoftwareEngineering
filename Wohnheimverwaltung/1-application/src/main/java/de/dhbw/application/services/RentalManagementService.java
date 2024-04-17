@@ -47,14 +47,14 @@ public class RentalManagementService {
         return rentalApartmentUnit.getId();
     }
 
-    public void rentRentalPropertyToTenants(RentalId rentalId, List<TenantId> tenantIds, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+    public void rentRentalPropertyToTenants(RentalId rentalId, List<TenantId> tenantIds, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice) {
         Rental rental = rentalRepository.findById(rentalId);
 
         List<Tenant> tenants = tenantIds.stream()
                 .map(tenantRepository::findById)
                 .toList();
 
-        rental.rentToTenants(tenants, inclusiveStartDate, rent, monthlyDayOfPayment);
+        rental.rentToTenants(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice);
     }
 
     public List<RentalApartmentUnitSnapshotDTO> listAllRentalApartmentUnitSnapshots() {

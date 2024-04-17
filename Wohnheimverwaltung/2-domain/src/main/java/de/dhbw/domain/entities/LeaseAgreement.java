@@ -21,8 +21,9 @@ import java.util.Objects;
 public class LeaseAgreement {
     private final LocalDate inclusiveStartDate;
     private final NthDayOfMonthAdjuster monthlyDayOfPayment;
+    private final int monthsOfNotice;
     private final Rent rent;
-    private final List<Tenant> tenants;
+    private final List<Tenant> tenants; // Subscribers
     private final LeaseAgreementId id;
     private final RentalId associatedRentalId;
     private final RentCharger rentCharger;
@@ -30,11 +31,12 @@ public class LeaseAgreement {
     private LocalDate nextPaymentDate;
 
     public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate,
-                          Rent rent, int monthlyDayOfPayment, RentalId associatedRentalId) {
+                          Rent rent, int monthlyDayOfPayment, int monthsOfNotice, RentalId associatedRentalId) {
         this(
                 inclusiveStartDate,
                 null,
                 monthlyDayOfPayment,
+                monthsOfNotice,
                 inclusiveStartDate,
                 rent,
                 tenants,
@@ -49,6 +51,7 @@ public class LeaseAgreement {
             @JsonProperty("inclusiveStartDate") LocalDate inclusiveStartDate,
             @JsonProperty("inclusiveEndDate") LocalDate inclusiveEndDate,
             @JsonProperty("monthlyDayOfPayment") int monthlyDayOfPayment,
+            @JsonProperty("monthsOfNotice") int monthsOfNotice,
             @JsonProperty("nextPaymentDate") LocalDate nextPaymentDate,
             @JsonProperty("rent") Rent rent,
             @JsonProperty("tenants") List<Tenant> tenants,
@@ -59,14 +62,17 @@ public class LeaseAgreement {
         this.inclusiveStartDate = inclusiveStartDate;
         this.nextPaymentDate = inclusiveStartDate;
         this.monthlyDayOfPayment = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
-        this.tenants = tenants;
+        this.monthsOfNotice = monthsOfNotice;
+        this.nextPaymentDate = nextPaymentDate;
+        this.inclusiveEndDate = inclusiveEndDate;
+        this.tenants = new ArrayList<>(tenants); // Register subscribers defensively
         this.id = id;
         this.rent = rent;
         this.associatedRentalId = associatedRentalId;
         this.rentCharger = rentCharger;
 
         // Notifies the tenants of the new lease agreement
-        tenants.forEach(tenant -> tenant.addLeaseAgreement(this));
+        tenants.forEach(tenant -> tenant.registerLeaseAgreementSubscription(this.id));
     }
 
     public LocalDate getInclusiveStartDate() {
@@ -78,9 +84,9 @@ public class LeaseAgreement {
     }
 
     public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
-        // TODO Minimum rental period
+        if (inclusiveStartDate.plusMonths(monthsOfNotice).isAfter(inclusiveEndDate))
+            throw new IllegalArgumentException("First possible end date is " + inclusiveStartDate.plusMonths(monthsOfNotice));
 
-        // Validate that the end date is after the start date
         if (inclusiveEndDate.isBefore(inclusiveStartDate))
             throw new IllegalArgumentException("End date must be after start date");
 
@@ -111,8 +117,14 @@ public class LeaseAgreement {
         return associatedRentalId;
     }
 
+    // Notify subscribers of new due payment
     public void chargeRent() {
         nextPaymentDate = rentCharger.chargeRent(this);
+    }
+
+    public void update() {
+        // TODO lease breaking
+        chargeRent();
     }
 
     @Override

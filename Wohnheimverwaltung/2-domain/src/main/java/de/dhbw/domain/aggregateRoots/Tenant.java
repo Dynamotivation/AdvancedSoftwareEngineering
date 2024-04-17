@@ -15,7 +15,7 @@ import java.util.List;
 public class Tenant {
     private final ContactInformation contactInformation;
     private final TenantId id;
-    private final List<LeaseAgreement> associatedLeaseAgreements = new ArrayList<>();
+    private final List<LeaseAgreementId> associatedLeaseAgreementIds = new ArrayList<>();
     private final Name name;
     private final List<Transaction> outstandingBalanceHistory = new ArrayList<>();
 
@@ -41,24 +41,24 @@ public class Tenant {
         return id;
     }
 
-    public List<LeaseAgreement> getAssociatedLeaseAgreements() {
-        return new ArrayList<>(associatedLeaseAgreements);
+    public List<LeaseAgreementId> getAssociatedLeaseAgreementIds() {
+        return new ArrayList<>(associatedLeaseAgreementIds);
     }
 
-    public void addLeaseAgreement(LeaseAgreement leaseAgreement) {
+    public void registerLeaseAgreementSubscription(LeaseAgreementId leaseAgreementId) {
         // Validate that the lease agreement id is not already in the list
-        if (associatedLeaseAgreements.contains(leaseAgreement))
-            throw new IllegalArgumentException("Lease agreement id already exists");
+        if (associatedLeaseAgreementIds.contains(leaseAgreementId))
+            throw new IllegalArgumentException("Lease agreement id registered");
 
-        associatedLeaseAgreements.add(leaseAgreement);
+        associatedLeaseAgreementIds.add(leaseAgreementId);
     }
 
-    private void removeLeaseAgreementId(LeaseAgreementId leaseAgreementId) {
+    private void deregisterLeaseAgreementSubscription(LeaseAgreementId leaseAgreementId) {
         // Validate that the lease agreement id is in the list
-        if (!associatedLeaseAgreements.contains(leaseAgreementId))
+        if (!associatedLeaseAgreementIds.contains(leaseAgreementId))
             throw new IllegalArgumentException("Lease agreement id does not exist");
 
-        associatedLeaseAgreements.remove(leaseAgreementId);
+        associatedLeaseAgreementIds.remove(leaseAgreementId);
     }
 
     public String getName() {
@@ -73,34 +73,8 @@ public class Tenant {
         return name.getFullName();
     }
 
-    public void addTransaction(Transaction transaction) {
-        // Validate that the tenant rents the property they are being charged for
-        if (transaction instanceof RentCharge rentCharge) {
-            boolean valid = false;
-
-            for (LeaseAgreement leaseAgreement : associatedLeaseAgreements) {
-                if (leaseAgreement.getId().equals(rentCharge.getAssociatedLeaseAgreementId())) {
-                    valid = true;
-                    break;
-                }
-            }
-
-            if (!valid)
-                throw new IllegalArgumentException("Tenant does not rent the property");
-        }
-
-        // Validate that the transaction has not been added before
-        if (outstandingBalanceHistory.contains(transaction))
-            throw new IllegalArgumentException("Transaction already exists");
-
-        outstandingBalanceHistory.add(transaction);
-    }
-
-    // TODO move into account entity
+    // Do not poll the balance from current leases, as this is a heavy, possibly redundant, operation
     public int getBalance() {
-        // Lazily charge rent for all associated lease agreements
-        associatedLeaseAgreements.forEach(LeaseAgreement::chargeRent);
-
         int balance = 0;
 
         for (Transaction transaction : outstandingBalanceHistory) {
@@ -112,5 +86,15 @@ public class Tenant {
 
     public List<Transaction> getOutstandingBalanceHistory() {
         return new ArrayList<>(outstandingBalanceHistory);
+    }
+
+    public void getCharged(LeaseAgreement leaseAgreement, RentCharge rentCharge) {
+        if (!associatedLeaseAgreementIds.contains(leaseAgreement))
+            throw new IllegalArgumentException("Tenant does not rent the property");
+
+        if (outstandingBalanceHistory.contains(rentCharge))
+            throw new IllegalArgumentException("Double charge");
+
+        outstandingBalanceHistory.add(rentCharge);
     }
 }

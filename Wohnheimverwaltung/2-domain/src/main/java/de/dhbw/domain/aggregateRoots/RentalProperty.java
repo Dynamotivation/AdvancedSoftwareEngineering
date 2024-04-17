@@ -96,7 +96,7 @@ public class RentalProperty implements Rental {
     }
 
     @Override
-    public void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment) {
+    public void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice) {
         // Validate that the rental property is not already booked
         if (leaseAgreement != null)
             throw new IllegalArgumentException("Rental property is already booked");
@@ -106,7 +106,7 @@ public class RentalProperty implements Rental {
             throw new IllegalArgumentException("Too many tenants");
 
 
-        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, id);
+        leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice, id);
     }
 
     @Override

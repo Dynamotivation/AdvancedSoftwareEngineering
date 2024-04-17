@@ -28,5 +28,5 @@ public interface Rental {
     int getMaxTenants();
     Size getSize();
     void remodel(Size size, int maxTenants);
-    void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment);
+    void rentToTenants(List<Tenant> tenants, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice);
 }
