@@ -15,6 +15,14 @@ public class ApartmentComplexManagementService {
         this.apartmentComplexRepository = apartmentComplexRepository;
     }
 
+    public ApartmentComplexSnapshotDTO getApartmentComplexById(ApartmentComplexId apartmentComplexId) {
+        return new ApartmentComplexSnapshotDTO(apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId));
+    }
+
+    public List<ApartmentComplexSnapshotDTO> getAllApartmentComplexes() {
+        return apartmentComplexRepository.listAll().stream().map(ApartmentComplexSnapshotDTO::new).toList();
+    }
+
     public ApartmentComplexId createApartmentComplex(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction) {
         ApartmentComplex apartmentComplex = new ApartmentComplex(streetName, houseNumber, postalCode, city, dateOfConstruction);
         apartmentComplexRepository.add(apartmentComplex);

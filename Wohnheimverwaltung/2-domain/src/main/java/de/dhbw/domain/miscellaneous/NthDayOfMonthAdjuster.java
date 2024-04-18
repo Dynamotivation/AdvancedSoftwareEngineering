@@ -17,6 +17,10 @@ public class NthDayOfMonthAdjuster implements TemporalAdjuster {
         return new NthDayOfMonthAdjuster(nthDay);
     }
 
+    public int getNthDay() {
+        return nthDay;
+    }
+
     @Override
     public Temporal adjustInto(Temporal temporal) {
         int month = temporal.get(ChronoField.MONTH_OF_YEAR);

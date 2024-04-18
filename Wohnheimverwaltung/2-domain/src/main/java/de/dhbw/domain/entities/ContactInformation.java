@@ -33,7 +33,7 @@ public class ContactInformation implements Iterable<ContactAvenue> {
     }
 
     public void removeContactAvenue(ContactAvenue contactAvenue) {
-        if (preferredContactAvenue.equals(contactAvenue))
+        if (preferredContactAvenue.equals(contactAvenue) && contactAvenues.size() == 1)
             throw new IllegalArgumentException("Cannot remove preferred contact avenue");
         if (!contactAvenues.contains(contactAvenue))
             throw new IllegalArgumentException("Contact avenue does not exist");
@@ -41,6 +41,9 @@ public class ContactInformation implements Iterable<ContactAvenue> {
             throw new IllegalArgumentException("Cannot remove last remaining contact avenue");
 
         contactAvenues.remove(contactAvenue);
+
+        if (preferredContactAvenue.equals(contactAvenue))
+            preferredContactAvenue = contactAvenues.getFirst();
     }
 
     public void setPreferredContactAvenue(ContactAvenue contactAvenue) {

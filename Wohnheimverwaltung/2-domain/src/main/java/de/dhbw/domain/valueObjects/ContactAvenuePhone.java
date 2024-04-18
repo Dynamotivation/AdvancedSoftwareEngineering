@@ -13,7 +13,7 @@ public class ContactAvenuePhone extends ContactAvenue {
     public ContactAvenuePhone(
             @JsonProperty("contactDetails") PhoneNumber contactDetails
     ) {
-        super(contactDetails.toString());
+        super(String.format("+%d%d", contactDetails.getCountryCode(), contactDetails.getNationalNumber()));
 
         if (!PhoneNumberUtil.getInstance().isValidNumber(contactDetails))
             throw new IllegalArgumentException("Invalid phone number");

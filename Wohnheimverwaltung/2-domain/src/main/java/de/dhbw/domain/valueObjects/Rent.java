@@ -7,8 +7,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class Rent {
-    // Rent should be a value object because it is a specialised form currency amounts.
-    private final int amount;
     private static final char cachedCommaSeparator;
 
     // Cache the comma separator safely once
@@ -17,6 +15,9 @@ public class Rent {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(jvmLocale);
         cachedCommaSeparator = symbols.getDecimalSeparator();
     }
+
+    // Rent should be a value object because it is a specialised form currency amounts.
+    private final int amount;
 
     @JsonCreator
     public Rent(

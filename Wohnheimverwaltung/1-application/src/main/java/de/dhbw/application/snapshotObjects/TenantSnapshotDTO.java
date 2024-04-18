@@ -3,6 +3,7 @@ package de.dhbw.application.snapshotObjects;
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.entities.ContactInformation;
 import de.dhbw.domain.entities.LeaseAgreement;
+import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TenantSnapshotDTO {
-    private final ContactInformation contactInformation;
+    private final ContactInformationSnapshotDTO contactInformation;
     private final TenantId id;
     private final List<LeaseAgreementId> associatedLeaseAgreementIds;
     private final Name name;
@@ -21,15 +22,19 @@ public class TenantSnapshotDTO {
 
     public TenantSnapshotDTO(Tenant tenant) {
         this.name = new Name(tenant.getName(), tenant.getSurname());
-        this.contactInformation = tenant.getContactInformation();
+        this.contactInformation = new ContactInformationSnapshotDTO(tenant.getPreferredContactAvenue(), tenant.getContactAvenues());
         this.id = tenant.getId();
         this.associatedLeaseAgreementIds = tenant.getAssociatedLeaseAgreementIds();
         this.outstandingBalanceHistory = tenant.getOutstandingBalanceHistory();
         this.balance = tenant.getBalance();
     }
 
-    public ContactInformation getContactInformation() {
-        return contactInformation;
+    public ContactAvenue getPreferredContactAvenue() {
+        return contactInformation.getPreferredContactAvenue();
+    }
+
+    public List<ContactAvenue> getContactAvenues() {
+        return contactInformation.getContactAvenues();
     }
 
     public TenantId getId() {

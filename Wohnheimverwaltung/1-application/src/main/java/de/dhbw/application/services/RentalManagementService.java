@@ -47,7 +47,7 @@ public class RentalManagementService {
         return rentalApartmentUnit.getId();
     }
 
-    public void rentRentalPropertyToTenants(RentalId rentalId, List<TenantId> tenantIds, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice) {
+    public void rentRentalToTenants(RentalId rentalId, List<TenantId> tenantIds, LocalDate inclusiveStartDate, Rent rent, int monthlyDayOfPayment, int monthsOfNotice) {
         Rental rental = rentalRepository.findById(rentalId);
 
         List<Tenant> tenants = tenantIds.stream()
@@ -76,6 +76,15 @@ public class RentalManagementService {
 
         if (rental instanceof RentalProperty rentalProperty)
             return new RentalPropertySnapshotDTO(rentalProperty);
+
+        return null;
+    }
+
+    public RentalApartmentUnitSnapshotDTO getRentalApartmentUnitSnapshotById(RentalId rentalId) {
+        Rental rental = rentalRepository.findById(rentalId);
+
+        if (rental instanceof RentalApartmentUnit rentalApartmentUnit)
+            return new RentalApartmentUnitSnapshotDTO(rentalApartmentUnit);
 
         return null;
     }

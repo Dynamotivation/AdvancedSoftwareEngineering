@@ -22,7 +22,7 @@ public class Deposit implements Transaction {
 
     @Override
     public int getAmount() {
-        return 0;
+        return amount;
     }
 
     @Override

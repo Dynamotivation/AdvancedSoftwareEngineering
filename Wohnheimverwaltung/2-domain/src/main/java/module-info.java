@@ -3,6 +3,7 @@ module de.dhbw.domain {
     requires org.apache.commons.validator;
     requires libphonenumber;
     requires com.fasterxml.jackson.annotation;
+    requires org.jetbrains.annotations;
 
     // Open packages only to required libraries
     opens de.dhbw.domain.aggregateRoots to com.fasterxml.jackson.databind;

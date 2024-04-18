@@ -2,7 +2,6 @@ package de.dhbw.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 
 public class DoorNumber {
     private final int floor;

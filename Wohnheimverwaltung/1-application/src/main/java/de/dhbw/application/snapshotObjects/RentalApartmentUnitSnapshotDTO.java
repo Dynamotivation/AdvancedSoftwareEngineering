@@ -13,7 +13,7 @@ public class RentalApartmentUnitSnapshotDTO {
     private final DoorNumber doorNumber;
     private final ApartmentComplexSnapshotDTO parentApartmentComplex;
     private final RentalId id;
-    private LeaseAgreement leaseAgreement;
+    private LeaseAgreementSnapshotDTO leaseAgreement;
     private final int maxTenants;
     private final Size size;
 
@@ -23,6 +23,7 @@ public class RentalApartmentUnitSnapshotDTO {
         this.size = rentalApartmentUnit.getSize();
         this.maxTenants = rentalApartmentUnit.getMaxTenants();
         this.id = rentalApartmentUnit.getId();
+        this.leaseAgreement = rentalApartmentUnit.getLeaseAgreement() == null ? null : new LeaseAgreementSnapshotDTO(rentalApartmentUnit.getLeaseAgreement());
     }
 
     public DoorNumber getDoorNumber() {
@@ -37,7 +38,7 @@ public class RentalApartmentUnitSnapshotDTO {
         return id;
     }
 
-    public LeaseAgreement getLeaseAgreement() {
+    public LeaseAgreementSnapshotDTO getLeaseAgreement() {
         return leaseAgreement;
     }
 

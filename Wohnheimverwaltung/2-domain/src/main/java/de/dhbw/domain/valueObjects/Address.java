@@ -2,6 +2,7 @@ package de.dhbw.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -15,10 +16,10 @@ public class Address {
 
     @JsonCreator
     public Address(
-            @JsonProperty("streetName") String streetName,
-            @JsonProperty("houseNumber") String houseNumber,
-            @JsonProperty("postalCode") String postalCode,
-            @JsonProperty("city") String city) {
+            @JsonProperty("streetName") @NotNull String streetName,
+            @JsonProperty("houseNumber") @NotNull String houseNumber,
+            @JsonProperty("postalCode") @NotNull String postalCode,
+            @JsonProperty("city") @NotNull String city) {
         // Validate street name
         streetName = streetName.trim();
 

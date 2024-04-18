@@ -8,6 +8,7 @@ import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,12 +33,12 @@ public class RentalProperty implements Rental {
 
     @JsonCreator
     private RentalProperty(
-            @JsonProperty("address") Address address,
-            @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction,
-            @JsonProperty("id") RentalId id,
+            @JsonProperty("address") @NotNull Address address,
+            @JsonProperty("dateOfConstruction") @NotNull LocalDate dateOfConstruction,
+            @JsonProperty("id") @NotNull RentalId id,
             @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
             @JsonProperty("maxTenants") int maxTenants,
-            @JsonProperty("size") Size size
+            @JsonProperty("size") @NotNull Size size
     ) {
         // Validate date of construction (implicitly checked for null)
         if (dateOfConstruction.isAfter(LocalDate.now()))
@@ -45,8 +46,9 @@ public class RentalProperty implements Rental {
 
         this.address = address;
         this.dateOfConstruction = dateOfConstruction;
-        this.id = new RentalId();
+        this.id = id;
         this.size = size;
+        this.leaseAgreement = leaseAgreement;
         setMaxTenants(maxTenants);
     }
 
@@ -85,13 +87,13 @@ public class RentalProperty implements Rental {
         return size;
     }
 
-    private void setSize(Size size) {
-        this.size = size;
-    }
-
     @Override
     public void remodel(Size size, int maxTenants) {
-        setSize(size);
+        // Validate the apartment is not rented
+        if (leaseAgreement != null)
+            throw new IllegalArgumentException("Rental property is already booked");
+
+        this.size = size;
         setMaxTenants(maxTenants);
     }
 

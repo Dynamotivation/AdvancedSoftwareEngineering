@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 public class Size {
@@ -33,6 +31,14 @@ public class Size {
         return new Size(bigDecimal, SizeUnit.SQUARE_FEET);
     }
 
+    private static BigDecimal convertSquareFeetToSquareMeters(BigDecimal value) {
+        return BigDecimal.valueOf(0.09290304).multiply(value);
+    }
+
+    private static BigDecimal convertSquareMetersToSquareFeet(BigDecimal value) {
+        return BigDecimal.valueOf(10.76391041671).multiply(value);
+    }
+
     public BigDecimal getValue() {
         return value;
     }
@@ -50,14 +56,6 @@ public class Size {
             case SQUARE_METERS -> convertSquareFeetToSquareMeters(value);
             case SQUARE_FEET -> convertSquareMetersToSquareFeet(value);
         };
-    }
-
-    private static BigDecimal convertSquareFeetToSquareMeters(BigDecimal value) {
-        return BigDecimal.valueOf(0.09290304).multiply(value);
-    }
-
-    private static BigDecimal convertSquareMetersToSquareFeet(BigDecimal value) {
-        return BigDecimal.valueOf(10.76391041671).multiply(value);
     }
 
     @Override

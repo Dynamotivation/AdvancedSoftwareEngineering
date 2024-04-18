@@ -2,6 +2,7 @@ package de.dhbw.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -11,8 +12,8 @@ public class Name {
 
     @JsonCreator
     public Name(
-            @JsonProperty("name") String name,
-            @JsonProperty("surname") String surname
+            @JsonProperty("name") @NotNull String name,
+            @JsonProperty("surname") @NotNull String surname
     ) {
         this.name = validateName(name);
         this.surname = validateName(surname);

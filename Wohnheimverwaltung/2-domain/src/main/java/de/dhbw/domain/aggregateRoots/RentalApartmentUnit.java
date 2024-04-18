@@ -9,6 +9,7 @@ import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,25 +27,28 @@ public class RentalApartmentUnit implements Rental {
     private int maxTenants;
     private Size size;
 
+    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, DoorNumber doorNumber, Size size, int maxTenants) {
+        this(doorNumber, parentApartmentComplex, new RentalId(), null, maxTenants, size);
+    }
+
     @JsonCreator
-    public RentalApartmentUnit(
-            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
-            @JsonProperty("doorNumber") DoorNumber doorNumber,
-            @JsonProperty("size") Size size,
-            @JsonProperty("maxTenants") int maxTenants) {
-        this.parentApartmentComplex = parentApartmentComplex;
+    private RentalApartmentUnit(
+            @JsonProperty("doorNumber") @NotNull DoorNumber doorNumber,
+            @JsonProperty("parentApartmentComplex") @NotNull ApartmentComplex parentApartmentComplex,
+            @JsonProperty("id") @NotNull RentalId id,
+            @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
+            @JsonProperty("maxTenants") int maxTenants,
+            @JsonProperty("size") @NotNull Size size) {
         this.doorNumber = doorNumber;
-        setSize(size);
+        this.parentApartmentComplex = parentApartmentComplex;
+        this.id = id;
+        this.leaseAgreement = leaseAgreement;
+        this.size = size;
         setMaxTenants(maxTenants);
-        this.id = new RentalId();
     }
 
     public DoorNumber getDoorNumber() {
         return doorNumber;
-    }
-
-    public void setDoorNumber(DoorNumber doorNumber) {
-        this.doorNumber = doorNumber;
     }
 
     public ApartmentComplex getParentApartmentComplex() {
@@ -78,17 +82,13 @@ public class RentalApartmentUnit implements Rental {
         return size;
     }
 
-    private void setSize(Size size) {
-        this.size = size;
-    }
-
     @Override
     public void remodel(Size size, int maxTenants) {
         // Validate the apartment is not rented
         if (leaseAgreement != null)
             throw new IllegalStateException("Cannot remodel while apartment is rented");
 
-        setSize(size);
+        this.size = size;
         setMaxTenants(maxTenants);
     }
 

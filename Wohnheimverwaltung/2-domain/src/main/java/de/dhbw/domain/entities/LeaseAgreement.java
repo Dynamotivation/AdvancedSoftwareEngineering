@@ -73,6 +73,9 @@ public class LeaseAgreement {
 
         // Notifies the tenants of the new lease agreement
         tenants.forEach(tenant -> tenant.registerLeaseAgreementSubscription(this.id));
+
+        // Notify subscribers of events since saved state
+        update();
     }
 
     public LocalDate getInclusiveStartDate() {
@@ -99,6 +102,10 @@ public class LeaseAgreement {
 
     public NthDayOfMonthAdjuster getMonthlyDayOfPayment() {
         return monthlyDayOfPayment;
+    }
+
+    public int getMonthsOfNotice() {
+        return monthsOfNotice;
     }
 
     public LocalDate getNextPaymentDate() {
