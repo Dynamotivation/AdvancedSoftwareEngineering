@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface ApartmentComplexRepository {
     List<ApartmentComplex> listAll();
+
     ApartmentComplex findByApartmentComplexId(ApartmentComplexId apartmentComplexId);
+
     void add(ApartmentComplex apartmentComplex);
+
     void remove(ApartmentComplex apartmentComplex);
+
     void save(ApartmentComplex apartmentComplex);
+
     List<ApartmentComplex> load();
 }

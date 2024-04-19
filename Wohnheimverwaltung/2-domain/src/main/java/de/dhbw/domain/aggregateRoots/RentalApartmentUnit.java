@@ -13,16 +13,14 @@ import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 public class RentalApartmentUnit implements Rental {
+    private final ApartmentComplex parentApartmentComplex;
+    // Required variables
+    private final RentalId id;
     // In case of remodelling the doorNumber and size should be mutable. Rent can naturally change.
     // Implementation specific variables
     private DoorNumber doorNumber;
-    private final ApartmentComplex parentApartmentComplex;
-
-    // Required variables
-    private final RentalId id;
     private LeaseAgreement leaseAgreement;
     private int maxTenants;
     private Size size;

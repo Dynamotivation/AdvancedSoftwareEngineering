@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ContactInformation implements Iterable<ContactAvenue> {
-    private ContactAvenue preferredContactAvenue;
     private final List<ContactAvenue> contactAvenues = new ArrayList<>();
+    private ContactAvenue preferredContactAvenue;
 
     public ContactInformation(ContactAvenue preferedContactAvenue, ContactAvenue... contactAvenues) {
         this(preferedContactAvenue, List.of(contactAvenues));
@@ -30,6 +30,15 @@ public class ContactInformation implements Iterable<ContactAvenue> {
 
     public ContactAvenue getPreferredContactAvenue() {
         return preferredContactAvenue;
+    }
+
+    public void setPreferredContactAvenue(ContactAvenue contactAvenue) {
+        if (!contactAvenues.contains(contactAvenue))
+            throw new IllegalArgumentException("Contact avenue not found in this contact information. If this is deliberate, add it first.");
+        if (preferredContactAvenue.equals(contactAvenue))
+            throw new IllegalArgumentException("Contact avenue is already the preferred one");
+
+        preferredContactAvenue = contactAvenue;
     }
 
     public List<ContactAvenue> getContactAvenues() {
@@ -55,15 +64,6 @@ public class ContactInformation implements Iterable<ContactAvenue> {
 
         if (preferredContactAvenue.equals(contactAvenue))
             preferredContactAvenue = contactAvenues.getFirst();
-    }
-
-    public void setPreferredContactAvenue(ContactAvenue contactAvenue) {
-        if (!contactAvenues.contains(contactAvenue))
-            throw new IllegalArgumentException("Contact avenue not found in this contact information. If this is deliberate, add it first.");
-        if (preferredContactAvenue.equals(contactAvenue))
-            throw new IllegalArgumentException("Contact avenue is already the preferred one");
-
-        preferredContactAvenue = contactAvenue;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package de.dhbw.domain.valueObjects;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
-import org.mockito.Mockito;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ContactAvenuePhoneTest {
 

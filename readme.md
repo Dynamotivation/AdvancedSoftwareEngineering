@@ -6,6 +6,7 @@
 
 
 
+- [0. Inbetriebnahme](#0-inbetriebnahme)
 - [1. Domain Driven Design](#1-domain-driven-design)
   - [Ubiquitous Language](#ubiquitous-language)
   - [Verwendete taktischer Muster des DDD](#verwendete-taktischer-muster-des-ddd)
@@ -19,6 +20,30 @@
 - [6. Entwurfsmuster](#6-entwurfsmuster)
   - [Gewähltes Entwurfsmuster](#gewähltes-entwurfsmuster)
 
+
+<div class="page"/>
+
+# 0. Inbetriebnahme
+1. OpenJDK 22 oder vergleichbar und GIT sollten auf dem Zielgerät installiert sein
+2. Die Umgebungsvariable "JAVA_HOME" sollte auf den Pfad der JDK Installation verweisen (z.B. "C:\Program Files\Java\jdk-22")\
+```setx JAVA_HOME "PFAD ZUR JDK"``` - Windows\
+```export JAVA_HOME=/usr/bin/java``` - Linux
+3. Das Repository mit ```git clone https://github.com/Dynamotivation/AdvancedSoftwareEngineering.git``` in einen Ordner der Wahl clonen (Der Ordner benötigt Schreibrechte; Sonderzeichen und lange übergeordnete Ordnernamen können Probleme bereiten)
+4. Ein(e) Eingabeaufforderung / Terminal im Ordner "Wohnheimverwaltung" öffnen
+5. Je nach Eingabeaufforderung / Terminal einen der Befehle zur Initialisierung ausführen:\
+```mvnw clean install``` - Windows CMD\
+```./mvnw clean install``` - PowerShell, Linux, etc.\
+Nun wurde die Tests bereits aufgeführt. Diese können beliebig wiederholt werden.\
+```mvnw test``` - Windows CMD\
+```./mvnw test``` - PowerShell, Linux, etc.
+6. Das automatisierte Demoskript starten:\
+```mvnw exec:java -f ./0-plugins/0-presentation/``` - Windows CMD\
+```./mvnw exec:java -f ./0-plugins/0-presentation/``` - PowerShell, Linux, etc.\
+Durch die Ausführung werden im aktuellen Ausführungsverzeichnis drei .save Dateien erzeugt.\
+Der Befehlsoutput gibt Aufklärung über die implementierten Use Cases des Programms.
+7. Das Nutzerinterface starten:\
+```mvnw javafx:run -f ./0-plugins/0-presentation/```\
+```./mvnw javafx:run -f ./0-plugins/0-presentation/```
 
 <div class="page"/>
 
@@ -39,11 +64,8 @@
 | Miete (Rent)                                | Ein im Mietvertrag festgelegter Betrag, welcher von allen Mietern bezahlt wird.                                                                                                                                                                 | - Positiv                                                                              |
 | Mietvertrag (Lease Agreement)               | Ein Vertrag zwischen einem Vermieter und allen Mietern in einer Wohnung, welcher durch seine Eckdaten (Miete, Vertragsbeginn, Befristung, Vertragsende im Falle von Befristung, Kündigungsfristen falls keine Befristung) charakterisiert wird. | - Mindestens ein Mieter                                                                |
 | Transaktion (Transaction)                   | Ein Dachbegriff für Forderungen und Zahlungen, welche einem Mieter zur Last gelegt werden.                                                                                                                                                      |                                                                                        |
-| Forderung (Charge)                          | Eine konkrete Transaktion, welche eine Forderung über einen bestimmten Betrag an einen Mieter darstellt.                                                                                                                                        | - Forderung muss kleiner als 0 sein                                                    |
-| Mietforderung (Rent Charge)                 | Eine konkrete Forderung, welche periodische Zahlung in Höhe der Miete darstellt.                                                                                                                                                                | siehe "Forderung"                                                                      |
-| Außerordentliche Forderung (Special Charge) | Eine konkrete Art der Forderung über einen Betrag, welche über die reguläre Mietforderung hinaus entstanden ist.                                                                                                                               | siehe "Forderung"                                                                      |
-| Einzahlung (Payment)                        | Eine konkrete Form der Transaktion über einen bestimmten Geldbetrag, welcher zur Deckung akkumulierter Forderungen dient.                                                                                                                       | - Zahlungsbetrag größer als 0 sein                                                     |
-| Startguthaben (Starting Balance)            | Eine konkrete Art der Transaktion, welche das Guthaben eines Mieters darstellt, sollte das Mietverhältnis erst nachträglich in das System eingepflegt werden. Somit müssen nicht alle zurückliegenden Transaktionen eingepflegt werden.          |                                                                                        |
+| Mietforderung (Rent Charge)                 | Eine konkrete Forderung, welche periodische Zahlung in Höhe der Miete darstellt.                                                                                                                                                                | siehe "Forderung"                                                                      |                               |
+| Einzahlung (Deposit)                        | Eine konkrete Form der Transaktion über einen bestimmten Geldbetrag, welcher zur Deckung akkumulierter Forderungen dient.                                                                                                                       | - Zahlungsbetrag größer als 0 sein                                                     |                                                                                   |
 | Vermieter                                   | Eine zur Verwaltung von Mietwohnungen in einem Gebäude berechtigte Person. Oftmals der Anwender der Software oder dessen Arbeitgeber.                                                                                                          |
 
 ---
@@ -51,8 +73,11 @@
 | Prozesse  |                                                                                                                          |
 |-----------|--------------------------------------------------------------------------------------------------------------------------|
 | Ausziehen | Der Prozess des Verlassens eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen. |
-| Einziehen | Der Prozess des beziehen eines Mietobjektes durch einen Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen.   |
-| Vermieten | Der Prozess in dem ein Vermieter und ein oder mehrere Mieter sich auf einen Mietvertrag einigen und diesen Abschließen.  |
+| Mieten | Der Prozess des vermieten eines Mietobjektes an einen oder mehrere Mieter unter Einhaltung der im Mietvertrag bestimmten Fristen und Miethöhen.   |
+| Mieter Anlegen | Der Prozess in dem ein Mieter der Mieterkartei hinzugefügt wird. |
+| Mietobjekt Anlegen | Der Prozess in dem ein Mietobjekt angelegt wird. |
+| Speichern | Der Prozess in dem alle Mietobjekte und Mieter gespeichert werden. |
+| Laden | Der Prozess in dem die gespeicherten Daten wieder eingelesen werden und ein identischer Zustand zur Speicherzeitpunkt entsteht. |
 
 [//]: # (Analysieren Sie die Fachlichkeit Ihrer Problemdomäne, indem Sie die relevanten Begriffe ✅ und deren fachliche Bedeutung ✅, Aufgaben ❔ und Regeln ✅ dokumentieren)
 
@@ -154,12 +179,32 @@ Das Single Responsibility Principle besagt, dass eine Klasse nur eine Aufgabe un
     <summary>Code Beispiel</summary>
 
 ```java
+package de.dhbw.domain.entities;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import de.dhbw.domain.aggregateRoots.Tenant;
+import de.dhbw.domain.miscellaneous.NthDayOfMonthAdjuster;
+import de.dhbw.domain.miscellaneous.RentCharger;
+import de.dhbw.domain.services.DefaultRentCharger;
+import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
+import de.dhbw.domain.valueObjects.ids.RentalId;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class LeaseAgreement {
     private final LocalDate inclusiveStartDate;
     private final NthDayOfMonthAdjuster monthlyDayOfPayment;
+    private final int monthsOfNotice;
     private final Rent rent;
-    private final List<Tenant> tenants;
+    private final List<Tenant> tenants; // Subscribers
     private final LeaseAgreementId id;
     private final RentalId associatedRentalId;
     private final RentCharger rentCharger;
@@ -167,11 +212,12 @@ public class LeaseAgreement {
     private LocalDate nextPaymentDate;
 
     public LeaseAgreement(List<Tenant> tenants, LocalDate inclusiveStartDate,
-                          Rent rent, int monthlyDayOfPayment, RentalId associatedRentalId) {
+                          Rent rent, int monthlyDayOfPayment, int monthsOfNotice, RentalId associatedRentalId) {
         this(
                 inclusiveStartDate,
                 null,
-                monthlyDayOfPayment,
+                new NthDayOfMonthAdjuster(monthlyDayOfPayment),
+                monthsOfNotice,
                 inclusiveStartDate,
                 rent,
                 tenants,
@@ -179,13 +225,20 @@ public class LeaseAgreement {
                 associatedRentalId,
                 new DefaultRentCharger()
         );
+
+        // Notifies the tenants of the new lease agreement
+        tenants.forEach(tenant -> tenant.registerLeaseAgreementSubscription(this.id));
+
+        // Notify subscribers of events since saved state
+        update();
     }
 
     @JsonCreator
     private LeaseAgreement(
             @JsonProperty("inclusiveStartDate") LocalDate inclusiveStartDate,
             @JsonProperty("inclusiveEndDate") LocalDate inclusiveEndDate,
-            @JsonProperty("monthlyDayOfPayment") int monthlyDayOfPayment,
+            @JsonProperty("monthlyDayOfPayment") NthDayOfMonthAdjuster monthlyDayOfPayment,
+            @JsonProperty("monthsOfNotice") int monthsOfNotice,
             @JsonProperty("nextPaymentDate") LocalDate nextPaymentDate,
             @JsonProperty("rent") Rent rent,
             @JsonProperty("tenants") List<Tenant> tenants,
@@ -194,16 +247,15 @@ public class LeaseAgreement {
             @JsonProperty("rentCharger") RentCharger rentCharger
     ) {
         this.inclusiveStartDate = inclusiveStartDate;
-        this.nextPaymentDate = inclusiveStartDate;
-        this.monthlyDayOfPayment = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
-        this.tenants = tenants;
+        this.monthlyDayOfPayment = monthlyDayOfPayment;
+        this.monthsOfNotice = monthsOfNotice;
+        this.nextPaymentDate = nextPaymentDate;
+        this.inclusiveEndDate = inclusiveEndDate;
+        this.tenants = new ArrayList<>(tenants); // Register subscribers defensively
         this.id = id;
         this.rent = rent;
         this.associatedRentalId = associatedRentalId;
         this.rentCharger = rentCharger;
-
-        // Notifies the tenants of the new lease agreement
-        tenants.forEach(tenant -> tenant.addLeaseAgreement(this));
     }
 
     public LocalDate getInclusiveStartDate() {
@@ -214,12 +266,12 @@ public class LeaseAgreement {
         return inclusiveEndDate;
     }
 
-    public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
-        // TODO Minimum rental period
-
-        // Validate that the end date is after the start date
-        if (inclusiveEndDate.isBefore(inclusiveStartDate))
+    public void setInclusiveEndDate(LocalDate submissionDate, LocalDate inclusiveEndDate) {
+        if (submissionDate.isBefore(inclusiveStartDate))
             throw new IllegalArgumentException("End date must be after start date");
+
+        if (submissionDate.plusMonths(monthsOfNotice).isAfter(inclusiveEndDate))
+            throw new IllegalArgumentException("First possible end date is " + submissionDate.plusMonths(monthsOfNotice));
 
         this.inclusiveEndDate = inclusiveEndDate;
     }
@@ -230,6 +282,10 @@ public class LeaseAgreement {
 
     public NthDayOfMonthAdjuster getMonthlyDayOfPayment() {
         return monthlyDayOfPayment;
+    }
+
+    public int getMonthsOfNotice() {
+        return monthsOfNotice;
     }
 
     public LocalDate getNextPaymentDate() {
@@ -248,8 +304,17 @@ public class LeaseAgreement {
         return associatedRentalId;
     }
 
+    // Notify subscribers of new due payment
     public void chargeRent() {
         nextPaymentDate = rentCharger.chargeRent(this);
+    }
+
+    public void update() {
+        chargeRent();
+
+        if (inclusiveEndDate != null && inclusiveEndDate.isBefore(LocalDate.now())) {
+            tenants.forEach(tenant -> tenant.deregisterLeaseAgreementSubscription(id, inclusiveEndDate));
+        }
     }
 
     @Override
@@ -324,8 +389,9 @@ public interface TenantRepository {
     List<Tenant> findByRentalId(RentalId rentalId);
     List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
     void add(Tenant tenant);
+    void remove(Tenant tenant);
     void save(Tenant tenant);
-    void load();
+    List<Tenant> load();
 }
 ```
 
@@ -450,8 +516,9 @@ public interface RentalRepository {
     List<RentalApartmentUnit> listAllRentalApartmentUnits();
     List<RentalProperty> listAllRentalProperties();
     void add(Rental rental);
+    void remove(Rental rental);
     void save(Rental rental);
-    void load();
+    List<Rental> load();
 }
 ```
 Wo _genau_ fehlt hier etwas "fehlt" ist natürlich schwer zu sagen. Eine Möglichkeit wäre, ähnlich zum Überladen von Konstruktoren, mehrere ```save(...)``` Methoden zu implementieren. So könnte man z.B. eine "Export" Funktion mit der vorhanden Methode ```save(Rental rental)``` implementieren, jedoch das Speichern des Programmzustandes mit ```Save(List<Rental> rental)```. Das _könnte_ den Vorteil haben, dass man beispielsweise nur einen offenen File Handle hat beim speichern. Da es sich hierbei jedoch um eine kleine Prototyp-Anwendung für Kleinvermieter in Deutschland handelt, ist eine etwaige Beschleunigung durch das aufteilen auf zwei solcher Methoden äußerst unausgewogen gegenüber der zusätzlich eingeführten Komplexität.
@@ -477,19 +544,22 @@ Während der private Konstruktor unbedingt seine jetzige Form behalten muss, kö
 
 ```java
     ...
-    public RentalProperty(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction, Size size, int maxTenants) {
+    public RentalProperty(String streetName, String houseNumber,
+        String postalCode, String city, LocalDate dateOfConstruction,
+        Size size, int maxTenants
+    ) {
         this(new Address(streetName, houseNumber, postalCode, city),
                 dateOfConstruction, new RentalId(), null, maxTenants, size);
     }
 
     @JsonCreator
     private RentalProperty(
-            @JsonProperty("address") Address address,
-            @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction,
-            @JsonProperty("id") RentalId id,
+            @JsonProperty("address") @NonNull Address address,
+            @JsonProperty("dateOfConstruction") @NonNull LocalDate dateOfConstruction,
+            @JsonProperty("id") @NonNull RentalId id,
             @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
             @JsonProperty("maxTenants") int maxTenants,
-            @JsonProperty("size") Size size
+            @JsonProperty("size") @NonNull Size size
     ) {
         ...
 ```
@@ -604,17 +674,8 @@ public class RentalApartmentUnit implements Rental {
     ...
     private Size size;
 
-    @JsonCreator
-    public RentalApartmentUnit(
-            @JsonProperty("parentApartmentComplex") ApartmentComplex parentApartmentComplex,
-            @JsonProperty("doorNumber") DoorNumber doorNumber,
-            @JsonProperty("size") Size size,
-            @JsonProperty("maxTenants") int maxTenants) {
-        this.parentApartmentComplex = parentApartmentComplex;
-        this.doorNumber = doorNumber;
-        setSize(size);
-        setMaxTenants(maxTenants);
-        this.id = new RentalId();
+    public RentalApartmentUnit(ApartmentComplex parentApartmentComplex, DoorNumber doorNumber, Size size, int maxTenants) {
+        ...
     }
     ...
 ```

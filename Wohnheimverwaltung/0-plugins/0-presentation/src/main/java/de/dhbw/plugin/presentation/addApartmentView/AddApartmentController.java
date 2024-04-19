@@ -4,7 +4,10 @@ import de.dhbw.plugin.presentation.MainApp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.Tooltip;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

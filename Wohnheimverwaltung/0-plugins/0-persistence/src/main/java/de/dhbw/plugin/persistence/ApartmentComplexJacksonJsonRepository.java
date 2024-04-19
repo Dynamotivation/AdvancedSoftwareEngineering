@@ -3,7 +3,6 @@ package de.dhbw.plugin.persistence;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.dhbw.domain.entities.ApartmentComplex;
-import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.repositories.ApartmentComplexRepository;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 

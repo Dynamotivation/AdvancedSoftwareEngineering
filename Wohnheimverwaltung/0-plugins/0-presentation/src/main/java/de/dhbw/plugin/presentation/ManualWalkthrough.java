@@ -341,7 +341,7 @@ public class ManualWalkthrough {
 
         if (rentalManagementService.getRentalApartmentUnitSnapshotById(rentalApartmentIds.get(0)).equals(rentalManagementService.getRentalApartmentUnitSnapshotById(newRentalIds.get(0)))
                 && rentalManagementService.getRentalApartmentUnitSnapshotById(rentalApartmentIds.get(1)).equals(rentalManagementService.getRentalApartmentUnitSnapshotById(newRentalIds.get(1)))
-                && rentalManagementService.getRentalPropertySnapshotById(rentalPropertyId).equals(rentalManagementService.getRentalPropertySnapshotById(newRentalIds.get(2))) ){
+                && rentalManagementService.getRentalPropertySnapshotById(rentalPropertyId).equals(rentalManagementService.getRentalPropertySnapshotById(newRentalIds.get(2)))) {
             System.out.println("The rental apartments and property are the same");
         } else {
             System.out.println("The rental apartments and property are different");

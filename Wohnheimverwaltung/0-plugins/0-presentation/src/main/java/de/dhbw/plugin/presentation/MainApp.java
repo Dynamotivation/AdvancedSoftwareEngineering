@@ -12,8 +12,8 @@ import de.dhbw.plugin.persistence.TenantJacksonJsonRepository;
 import de.dhbw.plugin.presentation.addApartmentView.AddApartmentController;
 import de.dhbw.plugin.presentation.addComplexView.AddComplexController;
 import de.dhbw.plugin.presentation.addPropertyView.AddPropertyController;
-import de.dhbw.plugin.presentation.overviewView.OverviewController;
 import de.dhbw.plugin.presentation.homeView.HomeController;
+import de.dhbw.plugin.presentation.overviewView.OverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,6 +33,32 @@ public class MainApp extends Application {
 
     private double stageWidth = 800; // Initial width
     private double stageHeight = 600; // Initial height
+
+    public static void main(String[] args) {
+        // Create repositories
+        RentalRepository rentalRepository = new RentalJacksonJsonRepository();
+        TenantRepository tenantRepository = new TenantJacksonJsonRepository();
+        ApartmentComplexRepository apartmentComplexRepository = new ApartmentComplexJacksonJsonRepository();
+
+        // Inject Repositories into Application Layer
+        rentalManagementService = new RentalManagementService(rentalRepository, tenantRepository, apartmentComplexRepository);
+        tenantManagementService = new TenantManagementService(tenantRepository);
+        apartmentComplexManagementService = new ApartmentComplexManagementService(apartmentComplexRepository);
+
+        launch();
+    }
+
+    public static RentalManagementService getRentalManagementService() {
+        return rentalManagementService;
+    }
+
+    public static TenantManagementService getTenantManagementService() {
+        return tenantManagementService;
+    }
+
+    public static ApartmentComplexManagementService getApartmentComplexManagementService() {
+        return apartmentComplexManagementService;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -66,32 +92,6 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        // Create repositories
-        RentalRepository rentalRepository = new RentalJacksonJsonRepository();
-        TenantRepository tenantRepository = new TenantJacksonJsonRepository();
-        ApartmentComplexRepository apartmentComplexRepository = new ApartmentComplexJacksonJsonRepository();
-
-        // Inject Repositories into Application Layer
-        rentalManagementService = new RentalManagementService(rentalRepository, tenantRepository, apartmentComplexRepository);
-        tenantManagementService = new TenantManagementService(tenantRepository);
-        apartmentComplexManagementService = new ApartmentComplexManagementService(apartmentComplexRepository);
-
-        launch();
-    }
-
-    public static RentalManagementService getRentalManagementService() {
-        return rentalManagementService;
-    }
-
-    public static TenantManagementService getTenantManagementService() {
-        return tenantManagementService;
-    }
-
-    public static ApartmentComplexManagementService getApartmentComplexManagementService() {
-        return apartmentComplexManagementService;
     }
 
     public void showAddPropertyView() {

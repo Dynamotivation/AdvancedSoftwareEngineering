@@ -1,16 +1,16 @@
 package de.dhbw.domain.entities;
 
-import static org.junit.Assert.*;
-
+import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.aggregateRoots.Tenant;
 import de.dhbw.domain.valueObjects.*;
 import org.junit.Test;
-import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class RentalApartmentUnitTest {
 

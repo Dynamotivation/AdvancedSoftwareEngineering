@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.entities.ContactInformation;
 import de.dhbw.domain.entities.Deposit;
 import de.dhbw.domain.entities.LeaseAgreement;
-import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.entities.RentCharge;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.miscellaneous.Transaction;
+import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 import lombok.NonNull;
@@ -57,13 +57,13 @@ public class Tenant {
         contactInformation.removeContactAvenue(contactAvenue);
     }
 
-    public void setPreferredContactAvenue(ContactAvenue contactAvenue) {
-        contactInformation.setPreferredContactAvenue(contactAvenue);
-    }
-
     @JsonIgnore
     public ContactAvenue getPreferredContactAvenue() {
         return contactInformation.getPreferredContactAvenue();
+    }
+
+    public void setPreferredContactAvenue(ContactAvenue contactAvenue) {
+        contactInformation.setPreferredContactAvenue(contactAvenue);
     }
 
     public TenantId getId() {

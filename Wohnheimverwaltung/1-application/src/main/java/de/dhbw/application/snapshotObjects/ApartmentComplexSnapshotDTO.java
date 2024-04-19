@@ -1,6 +1,5 @@
 package de.dhbw.application.snapshotObjects;
 
-import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;

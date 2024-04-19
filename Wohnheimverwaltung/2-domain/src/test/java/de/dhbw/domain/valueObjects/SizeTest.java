@@ -1,9 +1,11 @@
 package de.dhbw.domain.valueObjects;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class SizeTest {
 

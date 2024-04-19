@@ -17,6 +17,8 @@ import java.time.LocalDate;
 })
 public interface Transaction {
     int getAmount();
+
     LocalDate getDate();
+
     TransactionId getTransactionId();
 }

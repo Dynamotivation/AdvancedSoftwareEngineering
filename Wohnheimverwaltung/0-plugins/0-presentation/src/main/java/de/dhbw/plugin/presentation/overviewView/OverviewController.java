@@ -1,20 +1,20 @@
 package de.dhbw.plugin.presentation.overviewView;
 
 import com.dukescript.layouts.flexbox.FlexboxLayout;
+import com.dukescript.layouts.jfxflexbox.FlexBoxPane;
 import de.dhbw.application.snapshotObjects.ApartmentComplexSnapshotDTO;
 import de.dhbw.application.snapshotObjects.RentalPropertySnapshotDTO;
 import de.dhbw.plugin.presentation.MainApp;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Window;
 import org.kordamp.ikonli.javafx.FontIcon;
-import com.dukescript.layouts.jfxflexbox.FlexBoxPane;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ContextMenu;
 
 import java.util.List;
 

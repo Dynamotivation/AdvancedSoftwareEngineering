@@ -9,11 +9,18 @@ import java.util.List;
 
 public interface TenantRepository {
     List<Tenant> listAll();
+
     Tenant findById(TenantId tenantId);
+
     List<Tenant> findByRentalId(RentalId rentalId);
+
     List<Tenant> findByLeaseAgreementId(LeaseAgreementId leaseAgreementId);
+
     void add(Tenant tenant);
+
     void remove(Tenant tenant);
+
     void save(Tenant tenant);
+
     List<Tenant> load();
 }

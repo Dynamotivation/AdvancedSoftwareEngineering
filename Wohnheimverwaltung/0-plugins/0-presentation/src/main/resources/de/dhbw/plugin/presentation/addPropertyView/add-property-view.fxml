@@ -34,7 +34,8 @@
             <Button text="Zurück" onAction="#handleShowOverview"
                     GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2"/>
 
-            <Button text="Mietobjekt erstellen" fx:id="createButton" disable="true" onAction="#handleCreateRentalProperty"
+            <Button text="Mietobjekt erstellen" fx:id="createButton" disable="true"
+                    onAction="#handleCreateRentalProperty"
                     GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="2"/>
         </GridPane>
     </center>

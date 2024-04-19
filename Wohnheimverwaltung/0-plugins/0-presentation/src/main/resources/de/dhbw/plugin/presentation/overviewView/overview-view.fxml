@@ -3,10 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.text.Text?>
-<TabPane xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml"
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<TabPane xmlns:fx="http://javafx.com/fxml"
+         xmlns="http://javafx.com/javafx"
          fx:controller="de.dhbw.plugin.presentation.overviewView.OverviewController"
          prefWidth="800" prefHeight="600">
 
@@ -30,12 +30,12 @@
                     <VBox spacing="30">
                         <VBox fx:id="apartmentComplexesPane" spacing="5">
                             <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </VBox.margin>
                         </VBox>
                         <VBox fx:id="rentalPropertiesPane">
                             <VBox.margin>
-                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
                             </VBox.margin>
                         </VBox>
                     </VBox>

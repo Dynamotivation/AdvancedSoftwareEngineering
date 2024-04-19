@@ -43,8 +43,7 @@ public class HomeController {
             }
 
             mainApp.showOverviewView();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Fehler");
             alert.setHeaderText(String.format("Fehler beim Laden der Daten in %s. Bitte löschen Sie die korrupten Daten.",

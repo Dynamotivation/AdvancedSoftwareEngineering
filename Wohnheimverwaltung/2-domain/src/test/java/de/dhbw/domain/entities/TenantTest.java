@@ -1,17 +1,19 @@
 package de.dhbw.domain.entities;
 
-import static org.junit.Assert.*;
-
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
-import de.dhbw.domain.miscellaneous.ContactAvenue;
+import de.dhbw.domain.aggregateRoots.Tenant;
+import de.dhbw.domain.valueObjects.ContactAvenueEmail;
+import de.dhbw.domain.valueObjects.ContactAvenuePhone;
+import de.dhbw.domain.valueObjects.Email;
+import de.dhbw.domain.valueObjects.Rent;
+import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 import org.junit.Test;
-import de.dhbw.domain.aggregateRoots.Tenant;
-import de.dhbw.domain.valueObjects.*;
-import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 
 import java.time.LocalDate;
 import java.util.Collections;
+
+import static org.junit.Assert.*;
 
 public class TenantTest {
 

@@ -1,22 +1,19 @@
 package de.dhbw.application.snapshotObjects;
 
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
-import de.dhbw.domain.entities.ApartmentComplex;
-import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class RentalApartmentUnitSnapshotDTO {
     private final DoorNumber doorNumber;
     private final ApartmentComplexSnapshotDTO parentApartmentComplex;
     private final RentalId id;
-    private LeaseAgreementSnapshotDTO leaseAgreement;
     private final int maxTenants;
     private final Size size;
+    private LeaseAgreementSnapshotDTO leaseAgreement;
 
     public RentalApartmentUnitSnapshotDTO(RentalApartmentUnit rentalApartmentUnit) {
         this.parentApartmentComplex = new ApartmentComplexSnapshotDTO(rentalApartmentUnit.getParentApartmentComplex());

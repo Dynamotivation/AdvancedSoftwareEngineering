@@ -7,7 +7,6 @@ import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.repositories.TenantRepository;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 

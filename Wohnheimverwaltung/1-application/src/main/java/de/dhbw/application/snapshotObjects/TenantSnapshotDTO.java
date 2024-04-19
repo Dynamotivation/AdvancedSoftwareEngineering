@@ -1,11 +1,9 @@
 package de.dhbw.application.snapshotObjects;
 
 import de.dhbw.domain.aggregateRoots.Tenant;
-import de.dhbw.domain.entities.ContactInformation;
-import de.dhbw.domain.entities.LeaseAgreement;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
-import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.miscellaneous.Transaction;
+import de.dhbw.domain.valueObjects.Name;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
 
