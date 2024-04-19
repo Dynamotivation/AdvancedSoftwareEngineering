@@ -37,6 +37,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>de.dhbw.plugin.presentation.MainApp</mainClass>
+                            <workingDirectory>../..</workingDirectory>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -46,6 +47,15 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>de.dhbw.plugin.presentation.ManualWalkthrough</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
