@@ -24,9 +24,9 @@ public class TenantTest {
         Tenant tenant = new Tenant(name, surname, contactAvenue);
 
         assertNotNull(tenant.getId());
-        assertEquals(name, tenant.getName());
-        assertEquals(surname, tenant.getSurname());
-        assertEquals(name + " " + surname, tenant.getFullName());
+        assertEquals(name, tenant.getName().getName());
+        assertEquals(surname, tenant.getName().getSurname());
+        assertEquals(name + " " + surname, tenant.getName().getFullName());
         assertEquals(contactAvenue, tenant.getContactAvenues().getFirst());
         assertEquals(0, tenant.getOutstandingBalanceHistory().size());
         assertEquals(0, tenant.getAssociatedLeaseAgreementIds().size());
@@ -129,7 +129,7 @@ public class TenantTest {
         assertTrue(tenant.getAssociatedLeaseAgreementIds().contains(leaseAgreementId));
 
         // Deregister lease agreement subscription
-        tenant.deregisterLeaseAgreementSubscription(leaseAgreementId);
+        tenant.deregisterLeaseAgreementSubscription(leaseAgreementId, LocalDate.now());
         assertEquals(0, tenant.getAssociatedLeaseAgreementIds().size());
         assertFalse(tenant.getAssociatedLeaseAgreementIds().contains(leaseAgreementId));
     }

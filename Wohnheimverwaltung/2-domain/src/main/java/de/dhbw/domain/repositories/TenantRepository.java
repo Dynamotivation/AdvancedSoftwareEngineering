@@ -15,5 +15,5 @@ public interface TenantRepository {
     void add(Tenant tenant);
     void remove(Tenant tenant);
     void save(Tenant tenant);
-    void load();
+    List<Tenant> load();
 }

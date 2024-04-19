@@ -1,5 +1,7 @@
 package de.dhbw.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.TransactionId;
@@ -15,13 +17,23 @@ public class RentCharge implements Transaction {
     private final TransactionId transactionId;
 
     public RentCharge(int amount, LocalDate chargeDate, LeaseAgreementId associatedLeaseAgreementId) {
+        this(amount, chargeDate, associatedLeaseAgreementId, new TransactionId());
+    }
+
+    @JsonCreator
+    private RentCharge(
+            @JsonProperty("amount") int amount,
+            @JsonProperty("chargeDate") LocalDate chargeDate,
+            @JsonProperty("associatedLeaseAgreementId") LeaseAgreementId associatedLeaseAgreementId,
+            @JsonProperty("transactionId") TransactionId transactionId
+    ) {
         if (amount >= 0)
             throw new IllegalArgumentException("Invalid amount");
 
         this.amount = amount;
         this.chargeDate = chargeDate;
         this.associatedLeaseAgreementId = associatedLeaseAgreementId;
-        this.transactionId = new TransactionId();
+        this.transactionId = transactionId;
     }
 
     public LeaseAgreementId getAssociatedLeaseAgreementId() {
@@ -34,6 +46,7 @@ public class RentCharge implements Transaction {
     }
 
     @Override
+    @JsonProperty("chargeDate")
     public LocalDate getDate() {
         return chargeDate;
     }

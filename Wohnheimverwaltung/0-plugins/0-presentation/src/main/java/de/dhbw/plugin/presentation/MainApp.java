@@ -13,7 +13,7 @@ import de.dhbw.plugin.presentation.addApartmentView.AddApartmentController;
 import de.dhbw.plugin.presentation.addComplexView.AddComplexController;
 import de.dhbw.plugin.presentation.addPropertyView.AddPropertyController;
 import de.dhbw.plugin.presentation.overviewView.OverviewController;
-import de.dhbw.plugin.presentation.startView.HomeController;
+import de.dhbw.plugin.presentation.homeView.HomeController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -151,7 +151,7 @@ public class MainApp extends Application {
 
             System.out.println("Saving all data...");
             rentalManagementService.saveAllRentals();
-            apartmentComplexManagementService.saveAllOrphanApartments();
+            apartmentComplexManagementService.saveAllOrphanApartmentComplexes();
             //tenantManagementService.saveAllOrphanTenants();
             primaryStage.close();
         } catch (Exception e) {

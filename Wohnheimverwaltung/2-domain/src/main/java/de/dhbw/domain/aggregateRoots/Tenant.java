@@ -1,6 +1,7 @@
 package de.dhbw.domain.aggregateRoots;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.entities.ContactInformation;
 import de.dhbw.domain.entities.Deposit;
@@ -11,12 +12,14 @@ import de.dhbw.domain.miscellaneous.ContactAvenue;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
 import de.dhbw.domain.valueObjects.ids.TenantId;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tenant {
+    @JsonProperty("contactInformation")
     private final ContactInformation contactInformation;
     private final TenantId id;
     private final List<LeaseAgreementId> associatedLeaseAgreementIds;
@@ -29,11 +32,11 @@ public class Tenant {
 
     @JsonCreator
     private Tenant(
-            @JsonProperty("contactInformation") @NotNull ContactInformation contactInformation,
-            @JsonProperty("id") @NotNull TenantId id,
-            @JsonProperty("associatedLeaseAgreementIds") @NotNull List<LeaseAgreementId> associatedLeaseAgreementIds,
-            @JsonProperty("name") @NotNull Name name,
-            @JsonProperty("outstandingBalanceHistory") @NotNull List<Transaction> outstandingBalanceHistory
+            @JsonProperty("contactInformation") @NonNull ContactInformation contactInformation,
+            @JsonProperty("id") @NonNull TenantId id,
+            @JsonProperty("associatedLeaseAgreementIds") @NonNull List<LeaseAgreementId> associatedLeaseAgreementIds,
+            @JsonProperty("name") @NonNull Name name,
+            @JsonProperty("outstandingBalanceHistory") @NonNull List<Transaction> outstandingBalanceHistory
     ) {
         this.contactInformation = contactInformation;
         this.id = id;
@@ -58,6 +61,7 @@ public class Tenant {
         contactInformation.setPreferredContactAvenue(contactAvenue);
     }
 
+    @JsonIgnore
     public ContactAvenue getPreferredContactAvenue() {
         return contactInformation.getPreferredContactAvenue();
     }
@@ -78,27 +82,31 @@ public class Tenant {
         associatedLeaseAgreementIds.add(leaseAgreementId);
     }
 
-    public void deregisterLeaseAgreementSubscription(LeaseAgreementId leaseAgreementId) {
+    public void deregisterLeaseAgreementSubscription(LeaseAgreementId leaseAgreementId, LocalDate deregistrationDate) {
         // Validate that the lease agreement id is in the list
         if (!associatedLeaseAgreementIds.contains(leaseAgreementId))
             throw new IllegalArgumentException("Lease agreement id does not exist");
 
         associatedLeaseAgreementIds.remove(leaseAgreementId);
+
+        // Cleanup the balance history
+        List<Transaction> wrongfulTransactions = new ArrayList<>();
+
+        for (Transaction transaction : outstandingBalanceHistory) {
+            if (transaction instanceof RentCharge rentCharge && rentCharge.getDate().isAfter(deregistrationDate)) {
+                wrongfulTransactions.add(rentCharge);
+            }
+        }
+
+        outstandingBalanceHistory.removeAll(wrongfulTransactions);
     }
 
-    public String getName() {
-        return name.getName();
-    }
-
-    public String getSurname() {
-        return name.getSurname();
-    }
-
-    public String getFullName() {
-        return name.getFullName();
+    public Name getName() {
+        return name;
     }
 
     // Do not poll the balance from current leases, as this is a heavy, possibly redundant, operation
+    @JsonIgnore
     public int getBalance() {
         int balance = 0;
 

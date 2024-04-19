@@ -6,6 +6,7 @@ import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RentalPropertySnapshotDTO {
     private final Address address;
@@ -46,5 +47,25 @@ public class RentalPropertySnapshotDTO {
 
     public Size getSize() {
         return size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RentalPropertySnapshotDTO that = (RentalPropertySnapshotDTO) o;
+        return maxTenants == that.maxTenants && address.equals(that.address) && dateOfConstruction.equals(that.dateOfConstruction) && id.equals(that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && size.equals(that.size);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = address.hashCode();
+        result = 31 * result + dateOfConstruction.hashCode();
+        result = 31 * result + id.hashCode();
+        result = 31 * result + Objects.hashCode(leaseAgreement);
+        result = 31 * result + maxTenants;
+        result = 31 * result + size.hashCode();
+        return result;
     }
 }

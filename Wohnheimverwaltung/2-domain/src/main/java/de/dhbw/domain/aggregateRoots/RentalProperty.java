@@ -8,7 +8,7 @@ import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,12 +33,12 @@ public class RentalProperty implements Rental {
 
     @JsonCreator
     private RentalProperty(
-            @JsonProperty("address") @NotNull Address address,
-            @JsonProperty("dateOfConstruction") @NotNull LocalDate dateOfConstruction,
-            @JsonProperty("id") @NotNull RentalId id,
+            @JsonProperty("address") @NonNull Address address,
+            @JsonProperty("dateOfConstruction") @NonNull LocalDate dateOfConstruction,
+            @JsonProperty("id") @NonNull RentalId id,
             @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
             @JsonProperty("maxTenants") int maxTenants,
-            @JsonProperty("size") @NotNull Size size
+            @JsonProperty("size") @NonNull Size size
     ) {
         // Validate date of construction (implicitly checked for null)
         if (dateOfConstruction.isAfter(LocalDate.now()))
@@ -109,6 +109,26 @@ public class RentalProperty implements Rental {
 
 
         leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice, id);
+    }
+
+    @Override
+    public void endLeaseAgreement(LocalDate submissionDate, LocalDate endDate) {
+        // Validate that the rental property is booked
+        if (leaseAgreement == null)
+            throw new IllegalArgumentException("Rental property is not booked");
+
+        leaseAgreement.setInclusiveEndDate(submissionDate, endDate);
+        update();
+    }
+
+    @Override
+    public void update() {
+        if (leaseAgreement != null)
+            leaseAgreement.update();
+
+        if (leaseAgreement != null && leaseAgreement.getInclusiveEndDate().isBefore(LocalDate.now())) {
+            leaseAgreement = null;
+        }
     }
 
     @Override

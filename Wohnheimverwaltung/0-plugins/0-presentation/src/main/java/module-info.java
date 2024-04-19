@@ -17,8 +17,8 @@ module de.dhbw.plugin.presentation {
     // Export to JavaFX
     exports de.dhbw.plugin.presentation to javafx.graphics;
     opens de.dhbw.plugin.presentation to javafx.fxml;
-    exports de.dhbw.plugin.presentation.startView to javafx.graphics;
-    opens de.dhbw.plugin.presentation.startView to javafx.fxml;
+    exports de.dhbw.plugin.presentation.homeView to javafx.graphics;
+    opens de.dhbw.plugin.presentation.homeView to javafx.fxml;
     exports de.dhbw.plugin.presentation.overviewView to javafx.graphics;
     opens de.dhbw.plugin.presentation.overviewView to javafx.fxml;
     exports de.dhbw.plugin.presentation.addPropertyView to javafx.graphics;

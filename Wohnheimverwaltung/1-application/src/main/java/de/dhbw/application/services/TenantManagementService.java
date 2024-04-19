@@ -59,9 +59,27 @@ public class TenantManagementService {
         tenantRepository.load();
     }
 
-    public void clearAllTenants() {
+    public void deleteTenant(TenantId tenantId) {
+        Tenant tenant = tenantRepository.findById(tenantId);
+        tenantRepository.remove(tenant);
+    }
+
+    public void saveAllOrphanTenants() {
         for (Tenant tenant : tenantRepository.listAll()) {
-            tenantRepository.remove(tenant);
+            if (tenant.getAssociatedLeaseAgreementIds().isEmpty()) {
+                tenantRepository.save(tenant);
+            }
         }
+    }
+
+    public void exportTenantById(TenantId tenantId) {
+        Tenant tenant = tenantRepository.findById(tenantId);
+        tenantRepository.save(tenant);
+    }
+
+    public List<TenantId> importTenants() {
+        return tenantRepository.load().stream()
+                .map(Tenant::getId)
+                .toList();
     }
 }

@@ -1,5 +1,7 @@
 package de.dhbw.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.miscellaneous.ContactAvenue;
 
 import java.util.ArrayList;
@@ -11,10 +13,19 @@ public class ContactInformation implements Iterable<ContactAvenue> {
     private final List<ContactAvenue> contactAvenues = new ArrayList<>();
 
     public ContactInformation(ContactAvenue preferedContactAvenue, ContactAvenue... contactAvenues) {
-        this.preferredContactAvenue = preferedContactAvenue;
-        this.contactAvenues.add(preferedContactAvenue);
+        this(preferedContactAvenue, List.of(contactAvenues));
+    }
 
-        this.contactAvenues.addAll(List.of(contactAvenues));
+    @JsonCreator
+    private ContactInformation(
+            @JsonProperty("preferredContactAvenue") ContactAvenue preferredContactAvenue,
+            @JsonProperty("contactAvenues") List<ContactAvenue> contactAvenues
+    ) {
+        this.preferredContactAvenue = preferredContactAvenue;
+        this.contactAvenues.addAll(contactAvenues);
+
+        if (!this.contactAvenues.contains(preferredContactAvenue))
+            this.contactAvenues.add(preferredContactAvenue);
     }
 
     public ContactAvenue getPreferredContactAvenue() {

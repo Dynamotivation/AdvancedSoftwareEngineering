@@ -7,6 +7,7 @@ import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class RentalApartmentUnitSnapshotDTO {
@@ -48,5 +49,25 @@ public class RentalApartmentUnitSnapshotDTO {
 
     public Size getSize() {
         return size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RentalApartmentUnitSnapshotDTO that = (RentalApartmentUnitSnapshotDTO) o;
+        return maxTenants == that.maxTenants && doorNumber.equals(that.doorNumber) && parentApartmentComplex.equals(that.parentApartmentComplex) && id.equals(that.id) && Objects.equals(leaseAgreement, that.leaseAgreement) && size.equals(that.size);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = doorNumber.hashCode();
+        result = 31 * result + parentApartmentComplex.hashCode();
+        result = 31 * result + id.hashCode();
+        result = 31 * result + Objects.hashCode(leaseAgreement);
+        result = 31 * result + maxTenants;
+        result = 31 * result + size.hashCode();
+        return result;
     }
 }

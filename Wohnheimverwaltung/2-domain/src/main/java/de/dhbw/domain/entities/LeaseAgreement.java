@@ -35,7 +35,7 @@ public class LeaseAgreement {
         this(
                 inclusiveStartDate,
                 null,
-                monthlyDayOfPayment,
+                new NthDayOfMonthAdjuster(monthlyDayOfPayment),
                 monthsOfNotice,
                 inclusiveStartDate,
                 rent,
@@ -44,13 +44,19 @@ public class LeaseAgreement {
                 associatedRentalId,
                 new DefaultRentCharger()
         );
+
+        // Notifies the tenants of the new lease agreement
+        tenants.forEach(tenant -> tenant.registerLeaseAgreementSubscription(this.id));
+
+        // Notify subscribers of events since saved state
+        update();
     }
 
     @JsonCreator
     private LeaseAgreement(
             @JsonProperty("inclusiveStartDate") LocalDate inclusiveStartDate,
             @JsonProperty("inclusiveEndDate") LocalDate inclusiveEndDate,
-            @JsonProperty("monthlyDayOfPayment") int monthlyDayOfPayment,
+            @JsonProperty("monthlyDayOfPayment") NthDayOfMonthAdjuster monthlyDayOfPayment,
             @JsonProperty("monthsOfNotice") int monthsOfNotice,
             @JsonProperty("nextPaymentDate") LocalDate nextPaymentDate,
             @JsonProperty("rent") Rent rent,
@@ -60,8 +66,7 @@ public class LeaseAgreement {
             @JsonProperty("rentCharger") RentCharger rentCharger
     ) {
         this.inclusiveStartDate = inclusiveStartDate;
-        this.nextPaymentDate = inclusiveStartDate;
-        this.monthlyDayOfPayment = new NthDayOfMonthAdjuster(monthlyDayOfPayment);
+        this.monthlyDayOfPayment = monthlyDayOfPayment;
         this.monthsOfNotice = monthsOfNotice;
         this.nextPaymentDate = nextPaymentDate;
         this.inclusiveEndDate = inclusiveEndDate;
@@ -70,12 +75,6 @@ public class LeaseAgreement {
         this.rent = rent;
         this.associatedRentalId = associatedRentalId;
         this.rentCharger = rentCharger;
-
-        // Notifies the tenants of the new lease agreement
-        tenants.forEach(tenant -> tenant.registerLeaseAgreementSubscription(this.id));
-
-        // Notify subscribers of events since saved state
-        update();
     }
 
     public LocalDate getInclusiveStartDate() {
@@ -86,12 +85,12 @@ public class LeaseAgreement {
         return inclusiveEndDate;
     }
 
-    public void setInclusiveEndDate(LocalDate inclusiveEndDate) {
-        if (inclusiveStartDate.plusMonths(monthsOfNotice).isAfter(inclusiveEndDate))
-            throw new IllegalArgumentException("First possible end date is " + inclusiveStartDate.plusMonths(monthsOfNotice));
-
-        if (inclusiveEndDate.isBefore(inclusiveStartDate))
+    public void setInclusiveEndDate(LocalDate submissionDate, LocalDate inclusiveEndDate) {
+        if (submissionDate.isBefore(inclusiveStartDate))
             throw new IllegalArgumentException("End date must be after start date");
+
+        if (submissionDate.plusMonths(monthsOfNotice).isAfter(inclusiveEndDate))
+            throw new IllegalArgumentException("First possible end date is " + submissionDate.plusMonths(monthsOfNotice));
 
         this.inclusiveEndDate = inclusiveEndDate;
     }
@@ -130,8 +129,11 @@ public class LeaseAgreement {
     }
 
     public void update() {
-        // TODO lease breaking
         chargeRent();
+
+        if (inclusiveEndDate != null && inclusiveEndDate.isBefore(LocalDate.now())) {
+            tenants.forEach(tenant -> tenant.deregisterLeaseAgreementSubscription(id, inclusiveEndDate));
+        }
     }
 
     @Override

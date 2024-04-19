@@ -8,6 +8,7 @@ import de.dhbw.domain.valueObjects.ids.RentalId;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class LeaseAgreementSnapshotDTO {
     private final LocalDate inclusiveStartDate;
@@ -60,5 +61,27 @@ public class LeaseAgreementSnapshotDTO {
 
     public RentalId getAssociatedRentalId() {
         return associatedRentalId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LeaseAgreementSnapshotDTO that = (LeaseAgreementSnapshotDTO) o;
+        return inclusiveStartDate.equals(that.inclusiveStartDate) && Objects.equals(inclusiveEndDate, that.inclusiveEndDate) && monthlyDayOfPayment.equals(that.monthlyDayOfPayment) && nextPaymentDate.equals(that.nextPaymentDate) && rent.equals(that.rent) && tenants.equals(that.tenants) && id.equals(that.id) && associatedRentalId.equals(that.associatedRentalId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = inclusiveStartDate.hashCode();
+        result = 31 * result + Objects.hashCode(inclusiveEndDate);
+        result = 31 * result + monthlyDayOfPayment.hashCode();
+        result = 31 * result + nextPaymentDate.hashCode();
+        result = 31 * result + rent.hashCode();
+        result = 31 * result + tenants.hashCode();
+        result = 31 * result + id.hashCode();
+        result = 31 * result + associatedRentalId.hashCode();
+        return result;
     }
 }

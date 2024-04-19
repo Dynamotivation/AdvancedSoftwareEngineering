@@ -21,7 +21,7 @@ public class TenantSnapshotDTO {
     private final int balance;
 
     public TenantSnapshotDTO(Tenant tenant) {
-        this.name = new Name(tenant.getName(), tenant.getSurname());
+        this.name = tenant.getName();
         this.contactInformation = new ContactInformationSnapshotDTO(tenant.getPreferredContactAvenue(), tenant.getContactAvenues());
         this.id = tenant.getId();
         this.associatedLeaseAgreementIds = tenant.getAssociatedLeaseAgreementIds();
@@ -55,5 +55,25 @@ public class TenantSnapshotDTO {
 
     public int getBalance() {
         return balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TenantSnapshotDTO that = (TenantSnapshotDTO) o;
+        return balance == that.balance && contactInformation.equals(that.contactInformation) && id.equals(that.id) && associatedLeaseAgreementIds.equals(that.associatedLeaseAgreementIds) && name.equals(that.name) && outstandingBalanceHistory.equals(that.outstandingBalanceHistory);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = contactInformation.hashCode();
+        result = 31 * result + id.hashCode();
+        result = 31 * result + associatedLeaseAgreementIds.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + outstandingBalanceHistory.hashCode();
+        result = 31 * result + balance;
+        return result;
     }
 }

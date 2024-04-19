@@ -21,4 +21,20 @@ public class ContactInformationSnapshotDTO {
     public ContactAvenue getPreferredContactAvenue() {
         return preferredContactAvenue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ContactInformationSnapshotDTO that = (ContactInformationSnapshotDTO) o;
+        return contactAvenues.equals(that.contactAvenues) && preferredContactAvenue.equals(that.preferredContactAvenue);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = contactAvenues.hashCode();
+        result = 31 * result + preferredContactAvenue.hashCode();
+        return result;
+    }
 }

@@ -11,5 +11,5 @@ public interface ApartmentComplexRepository {
     void add(ApartmentComplex apartmentComplex);
     void remove(ApartmentComplex apartmentComplex);
     void save(ApartmentComplex apartmentComplex);
-    void load();
+    List<ApartmentComplex> load();
 }

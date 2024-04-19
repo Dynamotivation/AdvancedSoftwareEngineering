@@ -12,7 +12,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>0-presentation</artifactId>
+    <artifactId>de.dhbw.plugin.presentation</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -83,19 +83,21 @@
 
         <dependency>
             <groupId>de.dhbw</groupId>
-            <artifactId>2-domain</artifactId>
+            <artifactId>de.dhbw.plugin.persistence</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>de.dhbw</groupId>
-            <artifactId>0-persistence</artifactId>
+            <artifactId>de.dhbw.application</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>de.dhbw</groupId>
-            <artifactId>1-application</artifactId>
+            <artifactId>de.dhbw.domain</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

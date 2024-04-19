@@ -79,6 +79,9 @@ public class RentalJacksonJsonRepository implements RentalRepository {
 
     @Override
     public void remove(Rental rental) {
+        if (rental.getLeaseAgreement() != null)
+            throw new IllegalArgumentException("Rental has an active lease agreement");
+
         rentals.remove(rental);
     }
 
@@ -97,7 +100,9 @@ public class RentalJacksonJsonRepository implements RentalRepository {
     }
 
     @Override
-    public void load() {
+    public List<Rental> load() {
+        List<Rental> newRentals = new ArrayList<>();
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -105,10 +110,13 @@ public class RentalJacksonJsonRepository implements RentalRepository {
             while (reader.ready()) {
                 String jsonString = reader.readLine();
                 Rental rental = mapper.readValue(jsonString, Rental.class);
-                rentals.add(rental);
+                newRentals.add(rental);
             }
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }
+
+        rentals.addAll(newRentals);
+        return newRentals;
     }
 }

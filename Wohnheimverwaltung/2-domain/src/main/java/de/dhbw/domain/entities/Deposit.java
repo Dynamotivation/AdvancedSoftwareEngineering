@@ -1,5 +1,8 @@
 package de.dhbw.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.dhbw.domain.miscellaneous.Transaction;
 import de.dhbw.domain.valueObjects.ids.TransactionId;
 
@@ -7,17 +10,27 @@ import java.time.LocalDate;
 
 public class Deposit implements Transaction {
     private final int amount;
-    private final LocalDate dueDate;
+    @JsonProperty("creditDate")
+    private final LocalDate creditDate;
     private final TransactionId transactionId;
 
 
-    public Deposit(int amount, LocalDate dueDate) {
+    public Deposit(int amount, LocalDate creditDate) {
+        this(amount, creditDate, new TransactionId());
+    }
+
+    @JsonCreator
+    private Deposit(
+            @JsonProperty("amount") int amount,
+            @JsonProperty("creditDate") LocalDate creditDate,
+            @JsonProperty("transactionId") TransactionId transactionId
+    ) {
         if (amount <= 0)
             throw new IllegalArgumentException("Invalid amount");
 
         this.amount = amount;
-        this.dueDate = dueDate;
-        this.transactionId = new TransactionId();
+        this.creditDate = creditDate;
+        this.transactionId = transactionId;
     }
 
     @Override
@@ -26,8 +39,9 @@ public class Deposit implements Transaction {
     }
 
     @Override
+    @JsonIgnore
     public LocalDate getDate() {
-        return dueDate;
+        return creditDate;
     }
 
     @Override

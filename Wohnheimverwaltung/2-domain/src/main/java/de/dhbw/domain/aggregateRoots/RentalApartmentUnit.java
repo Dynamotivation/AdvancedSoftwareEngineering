@@ -9,7 +9,7 @@ import de.dhbw.domain.valueObjects.DoorNumber;
 import de.dhbw.domain.valueObjects.Rent;
 import de.dhbw.domain.valueObjects.Size;
 import de.dhbw.domain.valueObjects.ids.RentalId;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,12 +33,12 @@ public class RentalApartmentUnit implements Rental {
 
     @JsonCreator
     private RentalApartmentUnit(
-            @JsonProperty("doorNumber") @NotNull DoorNumber doorNumber,
-            @JsonProperty("parentApartmentComplex") @NotNull ApartmentComplex parentApartmentComplex,
-            @JsonProperty("id") @NotNull RentalId id,
+            @JsonProperty("doorNumber") @NonNull DoorNumber doorNumber,
+            @JsonProperty("parentApartmentComplex") @NonNull ApartmentComplex parentApartmentComplex,
+            @JsonProperty("id") @NonNull RentalId id,
             @JsonProperty("leaseAgreement") LeaseAgreement leaseAgreement,
             @JsonProperty("maxTenants") int maxTenants,
-            @JsonProperty("size") @NotNull Size size) {
+            @JsonProperty("size") @NonNull Size size) {
         this.doorNumber = doorNumber;
         this.parentApartmentComplex = parentApartmentComplex;
         this.id = id;
@@ -99,6 +99,25 @@ public class RentalApartmentUnit implements Rental {
             throw new IllegalArgumentException("Too many tenants");
 
         leaseAgreement = new LeaseAgreement(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice, id);
+    }
+
+    @Override
+    public void endLeaseAgreement(LocalDate submissionDate, LocalDate endDate) {
+        if (leaseAgreement == null)
+            throw new IllegalStateException("No lease agreement to end");
+
+        leaseAgreement.setInclusiveEndDate(submissionDate, endDate);
+        update();
+    }
+
+    @Override
+    public void update() {
+        if (leaseAgreement != null)
+            leaseAgreement.update();
+
+        if (leaseAgreement != null && leaseAgreement.getInclusiveEndDate().isBefore(LocalDate.now())) {
+            leaseAgreement = null;
+        }
     }
 
     @Override

@@ -2,9 +2,21 @@ package de.dhbw.domain.miscellaneous;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.dhbw.domain.valueObjects.ContactAvenueEmail;
+import de.dhbw.domain.valueObjects.ContactAvenueMail;
+import de.dhbw.domain.valueObjects.ContactAvenuePhone;
 import org.apache.commons.validator.routines.EmailValidator;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ContactAvenueEmail.class),
+        @JsonSubTypes.Type(value = ContactAvenuePhone.class),
+        @JsonSubTypes.Type(value = ContactAvenueMail.class),
+})
 public abstract class ContactAvenue {
     private final String contactDetails;
 

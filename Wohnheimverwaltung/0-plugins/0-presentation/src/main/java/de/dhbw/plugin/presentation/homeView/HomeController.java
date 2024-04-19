@@ -1,4 +1,4 @@
-package de.dhbw.plugin.presentation.startView;
+package de.dhbw.plugin.presentation.homeView;
 
 import de.dhbw.plugin.presentation.MainApp;
 import javafx.event.ActionEvent;
@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 
 import java.io.File;
 import java.nio.file.Files;
+
+import static java.lang.System.exit;
 
 public class HomeController {
     private MainApp mainApp;
@@ -24,15 +26,15 @@ public class HomeController {
             if (Files.exists(new File("rental.save").toPath()))
                 MainApp.getRentalManagementService().loadRentals();
 
-            if (Files.exists(new File("tenant.save").toPath()))
+            if (Files.exists(new File("tenantOrphaned.save").toPath()))
                 MainApp.getTenantManagementService().loadTenants();
 
-            if (Files.exists(new File("complex.save").toPath()))
+            if (Files.exists(new File("complexOrphaned.save").toPath()))
                 MainApp.getApartmentComplexManagementService().loadApartmentComplexes();
 
             if (Files.notExists(new File("rental.save").toPath()) &&
-                    Files.notExists(new File("tenant.save").toPath()) &&
-                    Files.notExists(new File("complex.save").toPath())) {
+                    Files.notExists(new File("tenantOrphaned.save").toPath()) &&
+                    Files.notExists(new File("complexOrphaned.save").toPath())) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText(String.format("Es wurden keine Daten in %s gefunden.",
@@ -48,12 +50,8 @@ public class HomeController {
             alert.setHeaderText(String.format("Fehler beim Laden der Daten in %s. Bitte löschen Sie die korrupten Daten.",
                     new File("").getAbsolutePath()));
             alert.setContentText(e.getMessage());
+            alert.setOnCloseRequest(event1 -> exit(1));
             alert.show();
-
-            // Rollback
-            MainApp.getRentalManagementService().clearAllRentals();
-            MainApp.getTenantManagementService().clearAllTenants();
-            MainApp.getApartmentComplexManagementService().clearAllApartmentComplexes();
         }
     }
 

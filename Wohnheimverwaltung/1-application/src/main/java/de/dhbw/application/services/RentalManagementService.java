@@ -43,6 +43,7 @@ public class RentalManagementService {
         ApartmentComplex apartmentComplex = apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId);
         RentalApartmentUnit rentalApartmentUnit = new RentalApartmentUnit(apartmentComplex, new DoorNumber(floor, apartmentNumber), Size.squareMeters(size), maxTenants);
         rentalRepository.add(rentalApartmentUnit);
+        apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId).addApartment(rentalApartmentUnit);
 
         return rentalApartmentUnit.getId();
     }
@@ -55,6 +56,12 @@ public class RentalManagementService {
                 .toList();
 
         rental.rentToTenants(tenants, inclusiveStartDate, rent, monthlyDayOfPayment, monthsOfNotice);
+    }
+
+    public void endLeaseAgreement(RentalId rentalId, LocalDate submissionDate, LocalDate endDate) {
+        Rental rental = rentalRepository.findById(rentalId);
+
+        rental.endLeaseAgreement(submissionDate, endDate);
     }
 
     public List<RentalApartmentUnitSnapshotDTO> listAllRentalApartmentUnitSnapshots() {
@@ -97,10 +104,14 @@ public class RentalManagementService {
                 .toList();
     }
 
-    public void clearAllRentals() {
-        for (Rental rental : rentalRepository.listAll()) {
-            rentalRepository.remove(rental);
-        }
+    public void deleteRental(RentalId rentalId) {
+        Rental rental = rentalRepository.findById(rentalId);
+        rentalRepository.remove(rental);
+    }
+
+    public void updateRental(RentalId rentalId) {
+        Rental rental = rentalRepository.findById(rentalId);
+        rental.update();
     }
 
     public void saveAllRentals() {
@@ -110,6 +121,23 @@ public class RentalManagementService {
     }
 
     public void loadRentals() {
-        rentalRepository.load();
+        List<Rental> newRentals = rentalRepository.load();
+
+        for (Rental rental : newRentals) {
+            if (rental instanceof RentalApartmentUnit rentalApartmentUnit) {
+                apartmentComplexRepository.add(rentalApartmentUnit.getParentApartmentComplex());
+            }
+        }
+    }
+
+    public void exportRentalById(RentalId rentalId) {
+        Rental rental = rentalRepository.findById(rentalId);
+        rentalRepository.save(rental);
+    }
+
+    public List<RentalId> importRentals() {
+        return rentalRepository.load().stream()
+                .map(Rental::getId)
+                .toList();
     }
 }

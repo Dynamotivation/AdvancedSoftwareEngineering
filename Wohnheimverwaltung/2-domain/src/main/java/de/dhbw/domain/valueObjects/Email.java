@@ -1,12 +1,12 @@
 package de.dhbw.domain.valueObjects;
 
+import lombok.NonNull;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.jetbrains.annotations.NotNull;
 
 public class Email {
     private final String email;
 
-    public Email(@NotNull String email) {
+    public Email(@NonNull String email) {
         if (!EmailValidator.getInstance().isValid(email))
             throw new IllegalArgumentException("Invalid email address");
 

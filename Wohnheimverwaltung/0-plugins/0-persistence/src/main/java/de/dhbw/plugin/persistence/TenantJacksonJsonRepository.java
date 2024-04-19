@@ -52,6 +52,9 @@ public class TenantJacksonJsonRepository implements TenantRepository {
 
     @Override
     public void remove(Tenant tenant) {
+        if (!tenant.getAssociatedLeaseAgreementIds().isEmpty())
+            throw new IllegalArgumentException("Tenant still has active lease agreements");
+
         tenants.remove(tenant);
     }
 
@@ -60,7 +63,7 @@ public class TenantJacksonJsonRepository implements TenantRepository {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        try (var writer = new FileWriter("tenant.save", true)) {
+        try (var writer = new FileWriter("tenantOrphaned.save", true)) {
             String jsonString = mapper.writeValueAsString(tenant) + "\n";
 
             writer.write(jsonString);
@@ -70,19 +73,24 @@ public class TenantJacksonJsonRepository implements TenantRepository {
     }
 
     @Override
-    public void load() {
+    public List<Tenant> load() {
+        List<Tenant> newTenants = new ArrayList<>();
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        try (var reader = new BufferedReader(new FileReader("tenant.save"))) {
+        try (var reader = new BufferedReader(new FileReader("tenantOrphaned.save"))) {
             while (reader.ready()) {
                 String jsonString = reader.readLine();
                 Tenant tenant = mapper.readValue(jsonString, Tenant.class);
-                tenants.add(tenant);
+                newTenants.add(tenant);
             }
 
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }
+
+        tenants.addAll(newTenants);
+        return newTenants;
     }
 }

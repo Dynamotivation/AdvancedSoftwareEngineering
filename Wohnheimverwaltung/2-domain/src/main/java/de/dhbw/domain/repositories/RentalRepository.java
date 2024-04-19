@@ -2,6 +2,7 @@ package de.dhbw.domain.repositories;
 
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.aggregateRoots.RentalProperty;
+import de.dhbw.domain.entities.ApartmentComplex;
 import de.dhbw.domain.miscellaneous.Rental;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
 import de.dhbw.domain.valueObjects.ids.LeaseAgreementId;
@@ -21,5 +22,5 @@ public interface RentalRepository {
     void add(Rental rental);
     void remove(Rental rental);
     void save(Rental rental);
-    void load();
+    List<Rental> load();
 }

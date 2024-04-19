@@ -1,12 +1,18 @@
 package de.dhbw.domain.miscellaneous;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.time.temporal.*;
 
 public class NthDayOfMonthAdjuster implements TemporalAdjuster {
     private int nthDay;
 
-    public NthDayOfMonthAdjuster(int nthDay) {
+    @JsonCreator
+    public NthDayOfMonthAdjuster(
+            @JsonProperty("nthDay") int nthDay
+    ) {
         if (nthDay <= 0 || nthDay > 31) {
             throw new IllegalArgumentException("Invalid day of month");
         }

@@ -2,7 +2,7 @@ package de.dhbw.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.util.Objects;
 
@@ -16,10 +16,10 @@ public class Address {
 
     @JsonCreator
     public Address(
-            @JsonProperty("streetName") @NotNull String streetName,
-            @JsonProperty("houseNumber") @NotNull String houseNumber,
-            @JsonProperty("postalCode") @NotNull String postalCode,
-            @JsonProperty("city") @NotNull String city) {
+            @JsonProperty("streetName") @NonNull String streetName,
+            @JsonProperty("houseNumber") @NonNull String houseNumber,
+            @JsonProperty("postalCode") @NonNull String postalCode,
+            @JsonProperty("city") @NonNull String city) {
         // Validate street name
         streetName = streetName.trim();
 

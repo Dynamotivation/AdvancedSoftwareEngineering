@@ -1,43 +1,46 @@
 package de.dhbw.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.dhbw.domain.aggregateRoots.RentalApartmentUnit;
 import de.dhbw.domain.valueObjects.Address;
 import de.dhbw.domain.valueObjects.ids.ApartmentComplexId;
+import de.dhbw.domain.valueObjects.ids.RentalId;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class ApartmentComplex {
     private final Address address;
     private final LocalDate dateOfConstruction;
-    private final List<RentalApartmentUnit> rentalApartmentUnits = new ArrayList<>();
+    private final List<RentalId> rentalApartmentUnits;
     private final ApartmentComplexId id;
 
     public ApartmentComplex(String streetName, String houseNumber, String postalCode, String city, LocalDate dateOfConstruction) {
-        // Validate date of construction (implicitly checked for null)
-        if (dateOfConstruction.isAfter(LocalDate.now()))
-            throw new IllegalArgumentException("Date of construction may not be in the future");
-
-        this.address = new Address(streetName, houseNumber, postalCode, city);
-        this.dateOfConstruction = dateOfConstruction;
-        this.id = new ApartmentComplexId();
+        this(new Address(streetName, houseNumber, postalCode, city), new ArrayList<RentalId>(), dateOfConstruction, new ApartmentComplexId());
     }
 
     // Powerful constructor for deserialization
     @JsonCreator
     private ApartmentComplex(
-            @JsonProperty("address") Address address,
-            @JsonProperty("rentalApartmentUnits") List<RentalApartmentUnit> rentalApartmentUnits,
-            @JsonProperty("dateOfConstruction") LocalDate dateOfConstruction) {
-        this(address.getStreetName(), address.getHouseNumber(), address.getPostalCode(), address.getCity(), dateOfConstruction);
+            @JsonProperty("address") @NonNull Address address,
+            @JsonProperty("rentalApartmentUnits") @NonNull List<RentalId> rentalApartmentUnits,
+            @JsonProperty("dateOfConstruction") @NonNull LocalDate dateOfConstruction,
+            @JsonProperty("id") @NonNull ApartmentComplexId id
+    ) {
+        // Validate date of construction
+        if (dateOfConstruction.isAfter(LocalDate.now()))
+            throw new IllegalArgumentException("Date of construction may not be in the future");
 
-        for (RentalApartmentUnit rentalApartmentUnit : rentalApartmentUnits) {
-            addApartment(rentalApartmentUnit);
-        }
+        this.address = address;
+        this.rentalApartmentUnits = rentalApartmentUnits;
+        this.dateOfConstruction = dateOfConstruction;
+        this.id = id;
     }
 
     public ApartmentComplexId getId() {
@@ -45,10 +48,10 @@ public class ApartmentComplex {
     }
 
     public void addApartment(RentalApartmentUnit rentalApartmentUnit) {
-        rentalApartmentUnits.add(rentalApartmentUnit);
+        rentalApartmentUnits.add(rentalApartmentUnit.getId());
     }
 
-    public List<RentalApartmentUnit> getRentalApartmentUnits() {
+    public List<RentalId> getRentalApartmentUnits() {
         return new ArrayList<>(rentalApartmentUnits);
     }
 
@@ -64,12 +67,17 @@ public class ApartmentComplex {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         ApartmentComplex that = (ApartmentComplex) o;
-        return Objects.equals(address, that.address) && Objects.equals(dateOfConstruction, that.dateOfConstruction) && Objects.equals(rentalApartmentUnits, that.rentalApartmentUnits);
+        return address.equals(that.address) && dateOfConstruction.equals(that.dateOfConstruction) && rentalApartmentUnits.equals(that.rentalApartmentUnits) && id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, dateOfConstruction, rentalApartmentUnits);
+        int result = address.hashCode();
+        result = 31 * result + dateOfConstruction.hashCode();
+        result = 31 * result + rentalApartmentUnits.hashCode();
+        result = 31 * result + id.hashCode();
+        return result;
     }
 }

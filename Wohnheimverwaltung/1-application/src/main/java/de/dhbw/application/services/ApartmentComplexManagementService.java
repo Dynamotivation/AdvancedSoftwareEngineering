@@ -40,7 +40,7 @@ public class ApartmentComplexManagementService {
         return new ApartmentComplexSnapshotDTO(apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId));
     }
 
-    public void saveAllOrphanApartments() {
+    public void saveAllOrphanApartmentComplexes() {
         for (ApartmentComplex apartmentComplex : apartmentComplexRepository.listAll()) {
             if (apartmentComplex.getRentalApartmentUnits().isEmpty()) {
                 apartmentComplexRepository.save(apartmentComplex);
@@ -48,13 +48,23 @@ public class ApartmentComplexManagementService {
         }
     }
 
+    public void exportApartmentComplexById(ApartmentComplexId apartmentComplexId) {
+        ApartmentComplex apartmentComplex = apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId);
+        apartmentComplexRepository.save(apartmentComplex);
+    }
+
     public void loadApartmentComplexes() {
         apartmentComplexRepository.load();
     }
 
-    public void clearAllApartmentComplexes() {
-        for (ApartmentComplex apartmentComplex : apartmentComplexRepository.listAll()) {
-            apartmentComplexRepository.remove(apartmentComplex);
-        }
+    public void deleteApartmentComplex(ApartmentComplexId apartmentComplexId) {
+        ApartmentComplex apartmentComplex = apartmentComplexRepository.findByApartmentComplexId(apartmentComplexId);
+        apartmentComplexRepository.remove(apartmentComplex);
+    }
+
+    public List<ApartmentComplexSnapshotDTO> importApartmentComplexes() {
+        return apartmentComplexRepository.load().stream()
+                .map(ApartmentComplexSnapshotDTO::new)
+                .toList();
     }
 }

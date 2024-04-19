@@ -33,11 +33,15 @@ public class ApartmentComplexJacksonJsonRepository implements ApartmentComplexRe
 
     @Override
     public void add(ApartmentComplex apartmentComplex) {
-        apartmentComplexes.add(apartmentComplex);
+        if (!apartmentComplexes.contains(apartmentComplex))
+            apartmentComplexes.add(apartmentComplex);
     }
 
     @Override
     public void remove(ApartmentComplex apartmentComplex) {
+        if (!apartmentComplex.getRentalApartmentUnits().isEmpty())
+            throw new IllegalArgumentException("Apartment complex still has rental apartment units");
+
         apartmentComplexes.remove(apartmentComplex);
     }
 
@@ -46,7 +50,7 @@ public class ApartmentComplexJacksonJsonRepository implements ApartmentComplexRe
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        try (var writer = new FileWriter("complex.save", true)) {
+        try (var writer = new FileWriter("complexOrphaned.save", true)) {
             String jsonString = mapper.writeValueAsString(apartmentComplex) + "\n";
 
             writer.write(jsonString);
@@ -56,18 +60,23 @@ public class ApartmentComplexJacksonJsonRepository implements ApartmentComplexRe
     }
 
     @Override
-    public void load() {
+    public List<ApartmentComplex> load() {
+        List<ApartmentComplex> newApartmentComplexes = new ArrayList<>();
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        try (var reader = new BufferedReader(new FileReader("complex.save"))) {
+        try (var reader = new BufferedReader(new FileReader("complexOrphaned.save"))) {
             while (reader.ready()) {
                 String jsonString = reader.readLine();
                 ApartmentComplex apartmentComplex = mapper.readValue(jsonString, ApartmentComplex.class);
-                apartmentComplexes.add(apartmentComplex);
+                newApartmentComplexes.add(apartmentComplex);
             }
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }
+
+        apartmentComplexes.addAll(newApartmentComplexes);
+        return newApartmentComplexes;
     }
 }
