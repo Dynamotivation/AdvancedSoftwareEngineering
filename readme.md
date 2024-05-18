@@ -99,7 +99,7 @@ Die Fläche eines Mietobjekt ist als Value Object implementiert, weil sie ledigl
 ### [**Entities**](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/)
 
 #### [Lease Agreement](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java)
-Der Mietvertrag ist als Entity implementiert, weil er neben finalen Feldern auch veränderbare Attribute hat, wie beispielsweise das End-Datum des Vertrags. Ihn bei jeder Änderung ersetzen zu müssen wäre eine große Einschränkung, da somit auch Objektreferenzen auf ihn geändert werden müssen. Dafür besitzt jeder Vertrag eine Identität, um ihn auch nach Änderungen eindeutig ausmachen zu können.
+Der Mietvertrag ist als Entity implementiert, weil er neben finalen Feldern auch veränderbare Attribute hat, wie beispielsweise das End-Datum des Vertrags. Den Mietvertrag bei jeder Änderung ersetzen zu müssen wäre eine große Einschränkung, da somit auch Objektreferenzen auf ihn geändert werden müssen. Dafür besitzt jeder Vertrag eine Identität, um ihn auch nach Änderungen eindeutig ausmachen zu können.
 
 ---
 
@@ -146,7 +146,7 @@ In der Domain Layer befindet sich der logische Kern der Anwendung und dessen Reg
 ---
 ### [**Application Layer**](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/1-application/)
 Implementiert: ✅\
-Die Application Layer enthält eine andere Art Services als die Domain Layer, denn sie behandeln nicht fachliche Aspekte, sondern technische. In der vorliegenden Implementation dienen die Services als Zugriffsweg auf die Repositories, damit die Domain Layer nur fachlich relevante Funktionen ihren Repository Interfaces implementieren muss. Der Service übernimmt weitere verbos-benannte Funktionen. Damit ist die Anbindung in die Presentation Layer einfacher und klar lesbar. Außerdem können künftig durch die map-Befehle auch sehr einfach Adapter eingesetzt werden. Im aktuellen Stadium werden Domain Entities 1-zu-1 auf Domain Entity DTO (Date Transfer Objects) gespiegelt, wodurch all ihre Felder final und read only werden.
+Die Application Layer enthält eine andere Art Services als die Domain Layer, denn sie behandeln nicht fachliche Aspekte, sondern technische. In der vorliegenden Implementation dienen die Services als Zugriffsweg auf die Repositories, damit die Domain Layer nur fachlich relevante Funktionen ihrer Repository Interfaces definieren muss. Der Service mappt weitere verbos-benannte Funktionen auf eine Reihe an Repository Funktionen für die Plugin Schicht. Außerdem können künftig durch die map-Befehle auch sehr einfach Adapter eingesetzt werden. Im aktuellen Stadium werden Domain Entities 1-zu-1 auf Domain Entity DTO (Data Transfer Objects) gespiegelt, wodurch all ihre Felder final und read only werden.
 
 
 ---
@@ -173,7 +173,7 @@ Speicherung wird in der Persistence Layer gehandhabt. In der vorliegenden Anwend
 [//]: # (Begründen Sie für 5 der vorgestellten Prinzipien aus SOLID, GRASP, DRY, … WO das jeweilige Prinzip in Ihrem Projekt berücksichtigt wird bzw. angewendet wird und nennen Sie ein Beispiel AUS IHREM SOURCE CODE dazu; „Das Single-Responsibility-Principle besagt, … Dies wird zum Beispiel in der Klasse XX berücksichtigt, weil…“)
 
 ### **3.1 SOLID - SRP - Single Responsibility Principle**
-Das Single Responsibility Principle besagt, dass eine Klasse nur eine Aufgabe und somit nur einen Grund zur Änderung hat. Dieses Prinzip wird in diesem Projekt an der Klasse [Lease Agreement](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java) demonstriert. Augenscheinlich hat die Klasse zwar ebenfalls Methoden, um den zugehörigen Mietern Miete zu berechnen, jedoch delegiert diese nur an eine Implementierung des Interface [Rent Charger](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/miscellaneous/RentCharger.java) um die Kapselung der Felder zu wahren. Durch diese Separation of Concerns werden die meisten Änderungen nur den Code einer der Klassen betreffen.
+Das Single Responsibility Principle besagt, dass eine Klasse nur eine Aufgabe und somit nur einen Grund zur Änderung hat. Dieses Prinzip wird in diesem Projekt an der Klasse [Lease Agreement](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/entities/LeaseAgreement.java) demonstriert. Augenscheinlich hat die Klasse zwar ebenfalls Methoden, um den zugehörigen Mietern Miete zu berechnen, jedoch delegiert diese nur an eine Implementierung des Interface [Rent Charger](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/miscellaneous/RentCharger.java), um die Kapselung der Felder zu wahren. Durch diese Separation of Concerns werden die meisten Änderungen nur den Code einer der Klassen betreffen.
 
 <details>
     <summary>Code Beispiel</summary>
@@ -339,7 +339,7 @@ public class LeaseAgreement {
 <div class="page"/>
 
 ### **3.2 SOLID - DIP - Dependency Inversion Principle**
-Das Dependency Inversion Principle besagt, dass Module höherer Ebenen anstelle von Detail behafteten Objekten aus niedrigeren Schichten von generalisierenden Interfaces abhängig sein sollen. Diese werden Abstraktionen genannt. Die Details selbst hängen von der Abstraktion ab.
+Das Dependency Inversion Principle besagt, dass Module höherer Ebenen anstelle von detailbehafteten Objekten aus niedrigeren Schichten von generalisierenden Interfaces abhängig sein sollen. Diese werden Abstraktionen genannt. Die Details selbst hängen von der Abstraktion ab.
 
 Die Abhängigkeit zu Abstraktionen lässt sich durch die Extraktion von Merkmalen in ein Interface oder eine abstrakte Klasse durchführen. Dadurch entsteht ein Vertrag / Protokoll. Innerhalb einer Ebene und in allen Ebenen darüber kann man sich nun auf den Vertrag verlassen, die Details der Implementierung spielen keine Rolle.
 
@@ -459,7 +459,7 @@ Wie der Name verrät zielt das KISS Prinzip darauf ab, Dinge auf eine einfache W
 Beispielweise beim Persistieren im [Jackson Rental Repository](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/0-plugins/0-persistence/src/main/java/de/dhbw/plugin/persistence/RentalJacksonJsonRepository.java) wird jede Entität einzeln als Zeile in eine Datei geschrieben. Selbstverständlich entsteht dadurch auch kein valide JSON Datei, da nur jede Zeile in sich selbst valide ist. Dabei wird allerdings das Problem vermieden, dass es nicht zu [Type Erasure](https://docs.oracle.com/javase/tutorial/java/generics/genTypes.html) wie beim Serialisieren einer ```List<Rental>``` kommt, was die Deserialisierung erheblich erleichtert. Als Konsequenz wird die gespeicherte Datei dann nicht ```.json``` sondern ```.save``` genannt, somit *erwartet* auch niemand korrekten JSON Syntax.\
 Die ```load()``` Methode deserialisiert dann ebenfalls Zeile für Zeile.
 
-KISS trifft hier eben zu, da diese vermeidlich "dumme" Lösung sehr einfach zu implementieren ist und weder ein eigener, komplexer Serialisierer oder Deserialisierer geschrieben werden muss.
+KISS trifft hier eben zu, da diese vermeidlich "dumme" Lösung sehr einfach zu implementieren ist und weder ein eigener, komplexer Serialisierer oder Deserialisierer geschrieben werden muss : )
 
 <details>
     <summary>Code Beispiel</summary>
@@ -595,7 +595,7 @@ public class RentalApartmentUnit implements Rental {
 <div class="page"/>
 
 ### **[5.1.3 Alternative Classes with Different Interfaces](https://refactoring.guru/smells/alternative-classes-with-different-interfaces)**
-Das ContactAvenue (Kontaktmöglichkeit) Interface war in seinem Zustand bis zum Commit "Finished Switch to Notification Based Rent Charging" (df05014) nicht sehr nützlich, da es leer war.
+Das ContactAvenue (Kontaktmöglichkeit) Interface war in seinem Zustand bis zum Commit *"Finished Switch to Notification Based Rent Charging"* (df05014) nicht sehr nützlich, da es leer war.
 
 ```java
 public interface ContactAvenue {
@@ -664,7 +664,7 @@ Um den Identifizierten Code Smell ["Primitive Obsession"](#512-primitive-obsessi
 
 Commit *"Implemented Rent Charging"* (b1dfa8c) verringert zwar nicht direkt die Anzahl der Parameter, sondern verhindert direkt das Hinzukommen des neuen Parameters ```sizeUnit``` indem er mit ```int size``` zum neuen Value Object [Size](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/Size.java) wird.
 
-Commit *Extracted DoorNumber from RentalApartmentUnit* (35851bc) kombiniert die verbleibenden zwei Primitives ```int floor``` und ```int apartmentNumber``` in das neue Value Object [DoorNumber](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/DoorNumber.java). Hierdurch wird die endgültige Parameterzahl von möglichen 6 auf 4 reduziert. 
+Commit *"Extracted DoorNumber from RentalApartmentUnit"* (35851bc) kombiniert die verbleibenden zwei Primitives ```int floor``` und ```int apartmentNumber``` in das neue Value Object [DoorNumber](https://github.com/Dynamotivation/AdvancedSoftwareEngineering/tree/main/Wohnheimverwaltung/2-domain/src/main/java/de/dhbw/domain/valueObjects/DoorNumber.java). Hierdurch wird die endgültige Parameterzahl von möglichen 6 auf 4 reduziert. 
 
 Refactored Version:
 ```java
